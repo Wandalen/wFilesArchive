@@ -2,13 +2,6 @@
 
 'use strict';
 
-if( typeof module !== 'undefined' )
-{
-
-  require( '../FileBase.s' );
-
-}
-
 //
 
 var _ = _global_.wTools;

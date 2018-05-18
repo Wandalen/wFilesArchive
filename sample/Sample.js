@@ -1,7 +1,10 @@
 
 if( typeof module !== 'undefined' )
 {
-  require( 'wFilesArchive' );
+  require( 'wfilesarchive' );
 }
 
 var _ = wTools;
+var Archive = new _.FilesArchive();
+
+console.log( 'made' );
