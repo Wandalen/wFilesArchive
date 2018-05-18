@@ -1,9 +1,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  require( 'wTools' );
+  require( 'wFilesArchive' );
 }
 
 var _ = wTools;
-
-/**/
