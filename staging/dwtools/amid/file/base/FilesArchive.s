@@ -38,102 +38,6 @@ function init( o )
 }
 
 //
-//
-// function _storageSave( o )
-// {
-//   var archive = this;
-//   var fileProvider = archive.fileProvider;
-//
-//   _.assert( arguments.length === 1 );
-//
-//   if( archive.verbosity >= 3 )
-//   logger.log( '+ saving archive',o.archiveFilePath );
-//
-//   var map = archive.fileMap;
-//   if( o.splitting )
-//   {
-//     var archiveDirPath = _.pathDir( o.archiveFilePath );
-//     map = Object.create( null );
-//     for( var m in archive.fileMap )
-//     {
-//       if( _.strBegins( m,archiveDirPath ) )
-//       map[ m ] = archive.fileMap[ m ];
-//     }
-//   }
-//
-//   fileProvider.fileWriteJson
-//   ({
-//     filePath : o.archiveFilePath,
-//     data : map,
-//     pretty : 1,
-//     sync : 1,
-//   });
-//
-// }
-//
-// _storageSave.defaults =
-// {
-//   archiveFilePath : null,
-//   splitting : 0,
-// }
-//
-// //
-//
-// function storageSave()
-// {
-//   var archive = this;
-//   var fileProvider = archive.fileProvider;
-//   var archiveFilePath = _.pathsJoin( archive.trackPath , archive.storageFileName );
-//
-//   _.assert( arguments.length === 0 );
-//
-//   if( _.arrayIs( archiveFilePath ) )
-//   for( var p = 0 ; p < archiveFilePath.length ; p++ )
-//   archive._storageSave
-//   ({
-//     archiveFilePath : archiveFilePath[ p ],
-//     splitting : 1,
-//   })
-//   else
-//   archive._storageSave
-//   ({
-//     archiveFilePath : archiveFilePath,
-//     splitting : 0,
-//   });
-//
-// }
-//
-// //
-//
-// function storageLoad( archiveDirPath )
-// {
-//   var archive = this;
-//   var fileProvider = archive.fileProvider;
-//   var archiveFilePath = _.pathJoin( archiveDirPath , archive.storageFileName );
-//
-//   _.assert( arguments.length === 1 );
-//
-//   if( !fileProvider.fileStat( archiveFilePath ) )
-//   return false;
-//
-//   for( var f = 0 ; f < archive.loadedStorages.length ; f++ )
-//   {
-//     var loadedArchive = archive.loadedStorages[ f ];
-//     if( _.strBegins( archiveDirPath,loadedArchive.dirPath ) && ( archiveFilePath !== loadedArchive.filePath ) )
-//     return false;
-//   }
-//
-//   if( archive.verbosity >= 3 )
-//   logger.log( '. loading archive',archiveFilePath );
-//   var mapExtend = fileProvider.fileReadJson( archiveFilePath );
-//   _.mapExtend( archive.fileMap,mapExtend );
-//
-//   archive.loadedStorages.push({ dirPath : archiveDirPath, filePath : archiveFilePath });
-//
-//   return true;
-// }
-
-//
 
 function filesUpdate()
 {
@@ -147,9 +51,9 @@ function filesUpdate()
   archive.fileModifiedMap = Object.create( null );
   archive.fileHashMap = null;
 
-  _.assert( _.strIsNotEmpty( archive.trackPath ) || _.strsAreNotEmpty( archive.trackPath ) );
+  _.assert( _.strIsNotEmpty( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
 
-  var globIn = _.strJoin( archive.trackPath, '/**' );
+  var globIn = _.strJoin( archive.basePath, '/**' );
   if( archive.verbosity >= 3 )
   logger.log( 'filesUpdate globIn',globIn );
 
@@ -216,7 +120,7 @@ function filesUpdate()
       d.size = record.stat.size;
       if( archive.maxSize === null || record.stat.size <= archive.maxSize )
       d.hash = fileProvider.fileHash( record.absolute );
-      d.hash2 = _.statsHash2Get( record.stat );
+      d.hash2 = _.fileStatHashGet( record.stat );
       d.nlink = record.stat.nlink;
     }
 
@@ -486,7 +390,7 @@ var Composes =
 {
   verbosity : 2,
 
-  trackPath : null,
+  basePath : null,
 
   comparingRelyOnHardLinks : 0,
   replacingByNewest : 1,
@@ -536,6 +440,7 @@ var Forbids =
 var Accessors =
 {
   verbosity : 'verbosity',
+  storageToStore : 'storageToStore',
 }
 
 // --
@@ -558,6 +463,8 @@ var Proto =
   //
 
   _verbositySet : _verbositySet,
+  _storageToStoreSet : _.setterAlias_functor({ original : 'fileMap', alias : 'storageToStore' }),
+  _storageToStoreGet : _.getterAlias_functor({ original : 'fileMap', alias : 'storageToStore' }),
 
 
   //

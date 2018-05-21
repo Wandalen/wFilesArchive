@@ -29,25 +29,26 @@ function _storageSave( o )
   var fileProvider = self.fileProvider;
 
   _.assert( arguments.length === 1 );
+  _.routineOptions( _storageSave,arguments );
 
   if( self.verbosity >= 3 )
-  logger.log( '+ saving ' + _.strReplaceAll( self.storageFileName,'.','' ) + ' ' + o.archiveFilePath );
+  logger.log( '+ saving ' + _.strReplaceAll( self.storageFileName,'.','' ) + ' ' + o.storageFilePath );
 
-  var map = self.fileMap;
+  var map = self.storageToStore;
   if( o.splitting )
   {
-    var archiveDirPath = _.pathDir( o.archiveFilePath );
+    var storageDirPath = _.pathDir( o.storageFilePath );
     map = Object.create( null );
-    for( var m in self.fileMap )
+    for( var m in self.storageToStore )
     {
-      if( _.strBegins( m,archiveDirPath ) )
-      map[ m ] = self.fileMap[ m ];
+      if( _.strBegins( m,storageDirPath ) )
+      map[ m ] = self.storageToStore[ m ];
     }
   }
 
   fileProvider.fileWriteJson
   ({
-    filePath : o.archiveFilePath,
+    filePath : o.storageFilePath,
     data : map,
     pretty : 1,
     sync : 1,
@@ -57,31 +58,32 @@ function _storageSave( o )
 
 _storageSave.defaults =
 {
-  archiveFilePath : null,
+  storageFilePath : null,
   splitting : 0,
 }
 
 //
 
-function storageSave()
+function storageSave( basePath )
 {
   var self = this;
   var fileProvider = self.fileProvider;
-  var archiveFilePath = _.pathsJoin( self.trackPath , self.storageFileName );
+  var basePath = basePath ? _.pathsGet( basePath ) : self.basePath;
+  var storageFilePath = _.pathsJoin( basePath , self.storageFileName );
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  if( _.arrayIs( archiveFilePath ) )
-  for( var p = 0 ; p < archiveFilePath.length ; p++ )
+  if( _.arrayIs( storageFilePath ) )
+  for( var p = 0 ; p < storageFilePath.length ; p++ )
   self._storageSave
   ({
-    archiveFilePath : archiveFilePath[ p ],
+    storageFilePath : storageFilePath[ p ],
     splitting : 1,
   })
   else
   self._storageSave
   ({
-    archiveFilePath : archiveFilePath,
+    storageFilePath : storageFilePath,
     splitting : 0,
   });
 
@@ -89,32 +91,32 @@ function storageSave()
 
 //
 
-function storageLoad( archiveDirPath )
+function storageLoad( storageDirPath )
 {
   var self = this;
   var fileProvider = self.fileProvider;
-  var archiveFilePath = _.pathJoin( archiveDirPath , self.storageFileName );
-
-  debugger;
+  var storageDirPath = _.pathGet( storageDirPath );
+  var storageFilePath = _.pathJoin( storageDirPath , self.storageFileName );
 
   _.assert( arguments.length === 1 );
 
-  if( !fileProvider.fileStat( archiveFilePath ) )
+  if( !fileProvider.fileStat( storageFilePath ) )
   return false;
 
   for( var f = 0 ; f < self.loadedStorages.length ; f++ )
   {
-    var loadedArchive = self.loadedStorages[ f ];
-    if( _.strBegins( archiveDirPath,loadedArchive.dirPath ) && ( archiveFilePath !== loadedArchive.filePath ) )
+    var loadedStorage = self.loadedStorages[ f ];
+    if( _.strBegins( storageDirPath,loadedStorage.dirPath ) && ( storageFilePath !== loadedStorage.filePath ) )
     return false;
   }
 
   if( self.verbosity >= 3 )
-  logger.log( '. loading ' + _.strReplaceAll( self.storageFileName,'.','' ) + ' ' + archiveFilePath );
-  var mapExtend = fileProvider.fileReadJson( archiveFilePath );
-  _.mapExtend( self.fileMap,mapExtend );
+  logger.log( '. loading ' + _.strReplaceAll( self.storageFileName,'.','' ) + ' ' + storageFilePath );
+  var mapExtend = fileProvider.fileReadJson( storageFilePath );
+  var storage = _.mapExtend( self.storageToStore,mapExtend );
+  self.storageToStore = storage;
 
-  self.loadedStorages.push({ dirPath : archiveDirPath, filePath : archiveFilePath });
+  self.loadedStorages.push({ dirPath : storageDirPath, filePath : storageFilePath });
 
   return true;
 }

@@ -33,17 +33,10 @@
   },
   "dependencies": {
     "wTools": "",
-    "wConsequence": "",
-    "wProto": "",
-    "wPath": "",
-    "wfieldsstack": "",
-    "wRegexpObject": "",
-    "fs-extra": ""
+    "wFiles": ""
   },
   "devDependencies": {
     "wTesting": "",
-    "typedarray-to-buffer": "",
-    "cli-table2": "",
     "wfilesarchive": "."
   },
   "keywords": [

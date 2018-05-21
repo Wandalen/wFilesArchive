@@ -126,14 +126,14 @@ function archive( test )
   });
 
   var provider = _.FileFilter.Archive();
-  provider.archive.trackPath = testRoutineDir;
+  provider.archive.basePath = testRoutineDir;
   provider.archive.verbosity = 0;
   provider.archive.fileMapAutosaving = 1;
   provider.archive.filesUpdate();
 
   /* check if map contains expected files */
 
-  var flatMap = flatMapFromTree( filesTree, provider.archive.trackPath );
+  var flatMap = flatMapFromTree( filesTree, provider.archive.basePath );
   var got = _.mapOwnKeys( provider.archive.fileMap );
   var expected = _.mapOwnKeys( flatMap );
   test.shouldBe( _.arraySetIdentical( got, expected ) );
@@ -150,7 +150,7 @@ function archive( test )
 
   /* check how archive saves fileMap of disk */
 
-  var archivePath = _.pathJoin( provider.archive.trackPath, provider.archive.storageFileName );
+  var archivePath = _.pathJoin( provider.archive.basePath, provider.archive.storageFileName );
   var savedOnDisk = !!provider.fileStat( archivePath );
   test.shouldBe( savedOnDisk );
   var arcive = provider.fileReadJson( archivePath );
@@ -167,7 +167,7 @@ function restoreLinks( test )
   _.fileProvider.fieldSet( 'safe', 0 );
 
   var provider = _.FileFilter.Archive();
-  provider.archive.trackPath = testRoutineDir;
+  provider.archive.basePath = testRoutineDir;
   provider.archive.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 1;
@@ -452,7 +452,7 @@ function restoreLinks( test )
   //
 
   var provider = _.FileFilter.Archive();
-  provider.archive.trackPath = testRoutineDir;
+  provider.archive.basePath = testRoutineDir;
   provider.archive.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 1;
@@ -509,14 +509,14 @@ function restoreLinksComplex( test )
   var provider = _.FileFilter.Archive({ original : new _.FileProvider.Default() });
   provider.verbosity = 0;
   provider.archive.verbosity = 0;
-  provider.archive.trackPath = testRoutineDir;
+  provider.archive.basePath = testRoutineDir;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 0;
 
   run();
 
   var provider = _.FileFilter.Archive();
-  provider.archive.trackPath = testRoutineDir;
+  provider.archive.basePath = testRoutineDir;
   provider.archive.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 1;
@@ -803,7 +803,7 @@ function filesLinkSame( test )
     }
 
     provider = _.FileFilter.Archive();
-    provider.archive.trackPath = dir;
+    provider.archive.basePath = dir;
     provider.archive.fileMapAutosaving = 0;
 
     _.FileProvider.Extract.readToProvider
@@ -897,7 +897,7 @@ function severalPaths( test )
     }
 
     provider = _.FileFilter.Archive();
-    provider.archive.trackPath = [ _.pathJoin( dir,'dir1' ), _.pathJoin( dir,'dir2' ), _.pathJoin( dir,'dir3' ) ];
+    provider.archive.basePath = [ _.pathJoin( dir,'dir1' ), _.pathJoin( dir,'dir2' ), _.pathJoin( dir,'dir3' ) ];
     provider.archive.fileMapAutosaving = 0;
 
     _.FileProvider.Extract.readToProvider

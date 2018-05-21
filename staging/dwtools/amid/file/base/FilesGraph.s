@@ -25,106 +25,229 @@ Self.nameShort = 'FilesGraph';
 
 function init( o )
 {
-  var archive = this;
+  var self = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  _.instanceInit( archive );
-  Object.preventExtensions( archive )
+  _.instanceInit( self );
+  Object.preventExtensions( self )
 
   if( o )
-  archive.copy( o );
+  self.copy( o );
 
 }
 
 //
 
-function contentUpdate( head,data )
+// function contentUpdate( head,data )
+// {
+//   var self = this;
+//
+//   _.assert( arguments.length === 2 );
+//
+//   var head = _.FileRecord.from( head );
+//   var dependency = self._headToTailsFor( head );
+//
+//   dependency.node.hash = self._hashFor( data );
+//
+//   return dependency;
+// }
+//
+// //
+//
+// function statUpdate( head,stat )
+// {
+//   var self = this;
+//
+//   _.assert( arguments.length === 2 );
+//
+//   var head = _.FileRecord.from( head );
+//   var dependency = self._headToTailsFor( head );
+//
+//   dependency.node.mtime = stat.mtime.getTime();
+//   dependency.node.ctime = stat.ctime.getTime();
+//   dependency.node.birthtime = stat.birthtime.getTime();
+//   dependency.node.size = stat.size;
+//
+//   return dependency;
+// }
+
+//
+
+function fileChange( path )
 {
-  var archive = this;
+  var self = this;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 1 );
 
-  var head = _.FileRecord.from( head );
-  var dependency = archive._dependencyFor( head );
+  self.changedMap[ path ] = true;
 
-  dependency.info.hash = archive._hashFor( data );
+  /* xxx */
 
-  return dependency;
 }
 
 //
 
-function statUpdate( head,stat )
+function filesUpdate( record )
 {
-  var archive = this;
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  if( _.arrayIs( record ) )
+  {
+    for( var r = 0 ; r < record.length ; r++ )
+    self.filesUpdate( record[ r ] );
+    return self;
+  }
+
+  _.assert( record instanceof _.FileRecord );
+
+  self._nodeForChanging( record )
+
+  return self;
+}
+
+//
+
+function dependencyIsUpToDate( head,tails )
+{
+  var self = this;
+
+  if( tails instanceof _.FileRecord )
+  tails = [ tails ];
 
   _.assert( arguments.length === 2 );
+  _.assert( head instanceof _.FileRecord );
+  _.assert( _.arrayIs( tails ) );
 
-  var head = _.FileRecord.from( head );
-  var dependency = archive._dependencyFor( head );
+  var change = false;
 
-  dependency.info.mtime = stat.mtime;
-  dependency.info.ctime = stat.ctime;
-  dependency.info.birthtime = stat.birthtime;
-  dependency.info.size = stat.size;
+  debugger;
 
-  return dependency;
+  self.filesUpdate( head );
+  self.filesUpdate( tails );
+
+  if( self.changedMap[ head.absolute ] )
+  return false;
+
+  debugger;
+
+  // var dependency = self._dependencyGet( head );
+  //
+  // // var dependency = self._dependencyGet( head );
+  //
+  // if( !dependency )
+  // return false;
+  //
+  // debugger;
+  //
+  // if( !self._nodeRecordSame( dependency.head, head ) )
+  // {
+  //   debugger;
+  //   return false;
+  // }
+  //
+  // debugger; xxx
+
+  return true;
 }
 
 //
 
 function dependencyAdd( head,tails )
 {
-  var archive = this;
-
-  _.assert( arguments.length === 2 );
-
-  // head = _.FileRecord.from( head );
-  // tails = _.FileRecord.manyFrom( tails );
+  var self = this;
 
   if( tails instanceof _.FileRecord )
   tails = [ tails ];
 
+  _.assert( arguments.length === 2 );
   _.assert( head instanceof _.FileRecord );
   _.assert( _.arrayIs( tails ) );
 
-  var dependency = archive._dependencyFor( head );
+  if( _.strHas( head.absolute,'backgroundDraw.chunk' ) )
+  debugger;
+
+  /* */
+
+  var headToTails = self._headToTailsFor( head );
+  for( var t = 0 ; t < tails.length ; t++ )
+  {
+    var tailRecord = tails[ t ];
+    _.assert( tailRecord instanceof _.FileRecord );
+
+    var tailNode = self.nodesMap[ headToTails.tails[ tailRecord.absolute ] ];
+    if( tailNode )
+    _.assert( self._nodeRecordSame( tailNode, tailRecord ) );
+    headToTails.tails[ tailRecord.absolute ] = self._nodeFor( tailRecord );
+    headToTails.tails[ tailRecord.absolute ] = headToTails.tails[ tailRecord.absolute ].absolute;
+  }
+
+  /* */
 
   for( var t = 0 ; t < tails.length ; t++ )
   {
-    var tail = tails[ t ];
-    _.assert( tail instanceof _.FileRecord );
-    if( dependency.tails[ tail.absolute ] )
-    _.assert( archive._infoRecordSame( dependency.tails[ tail.absolute ], tail ) );
-    dependency.tails[ tail.absolute ] = archive._infoFor( tail );
+    var tailRecord = tails[ t ];
+    _.assert( tailRecord instanceof _.FileRecord );
+
+    var tailToHeads = self._tailToHeadsFor( tailRecord );
+
+    var headNode = self.nodesMap[ tailToHeads.heads[ head.absolute ] ];
+    if( headNode )
+    _.assert( self._nodeRecordSame( headNode, head ) );
+
+    tailToHeads.heads[ head.absolute ] = self._nodeFor( head );
+    tailToHeads.heads[ head.absolute ] = tailToHeads.heads[ head.absolute ].absolute;
   }
 
-  return dependency;
+  /* */
+
+  return self;
 }
 
 //
+//
+// function _dependencyGet( headRecord )
+// {
+//   var self = this;
+//
+//   _.assert( arguments.length === 1 );
+//   _.assert( headRecord instanceof _.FileRecord );
+//
+//   var dependency = self.tailsForHeadMap[ headRecord.absolute ];
+//
+//   return dependency;
+// }
+//
+//
 
-function _dependencyFor( head )
+function _headToTailsFor( headRecord )
 {
-  var archive = this;
+  var self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( head instanceof _.FileRecord );
+  _.assert( headRecord instanceof _.FileRecord );
 
-  var dependency = archive.dependencyMap[ head.absolute ];
+  var dependency = self.tailsForHeadMap[ headRecord.absolute ];
 
   if( !dependency )
   {
-    dependency = archive.dependencyMap[ head.relative ] = Object.create( null );
-    dependency.head = head.relative;
+    dependency = self.tailsForHeadMap[ headRecord.absolute ] = Object.create( null );
     dependency.tails = Object.create( null );
-    dependency.head = archive._infoFor( head );
+    dependency.head = self._nodeFor( headRecord );
+    dependency.head = dependency.head.absolute;
     Object.preventExtensions( dependency );
   }
   else
   {
-    _.assert( archive._infoRecordSame( dependency.head, head ) );
+    // debugger;
+    self._nodeFor( headRecord );
+    // var same = self._nodeRecordSame( dependency.head, headRecord );
+    // if( !same )
+    // {
+    //   self._nodeFromRecord( dependency.head, headRecord );
+    // }
   }
 
   return dependency;
@@ -132,60 +255,158 @@ function _dependencyFor( head )
 
 //
 
-function _infoFor( record )
+function _tailToHeadsFor( tailRecord )
 {
-  var archive = this;
-  var provider = archive.provider;
+  var self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( record instanceof _.FileRecord );
-  _.assert( record.stat );
+  _.assert( tailRecord instanceof _.FileRecord );
 
-  var info = Object.create( null );
-  info.absolute = record.absolute;
-  info.relative = record.relative;
-  info.hash = record.hashGet();
-  info.hash2 = _.statsHash2Get( record.stat );
-  info.size = record.stat.size;
-  info.mtime = record.stat.mtime;
-  info.ctime = record.stat.ctime;
-  info.birthtime = record.stat.birthtime;
-  Object.preventExtensions( info );
+  var dependency = self.headsForTailMap[ tailRecord.absolute ];
 
-  return info;
+  if( !dependency )
+  {
+    dependency = self.headsForTailMap[ tailRecord.absolute ] = Object.create( null );
+    dependency.heads = Object.create( null );
+    dependency.tail = self._nodeFor( tailRecord );
+    dependency.tail = dependency.tail.absolute;
+    Object.preventExtensions( dependency );
+  }
+  else
+  {
+    // debugger;
+    self._nodeFor( tailRecord );
+    // var same = self._nodeRecordSame( dependency.head, tailRecord );
+    // if( !same )
+    // {
+    //   self._nodeFromRecord( dependency.head, tailRecord );
+    // }
+  }
+
+  return dependency;
 }
 
 //
 
-function _infoRecordSame( info,record )
+function _nodeFor( record )
 {
-  var archive = this;
-  var provider = archive.provider;
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  var node = self.nodesMap[ record.absolute ];
+
+  if( node )
+  {
+    _.assert( self._nodeRecordSame( node,record ) );
+    return node;
+  }
+
+  node = self._nodeMake( record );
+
+  return node;
+}
+
+//
+
+function _nodeForChanging( record )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  var node = self.nodesMap[ record.absolute ];
+
+  if( !node )
+  {
+
+    node = self._nodeMake( record );
+    self.fileChange( record.absolute );
+
+  }
+  else
+  {
+    if( !self._nodeRecordSame( node,record ) )
+    {
+      self._nodeFromRecord( node,record );
+      self.fileChange( record.absolute );
+    }
+  }
+
+  return node;
+}
+
+//
+
+function _nodeMake( record )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( !self.nodesMap[ record.absolute ] );
+
+  var node = Object.create( null );
+  self._nodeFromRecord( node,record );
+  Object.preventExtensions( node );
+  self.nodesMap[ record.absolute ] = node;
+
+  return node;
+}
+
+//
+
+function _nodeFromRecord( node,record )
+{
+  var self = this;
+  var provider = self.provider;
 
   _.assert( arguments.length === 2 );
-  _.assert( _.mapIs( info ) );
   _.assert( record instanceof _.FileRecord );
   _.assert( record.stat );
 
-  if( info.absolute !== record.absolute )
+  node.absolute = record.absolute;
+  node.relative = record.relative;
+  node.hash = record.hashGet();
+  node.hash2 = _.fileStatHashGet( record.stat );
+  node.size = record.stat.size;
+  node.mtime = record.stat.mtime.getTime();
+  node.ctime = record.stat.ctime.getTime();
+  node.birthtime = record.stat.birthtime.getTime();
+
+  return node;
+}
+
+//
+
+function _nodeRecordSame( node,record )
+{
+  var self = this;
+  var provider = self.provider;
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.mapIs( node ) );
+  _.assert( record instanceof _.FileRecord );
+  _.assert( record.stat );
+
+  if( node.absolute !== record.absolute )
   return false;
 
-  if( info.relative !== record.relative )
+  if( node.relative !== record.relative )
   return false;
 
-  if( info.size !== record.stat.size )
+  if( node.size !== record.stat.size )
   return false;
 
-  if( info.mtime !== record.stat.mtime )
+  if( node.mtime !== record.stat.mtime.getTime() )
   return false;
 
-  if( info.ctime !== record.stat.ctime )
+  if( node.ctime !== record.stat.ctime.getTime() )
   return false;
 
-  if( info.birthtime !== record.stat.birthtime )
+  if( node.birthtime !== record.stat.birthtime.getTime() )
   return false;
 
-  // if( info.hash !== record.hashGet() )
+  // if( node.hash !== record.hashGet() )
   // return false;
 
   return true;
@@ -225,6 +446,8 @@ function actionBegin( action )
 
   self.currentAction = action;
 
+
+
 }
 
 //
@@ -245,7 +468,7 @@ function actionEnd( action )
 
 function _verbositySet( val )
 {
-  var archive = this;
+  var self = this;
 
   _.assert( arguments.length === 1 );
 
@@ -254,7 +477,37 @@ function _verbositySet( val )
   if( val < 0 )
   val = 0;
 
-  archive[ verbositySymbol ] = val;
+  self[ verbositySymbol ] = val;
+}
+
+//
+
+function _storageToStoreSet( storage )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  // self.changedMap = storage.changedMap;
+  self.nodesMap = storage.nodesMap;
+  self.headsForTailMap = storage.headsForTailMap;
+  self.tailsForHeadMap = storage.tailsForHeadMap;
+
+}
+
+//
+
+function _storageToStoreGet()
+{
+  var self = this;
+  var storage = Object.create( null );
+
+  // storage.changedMap = self.changedMap;
+  storage.nodesMap = self.nodesMap;
+  storage.headsForTailMap = self.headsForTailMap;
+  storage.tailsForHeadMap = self.tailsForHeadMap;
+
+  return storage;
 }
 
 // --
@@ -265,10 +518,19 @@ var verbositySymbol = Symbol.for( 'verbosity' );
 
 var Composes =
 {
-  verbosity : 2,
+
+  verbosity : 3,
   storageFileName : '.wfilesgraph',
-  dependencyMap : Object.create( null ),
+  basePath : '/',
   currentAction : null,
+
+  // dependencyMap : Object.create( null ),
+
+  changedMap : Object.create( null ),
+  nodesMap : Object.create( null ),
+  headsForTailMap : Object.create( null ),
+  tailsForHeadMap : Object.create( null ),
+
 }
 
 var Aggregates =
@@ -291,7 +553,7 @@ var Statics =
 var Forbids =
 {
 
-  trackPath : 'trackPath',
+  // basePath : 'basePath',
 
   comparingRelyOnHardLinks : 'comparingRelyOnHardLinks',
   replacingByNewest : 'replacingByNewest',
@@ -316,6 +578,7 @@ var Forbids =
 var Accessors =
 {
   verbosity : 'verbosity',
+  storageToStore : 'storageToStore',
 }
 
 // --
@@ -327,14 +590,25 @@ var Proto =
 
   init : init,
 
-  contentUpdate : contentUpdate,
-  statUpdate : statUpdate,
+  // contentUpdate : contentUpdate,
+  // statUpdate : statUpdate,
 
+  fileChange : fileChange,
+  filesUpdate : filesUpdate,
+
+  dependencyIsUpToDate : dependencyIsUpToDate,
   dependencyAdd : dependencyAdd,
-  _dependencyFor : _dependencyFor,
+  // _dependencyGet : _dependencyGet,
 
-  _infoFor : _infoFor,
-  _infoRecordSame : _infoRecordSame,
+  _headToTailsFor : _headToTailsFor,
+  _tailToHeadsFor : _tailToHeadsFor,
+
+  _nodeMake : _nodeMake,
+  _nodeFor : _nodeFor,
+  _nodeForChanging : _nodeForChanging,
+
+  _nodeFromRecord : _nodeFromRecord,
+  _nodeRecordSame : _nodeRecordSame,
 
   _hashFor : _hashFor,
 
@@ -345,6 +619,11 @@ var Proto =
   //
 
   _verbositySet : _verbositySet,
+  _storageToStoreSet : _storageToStoreSet,
+  _storageToStoreGet : _storageToStoreGet,
+
+  // _storageToStoreSet : _.setterAlias_functor({ original : 'dependencyMap', alias : 'storageToStore' }),
+  // _storageToStoreGet : _.getterAlias_functor({ original : 'dependencyMap', alias : 'storageToStore' }),
 
 
   //
