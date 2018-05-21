@@ -113,10 +113,26 @@ function storageLoad( storageDirPath )
   if( self.verbosity >= 3 )
   logger.log( '. loading ' + _.strReplaceAll( self.storageFileName,'.','' ) + ' ' + storageFilePath );
   var mapExtend = fileProvider.fileReadJson( storageFilePath );
+
+  var extended = self.storageLoadEnd( storageFilePath,mapExtend );
+
+  if( extended )
+  self.loadedStorages.push({ dirPath : storageDirPath, filePath : storageFilePath });
+
+  return extended;
+}
+
+//
+
+function storageLoadEnd( storageFilePath,mapExtend )
+{
+  var self = this;
+  var fileProvider = self.fileProvider;
+
+  _.assert( arguments.length === 2 );
+
   var storage = _.mapExtend( self.storageToStore,mapExtend );
   self.storageToStore = storage;
-
-  self.loadedStorages.push({ dirPath : storageDirPath, filePath : storageFilePath });
 
   return true;
 }
@@ -166,6 +182,7 @@ var Supplement =
   _storageSave : _storageSave,
   storageSave : storageSave,
   storageLoad : storageLoad,
+  storageLoadEnd : storageLoadEnd,
 
 
   //
