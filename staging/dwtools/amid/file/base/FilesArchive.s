@@ -212,7 +212,7 @@ function filesLinkSame( o )
   {
     var files = fileHashMap[ f ];
 
-    // if( _.strHas( files[ 0 ],'StringTools2.test.s' ) )
+    // if( _.strHas( files[ 0 ],'zTest.ss' ) )
     // debugger;
 
     if( files.length < 2 )
