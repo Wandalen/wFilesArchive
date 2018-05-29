@@ -121,7 +121,7 @@ function _eachHeadBody( it,op )
   var result = 1;
 
   _.assert( arguments.length === 2 );
-  _.assert( self.nodesMap[ it.path ] );
+  // _.assert( self.nodesMap[ it.path ] );
 
   if( _.arrayHas( op.visited,it.path ) )
   return;
@@ -188,6 +188,7 @@ function fileChange( path )
 
   function onUp( it,op )
   {
+    debugger;
     self.changedMap[ it.path ] = true;
     if( self.verbosity >= 3 )
     if( it.prevPath )
@@ -216,7 +217,13 @@ function filesUpdate( record )
 
   _.assert( record instanceof _.FileRecord );
 
-  self._nodeForChanging( record )
+  debugger;
+  // self._nodeForChanging( record );
+  if( !self._nodeForUpdating( record ) )
+  {
+    _.assert( !self.unprocessedMap[ record.absolute ] );
+    return self;
+  }
 
   delete self.unprocessedMap[ record.absolute ];
 
@@ -230,21 +237,6 @@ function fileDeletedUpdate( path )
   var self = this;
 
   _.assert( arguments.length === 1 );
-
-  // self.eachHead
-  // ({
-  //   onUp : onUp,
-  //   onDown : onDown,
-  //   path : path,
-  // });
-  //
-  // function onUp( it,op )
-  // {
-  // }
-  //
-  // function onDown( it,op )
-  // {
-  // }
 
   /* */
 
@@ -384,15 +376,25 @@ function dependencyAdd( head,tails )
 
   /* */
 
+  delete self.unprocessedMap[ head.absolute ];
+  for( var t = 0 ; t < tails.length ; t++ )
+  {
+    var tailRecord = tails[ t ];
+    delete self.unprocessedMap[ tailRecord.absolute ];
+  }
+
+  /* */
+
   var headToTails = self._headToTailsFor( head );
   for( var t = 0 ; t < tails.length ; t++ )
   {
     var tailRecord = tails[ t ];
     _.assert( tailRecord instanceof _.FileRecord );
 
-    var tailNode = self.nodesMap[ headToTails.tails[ tailRecord.absolute ] ];
-    if( tailNode )
-    _.assert( self._nodeRecordSame( tailNode, tailRecord ) );
+    // var tailNode = self.nodesMap[ headToTails.tails[ tailRecord.absolute ] ];
+    // if( tailNode )
+    // _.assert( self._nodeRecordSame( tailNode, tailRecord ) );
+
     headToTails.tails[ tailRecord.absolute ] = self._nodeForChanging( tailRecord );
     headToTails.tails[ tailRecord.absolute ] = headToTails.tails[ tailRecord.absolute ].absolute;
   }
@@ -406,9 +408,9 @@ function dependencyAdd( head,tails )
 
     var tailToHeads = self._tailToHeadsFor( tailRecord );
 
-    var headNode = self.nodesMap[ tailToHeads.heads[ head.absolute ] ];
-    if( headNode )
-    _.assert( self._nodeRecordSame( headNode, head ) );
+    // var headNode = self.nodesMap[ tailToHeads.heads[ head.absolute ] ];
+    // if( headNode )
+    // _.assert( self._nodeRecordSame( headNode, head ) );
 
     tailToHeads.heads[ head.absolute ] = self._nodeForChanging( head );
     tailToHeads.heads[ head.absolute ] = tailToHeads.heads[ head.absolute ].absolute;
@@ -537,6 +539,45 @@ function _nodeForChanging( record )
       self._nodeFromRecord( node,record );
       self.fileChange( record.absolute );
     }
+  }
+
+  return node;
+}
+
+//
+
+function _nodeForUpdating( record )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  var node = self.nodesMap[ record.absolute ];
+
+  if( !node )
+  {
+
+    if( !record.inclusion )
+    {
+      debugger;
+      self.fileChange( record.absolute );
+      debugger;
+      return null;
+    }
+
+    node = self._nodeMake( record );
+    self.fileChange( record.absolute );
+
+  }
+  else
+  {
+
+    if( !self._nodeRecordSame( node,record ) )
+    {
+      self._nodeFromRecord( node,record );
+      self.fileChange( record.absolute );
+    }
+
   }
 
   return node;
@@ -782,6 +823,11 @@ function _storageToStoreGet()
 //
 // --
 
+/*
+  - changedMap could have path without nodes
+  - unprocessedMap could not have path without nodes
+*/
+
 var verbositySymbol = Symbol.for( 'verbosity' );
 
 var Composes =
@@ -897,9 +943,11 @@ var Proto =
   _nodeMake : _nodeMake,
   _nodeFor : _nodeFor,
   _nodeForChanging : _nodeForChanging,
+  _nodeForUpdating : _nodeForUpdating,
 
   _nodeFromRecord : _nodeFromRecord,
   _nodeRecordSame : _nodeRecordSame,
+
 
   // etc
 

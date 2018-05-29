@@ -132,7 +132,6 @@ function filesUpdate()
 
   archive.mask = _.regexpMakeObject( archive.mask );
 
-  debugger;
   var files = fileProvider.filesFind
   ({
     globIn : globIn,
@@ -142,7 +141,6 @@ function filesUpdate()
     includingDirectories : 1,
     recursive : 1,
   });
-  debugger;
 
   archive.fileRemovedMap = fileMapOld;
   archive.fileMap = fileMapNew;
