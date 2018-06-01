@@ -944,7 +944,7 @@ var Self =
 
   name : 'FileFilter.Archive',
   silencing : 1,
-  verbosity : 5,
+  verbosity : 4,
   importanceOfNegative : 5,
 
   onSuitBegin : onSuitBegin,
