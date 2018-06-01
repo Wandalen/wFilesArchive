@@ -26,9 +26,7 @@ if( typeof module !== 'undefined' )
 
   var _ = _global_.wTools;
 
-  if( !_global_.wTools.FileProvider )
-  require( '../file/FileTop.s' );
-
+  _.include( 'wFiles' );
   _.include( 'wTesting' );
 
 }
