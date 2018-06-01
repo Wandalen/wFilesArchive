@@ -28,6 +28,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wFiles' );
   _.include( 'wTesting' );
+  _.include( 'wFilesArchive' );
 
 }
 
@@ -591,7 +592,7 @@ function restoreLinksComplex( test )
     test.identical( provider.archive.replacingByNewest, 1 );
     test.identical( provider.archive.fileMapAutosaving, 0 );
     test.identical( provider.archive.storageFileName, '.warchive' );
-    test.identical( provider.archive.dependencyMap, {} );
+    // test.identical( provider.archive.dependencyMap, {} );
     test.identical( provider.archive.fileByHashMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
     test.identical( provider.archive.fileRemovedMap, {} );
@@ -665,7 +666,7 @@ function restoreLinksComplex( test )
     test.identical( provider.archive.replacingByNewest, 1 );
     test.identical( provider.archive.fileMapAutosaving, 0 );
     test.identical( provider.archive.storageFileName, '.warchive' );
-    test.identical( provider.archive.dependencyMap, {} );
+    // test.identical( provider.archive.dependencyMap, {} );
     test.identical( provider.archive.fileByHashMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
     test.identical( provider.archive.fileRemovedMap, {} );
@@ -738,7 +739,7 @@ function restoreLinksComplex( test )
     test.identical( provider.archive.replacingByNewest, 1 );
     test.identical( provider.archive.fileMapAutosaving, 0 );
     test.identical( provider.archive.storageFileName, '.warchive' );
-    test.identical( provider.archive.dependencyMap, {} );
+    // test.identical( provider.archive.dependencyMap, {} );
     test.identical( provider.archive.fileByHashMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
     test.identical( provider.archive.fileRemovedMap, {} );
