@@ -171,56 +171,56 @@ function restoreLinks( test )
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 1;
 
+  // //
   //
-
-  test.description = 'three files linked, first link will be broken';
-  provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
-  var paths = [ 'a', 'b', 'c' ];
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  provider.archive.restoreLinksEnd();
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
-  test.identical( provider.filesAreHardLinked( paths ), true );
-  test.identical( provider.fileRead( paths[0] ), 'abc' );
-
+  // test.description = 'three files linked, first link will be broken';
+  // provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
+  // var paths = [ 'a', 'b', 'c' ];
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // provider.archive.restoreLinksEnd();
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  // test.identical( provider.fileRead( paths[0] ), 'abc' );
   //
-
-  test.description = 'three files linked, 0 link will be broken, content 0 changed';
-  provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
-  var paths = [ 'a', 'b', 'c' ];
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  provider.fileWrite( paths[ 0 ], 'bcd' );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), true );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.identical( provider.fileRead( paths[0] ), 'bcd' );
-
+  // //
   //
+  // test.description = 'three files linked, 0 link will be broken, content 0 changed';
+  // provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
+  // var paths = [ 'a', 'b', 'c' ];
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
+  // provider.fileWrite( paths[ 0 ], 'bcd' );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // provider.archive.restoreLinksEnd();
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.identical( provider.fileRead( paths[0] ), 'bcd' );
+  //
+  // //
 
-  test.description = 'three files linked, 0 link will be broken, content 1 changed';
+  test.description = 'three files linked, 1 link will be broken, content 1 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -240,260 +240,261 @@ function restoreLinks( test )
   test.identical( provider.filesAreHardLinked( paths ), true );
   test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
   test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.identical( provider.fileRead( paths[0] ), 'bcd' );
+  test.identical( provider.fileRead( paths[ 0 ] ), 'bcd' );
+
+  // //
   //
-
-  test.description = 'three files linked, 0 link will be broken, content 2 changed';
-  provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
-  var paths = [ 'a', 'b', 'c' ];
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  provider.fileWrite( paths[ 2 ], 'bcd' );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), true );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.identical( provider.fileRead( paths[0] ), 'bcd' );
-
+  // test.description = 'three files linked, 0 link will be broken, content 2 changed';
+  // provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
+  // var paths = [ 'a', 'b', 'c' ];
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
+  // provider.fileWrite( paths[ 2 ], 'bcd' );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // provider.archive.restoreLinksEnd();
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.identical( provider.fileRead( paths[0] ), 'bcd' );
   //
-
-  test.description = 'three files linked, 2 link will be broken, content 0 changed';
-  provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
-  var paths = [ 'a', 'b', 'c' ];
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
-  provider.fileWrite( paths[ 0 ], 'bcd' );
-  test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), true );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.identical( provider.fileRead( paths[0] ), 'bcd' );
-
+  // //
   //
-
-  test.description = 'three files linked, 2 link will be broken, content 1 changed';
-  provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
-  var paths = [ 'a', 'b', 'c' ];
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
-  provider.fileWrite( paths[ 1 ], 'bcd' );
-  test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), true );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.identical( provider.fileRead( paths[0] ), 'bcd' );
-
+  // test.description = 'three files linked, 2 link will be broken, content 0 changed';
+  // provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
+  // var paths = [ 'a', 'b', 'c' ];
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
+  // provider.fileWrite( paths[ 0 ], 'bcd' );
+  // test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // provider.archive.restoreLinksEnd();
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.identical( provider.fileRead( paths[0] ), 'bcd' );
   //
-
-  test.description = 'three files linked, 2 link will be broken, content 2 changed';
-  provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
-  var paths = [ 'a', 'b', 'c' ];
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
-  provider.fileWrite( paths[ 2 ], 'bcd' );
-  test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), true );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.identical( provider.fileRead( paths[0] ), 'bcd' );
-
+  // //
   //
-
-  test.description = 'three files linked, all links will be broken';
-  provider.filesDelete( testRoutineDir );
-  var paths = [ 'a', 'b', 'c' ];
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  provider.archive.restoreLinksBegin();
-  paths.forEach( ( p, i ) =>
-  {
-    provider.fileTouch({ filePath : p, purging : 1 });
-    provider.fileWrite( p, '' + i );
-  })
-  test.identical( provider.fileRead( paths[ 0 ] ), '0' );
-  test.identical( provider.fileRead( paths[ 1 ] ), '1' );
-  test.identical( provider.fileRead( paths[ 2 ] ), '2' );
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), true );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.identical( provider.fileRead( paths[ 0 ] ), '2' );
-  test.identical( provider.fileRead( paths[ 1 ] ), '2' );
-  test.identical( provider.fileRead( paths[ 2 ] ), '2' );
-
+  // test.description = 'three files linked, 2 link will be broken, content 1 changed';
+  // provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
+  // var paths = [ 'a', 'b', 'c' ];
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
+  // provider.fileWrite( paths[ 1 ], 'bcd' );
+  // test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // provider.archive.restoreLinksEnd();
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.identical( provider.fileRead( paths[0] ), 'bcd' );
   //
-
-  test.description = 'three files linked, size of first is changed after breaking the link, write 1 last'
-  var paths = [ 'a', 'b', 'c' ];
-  provider.filesDelete( testRoutineDir );
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  provider.fileWrite( paths[ 0 ], 'abcd0' );
-  provider.fileWrite( paths[ 1 ], 'abcd1' );
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  provider.archive.restoreLinksEnd();
-  test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.identical( provider.fileRead( paths[ 0 ] ), 'abcd1' );
-  test.identical( provider.fileRead( paths[ 1 ] ), 'abcd1' );
-  test.identical( provider.fileRead( paths[ 2 ] ), 'abcd1' );
-
+  // //
   //
-
-  test.description = 'three files linked, size of first is changed after breaking the link, write 0 last'
-  var paths = [ 'a', 'b', 'c' ];
-  provider.filesDelete( testRoutineDir );
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  provider.fileWrite( paths[ 1 ], 'abcd1' );
-  provider.fileWrite( paths[ 0 ], 'abcd0' );
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  provider.archive.restoreLinksEnd();
-  test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
-  test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
-  test.identical( provider.fileRead( paths[ 0 ] ), 'abcd0' );
-  test.identical( provider.fileRead( paths[ 1 ] ), 'abcd0' );
-  test.identical( provider.fileRead( paths[ 2 ] ), 'abcd0' );
-
+  // test.description = 'three files linked, 2 link will be broken, content 2 changed';
+  // provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
+  // var paths = [ 'a', 'b', 'c' ];
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
+  // provider.fileWrite( paths[ 2 ], 'bcd' );
+  // test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // provider.archive.restoreLinksEnd();
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.identical( provider.fileRead( paths[0] ), 'bcd' );
   //
-
-  test.description = 'three files linked, fourth is linked with the third file';
-  provider.filesDelete( testRoutineDir );
-  var paths = [ 'a', 'b', 'c' ];
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-
-  /* linking fourth with second and saving info */
-
-  paths[ 3 ] = _.pathJoin( testRoutineDir, 'e' );
-  provider.linkHard( paths[ 3 ], paths[ 2 ] );
-  provider.archive.restoreLinksBegin();
-
-  /*  breaking linkage and changing it content */
-
-  provider.fileWrite({ filePath : paths[ 0 ], purging : 1, data : 'bcd' });
-
-  /*  checking if linkage is broken  */
-
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  test.identical( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ), false );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ), true );
-  test.identical( provider.filesAreHardLinked( paths[ 2 ],paths[ 3 ] ), true );
-  test.shouldBe( provider.fileRead( paths[ 0 ] ) !== provider.fileRead( paths[ 3 ] ) );
-  test.identical( provider.fileRead( paths[ 2 ] ), provider.fileRead( paths[ 3 ] ) );
-
-  /*  restoring linkage  */
-
-  provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), true );
-
+  // //
   //
-
-  var provider = _.FileFilter.Archive();
-  provider.archive.basePath = testRoutineDir;
-  provider.archive.verbosity = 0;
-  provider.archive.fileMapAutosaving = 0;
-  provider.archive.comparingRelyOnHardLinks = 1;
-  provider.resolvingSoftLink = 1;
-
-  test.description = 'three files linked, size of file is changed';
-  var paths = [ 'a', 'b', 'c' ];
-  provider.filesDelete( testRoutineDir );
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  /* changing size of a file */
-  provider.fileWrite( paths[ 0 ], 'abcd' );
-  provider.archive.restoreLinksEnd();
-  /* checking if link was recovered by comparing content of a files */
-  test.identical( provider.filesAreHardLinked( paths ), true );
-
+  // test.description = 'three files linked, all links will be broken';
+  // provider.filesDelete( testRoutineDir );
+  // var paths = [ 'a', 'b', 'c' ];
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // provider.archive.restoreLinksBegin();
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   provider.fileTouch({ filePath : p, purging : 1 });
+  //   provider.fileWrite( p, '' + i );
+  // })
+  // test.identical( provider.fileRead( paths[ 0 ] ), '0' );
+  // test.identical( provider.fileRead( paths[ 1 ] ), '1' );
+  // test.identical( provider.fileRead( paths[ 2 ] ), '2' );
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // provider.archive.restoreLinksEnd();
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.identical( provider.fileRead( paths[ 0 ] ), '2' );
+  // test.identical( provider.fileRead( paths[ 1 ] ), '2' );
+  // test.identical( provider.fileRead( paths[ 2 ] ), '2' );
   //
-
-  test.description = 'three files linked, changing content of a file, but saving size';
-  var paths = [ 'a', 'b', 'c' ];
-  provider.filesDelete( testRoutineDir );
-  paths.forEach( ( p, i ) =>
-  {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
-    provider.fileWrite( paths[ i ], 'abc' );
-  });
-  provider.linkHard({ dstPath : paths });
-  provider.archive.restoreLinksBegin();
-  provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  /* changing size of a file */
-  provider.fileWrite( paths[ 0 ], 'cad' );
-  provider.archive.restoreLinksEnd();
-  /* checking if link was recovered by comparing content of a files */
-  test.identical( provider.filesAreHardLinked( paths ), true );
-
-  _.fileProvider.fieldReset( 'safe', 0 );
+  // //
+  //
+  // test.description = 'three files linked, size of first is changed after breaking the link, write 1 last'
+  // var paths = [ 'a', 'b', 'c' ];
+  // provider.filesDelete( testRoutineDir );
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
+  // provider.fileWrite( paths[ 0 ], 'abcd0' );
+  // provider.fileWrite( paths[ 1 ], 'abcd1' );
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // provider.archive.restoreLinksEnd();
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.identical( provider.fileRead( paths[ 0 ] ), 'abcd1' );
+  // test.identical( provider.fileRead( paths[ 1 ] ), 'abcd1' );
+  // test.identical( provider.fileRead( paths[ 2 ] ), 'abcd1' );
+  //
+  // //
+  //
+  // test.description = 'three files linked, size of first is changed after breaking the link, write 0 last'
+  // var paths = [ 'a', 'b', 'c' ];
+  // provider.filesDelete( testRoutineDir );
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
+  // provider.fileWrite( paths[ 1 ], 'abcd1' );
+  // provider.fileWrite( paths[ 0 ], 'abcd0' );
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // provider.archive.restoreLinksEnd();
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ) );
+  // test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
+  // test.identical( provider.fileRead( paths[ 0 ] ), 'abcd0' );
+  // test.identical( provider.fileRead( paths[ 1 ] ), 'abcd0' );
+  // test.identical( provider.fileRead( paths[ 2 ] ), 'abcd0' );
+  //
+  // //
+  //
+  // test.description = 'three files linked, fourth is linked with the third file';
+  // provider.filesDelete( testRoutineDir );
+  // var paths = [ 'a', 'b', 'c' ];
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  //
+  // /* linking fourth with second and saving info */
+  //
+  // paths[ 3 ] = _.pathJoin( testRoutineDir, 'e' );
+  // provider.linkHard( paths[ 3 ], paths[ 2 ] );
+  // provider.archive.restoreLinksBegin();
+  //
+  // /*  breaking linkage and changing it content */
+  //
+  // provider.fileWrite({ filePath : paths[ 0 ], purging : 1, data : 'bcd' });
+  //
+  // /*  checking if linkage is broken  */
+  //
+  // test.identical( provider.filesAreHardLinked( paths ), false );
+  // test.identical( provider.filesAreHardLinked( paths[ 0 ],paths[ 1 ] ), false );
+  // test.identical( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ), true );
+  // test.identical( provider.filesAreHardLinked( paths[ 2 ],paths[ 3 ] ), true );
+  // test.shouldBe( provider.fileRead( paths[ 0 ] ) !== provider.fileRead( paths[ 3 ] ) );
+  // test.identical( provider.fileRead( paths[ 2 ] ), provider.fileRead( paths[ 3 ] ) );
+  //
+  // /*  restoring linkage  */
+  //
+  // provider.archive.restoreLinksEnd();
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  //
+  // //
+  //
+  // var provider = _.FileFilter.Archive();
+  // provider.archive.basePath = testRoutineDir;
+  // provider.archive.verbosity = 0;
+  // provider.archive.fileMapAutosaving = 0;
+  // provider.archive.comparingRelyOnHardLinks = 1;
+  // provider.resolvingSoftLink = 1;
+  //
+  // test.description = 'three files linked, size of file is changed';
+  // var paths = [ 'a', 'b', 'c' ];
+  // provider.filesDelete( testRoutineDir );
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
+  // /* changing size of a file */
+  // provider.fileWrite( paths[ 0 ], 'abcd' );
+  // provider.archive.restoreLinksEnd();
+  // /* checking if link was recovered by comparing content of a files */
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  //
+  // //
+  //
+  // test.description = 'three files linked, changing content of a file, but saving size';
+  // var paths = [ 'a', 'b', 'c' ];
+  // provider.filesDelete( testRoutineDir );
+  // paths.forEach( ( p, i ) =>
+  // {
+  //   paths[ i ] = _.pathJoin( testRoutineDir, p );
+  //   provider.fileWrite( paths[ i ], 'abc' );
+  // });
+  // provider.linkHard({ dstPath : paths });
+  // provider.archive.restoreLinksBegin();
+  // provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
+  // /* changing size of a file */
+  // provider.fileWrite( paths[ 0 ], 'cad' );
+  // provider.archive.restoreLinksEnd();
+  // /* checking if link was recovered by comparing content of a files */
+  // test.identical( provider.filesAreHardLinked( paths ), true );
+  //
+  // _.fileProvider.fieldReset( 'safe', 0 );
 
 }
 
@@ -946,6 +947,7 @@ var Self =
   silencing : 1,
   verbosity : 4,
   importanceOfNegative : 5,
+  routine : 'restoreLinks',
 
   onSuitBegin : onSuitBegin,
   onSuitEnd : onSuitEnd,
