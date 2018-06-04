@@ -51,7 +51,7 @@ function init( o )
   if( !self.original )
   self.original = _.fileProvider;
 
-  var self = _.protoProxy( self, self.original );
+  var self = _.proxyMap( self, self.original );
 
   if( !self.archive )
   self.archive = new wFilesArchive({ fileProvider : self });
