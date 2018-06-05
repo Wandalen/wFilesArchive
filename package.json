@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "wTesting": "",
+    "wait-sync": "",
     "wfilesarchive": "."
   },
   "keywords": [
