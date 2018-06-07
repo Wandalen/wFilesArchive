@@ -1,6 +1,6 @@
 {
   "name": "wfilesarchive",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "engine": "node >= 6.0.0",
   "description": "Files Archive",
   "license": "MIT",
