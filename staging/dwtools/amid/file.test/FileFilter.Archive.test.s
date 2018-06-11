@@ -1,6 +1,6 @@
 ( function _FileFilter_Archive_test_s_( ) {
 
-'use strict'; 
+'use strict';
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
@@ -944,9 +944,9 @@ var Self =
 
   name : 'FileFilter.Archive',
   silencing : 1,
-  verbosity : 4,
-  importanceOfNegative : 5,
-  routine : 'restoreLinks',
+  // verbosity : 4,
+  // importanceOfNegative : 5,
+  // routine : 'restoreLinks',
 
   onSuitBegin : onSuitBegin,
   onSuitEnd : onSuitEnd,
