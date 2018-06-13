@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
     let toolsExternal = 0;
     try
     {
-      require.resolve( toolsPath );
+      toolsPath = require.resolve( toolsPath );
     }
     catch( err )
     {
@@ -957,8 +957,8 @@ var Self =
 
   name : 'FileFilter.Archive',
   silencing : 1,
-  verbosity : 4,
-  importanceOfNegative : 5,
+  // verbosity : 4,
+  // importanceOfNegative : 5,
   // routine : 'restoreLinks',
 
   onSuitBegin : onSuitBegin,

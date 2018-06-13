@@ -4,7 +4,7 @@
 
 //
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 var Parent = null;
 var Self = function wFileStorage( o )
 {
@@ -218,7 +218,7 @@ _global_[ Self.name ] = _[ Self.nameShort ] = Self;
 // --
 
 if( typeof module !== 'undefined' )
-if( _global_._UsingWtoolsPrivately_ )
+if( _global_.WTOOLS_PRIVATE )
 delete require.cache[ module.id ];
 
 if( typeof module !== 'undefined' && module !== null )
