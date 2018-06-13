@@ -442,7 +442,7 @@ var Accessors =
 }
 
 // --
-// prototype
+// define class
 // --
 
 var Proto =
