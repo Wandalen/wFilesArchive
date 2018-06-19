@@ -40,7 +40,7 @@ var Parent = _.Tester;
 
 //
 
-function onSuitBegin()
+function onSuiteBegin()
 {
   if( !isBrowser )
   this.testRootDirectory = _.dirTempMake( _.pathJoin( __dirname, '../..'  ) );
@@ -50,7 +50,7 @@ function onSuitBegin()
 
 //
 
-function onSuitEnd()
+function onSuiteEnd()
 {
   if( !isBrowser )
   {
@@ -949,7 +949,7 @@ function severalPaths( test )
 }
 
 // --
-// proto
+// define class
 // --
 
 var Self =
@@ -961,8 +961,8 @@ var Self =
   // importanceOfNegative : 5,
   // routine : 'restoreLinks',
 
-  onSuitBegin : onSuitBegin,
-  onSuitEnd : onSuitEnd,
+  onSuiteBegin : onSuiteBegin,
+  onSuiteEnd : onSuiteEnd,
 
   context :
   {
@@ -982,7 +982,7 @@ var Self =
 
 };
 
-Self = wTestSuit( Self )
+Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 
