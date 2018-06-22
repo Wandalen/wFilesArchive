@@ -46,6 +46,8 @@ function onSuiteBegin()
   this.testRootDirectory = _.dirTempMake( _.pathJoin( __dirname, '../..'  ) );
   else
   this.testRootDirectory = _.pathCurrent();
+
+  this.delay = _.fileProvider.systemBitrateTimeGet() / 1000;
 }
 
 //
@@ -186,7 +188,7 @@ function restoreLinks( test )
   test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
   test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
   test.identical( provider.filesAreHardLinked( paths ), false );
@@ -230,7 +232,7 @@ function restoreLinks( test )
   test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   provider.fileWrite( paths[ 1 ], 'bcd' );
   test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
   test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
@@ -255,7 +257,7 @@ function restoreLinks( test )
   test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   provider.fileWrite( paths[ 2 ], 'bcd' );
   test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
   test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
@@ -280,7 +282,7 @@ function restoreLinks( test )
   test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   provider.fileWrite( paths[ 0 ], 'bcd' );
   test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
   test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
@@ -305,7 +307,7 @@ function restoreLinks( test )
   test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   provider.fileWrite( paths[ 1 ], 'bcd' );
   test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
   test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
@@ -330,7 +332,7 @@ function restoreLinks( test )
   test.shouldBe( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   provider.fileWrite( paths[ 2 ], 'bcd' );
   test.shouldBe( !provider.filesAreHardLinked( paths[ 1 ],paths[ 2 ] ) );
   test.shouldBe( provider.filesAreHardLinked( paths[ 1 ],paths[ 0 ] ) );
@@ -356,7 +358,7 @@ function restoreLinks( test )
   paths.forEach( ( p, i ) =>
   {
     provider.fileTouch({ filePath : p, purging : 1 });
-    waitSync( 0.001 );
+    waitSync( test.context.delay );
     provider.fileWrite( p, '' + i );
   })
   test.identical( provider.fileRead( paths[ 0 ] ), '0' );
@@ -384,9 +386,9 @@ function restoreLinks( test )
   provider.linkHard({ dstPath : paths });
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   provider.fileWrite( paths[ 0 ], 'abcd0' );
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   provider.fileWrite( paths[ 1 ], 'abcd1' );
   test.identical( provider.filesAreHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
@@ -409,9 +411,9 @@ function restoreLinks( test )
   provider.linkHard({ dstPath : paths });
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   provider.fileWrite( paths[ 1 ], 'abcd1' );
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   provider.fileWrite( paths[ 0 ], 'abcd0' );
   test.identical( provider.filesAreHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
@@ -442,7 +444,7 @@ function restoreLinks( test )
   /*  breaking linkage and changing it content */
 
   provider.fileWrite({ filePath : paths[ 0 ], purging : 1, data : 'bcd' });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
 
   /*  checking if linkage is broken  */
 
@@ -476,7 +478,7 @@ function restoreLinks( test )
   provider.linkHard({ dstPath : paths });
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   /* changing size of a file */
   provider.fileWrite( paths[ 0 ], 'abcd' );
   provider.archive.restoreLinksEnd();
@@ -496,7 +498,7 @@ function restoreLinks( test )
   provider.linkHard({ dstPath : paths });
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
-  waitSync( 0.001 );
+  waitSync( test.context.delay );
   /* changing size of a file */
   provider.fileWrite( paths[ 0 ], 'cad' );
   provider.archive.restoreLinksEnd();
@@ -553,6 +555,7 @@ function restoreLinksComplex( test )
     {
       k = _.pathJoin( testRoutineDir, k );
       files[ k ] = e;
+      waitSync( test.context.delay )
       provider.fileWrite( k, e );
     });
 
@@ -576,12 +579,16 @@ function restoreLinksComplex( test )
     test.shouldBe( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ) );
     test.shouldBe( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 6, 8 ) ) );
 
+
     provider.archive.restoreLinksBegin();
 
     /* remove some links and check if they are broken */
 
+    waitSync( test.context.delay )
     provider.fileWrite({ filePath : _.mapKeys( files )[ 0 ], purging : 1, data : 'a' });
+    waitSync( test.context.delay )
     provider.fileWrite({ filePath : _.mapKeys( files )[ 3 ], purging : 1, data : 'b' });
+    waitSync( test.context.delay )
     provider.fileWrite({ filePath : _.mapKeys( files )[ 6 ], purging : 0, data : 'd' });
     test.shouldBe( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ) );
     test.shouldBe( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 8 ) ) );
@@ -595,6 +602,12 @@ function restoreLinksComplex( test )
     test.identical( provider.fileRead( _.mapKeys( files )[ 7 ] ), '8' );
 
     /* restore links and check if they works now */
+
+    var records1 = provider.fileRecords( _.mapKeys( files ).slice( 0, 3 ) );
+    var records2 = provider.fileRecords( _.mapKeys( files ).slice( 3, 6 ) );
+
+    logger.log( _.entitySelect( records1, '*.stat.mtime' ).map( ( t ) => t.getTime() ) )
+    logger.log( _.entitySelect( records2, '*.stat.mtime' ).map( ( t ) => t.getTime() ) )
 
     provider.archive.restoreLinksEnd();
 
@@ -651,7 +664,9 @@ function restoreLinksComplex( test )
 
     /* remove some links and check if they are broken */
 
+    waitSync( test.context.delay )
     provider.fileWrite({ filePath : _.mapKeys( files )[ 0 ], purging : 1, data : 'a1' });
+    waitSync( test.context.delay )
     provider.fileWrite({ filePath : _.mapKeys( files )[ 1 ], purging : 1, data : 'a2' });
     test.shouldBe( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ) );
     test.shouldBe( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 8 ) ) );
@@ -726,11 +741,11 @@ function restoreLinksComplex( test )
     /* remove some links and check if they are broken */
 
     provider.fileWrite({ filePath : _.mapKeys( files )[ 0 ], purging : 1, data : 'a' });
-    waitSync( 0.001 );
+    waitSync( test.context.delay );
     provider.fileWrite({ filePath : _.mapKeys( files )[ 3 ], purging : 1, data : 'b' });
-    waitSync( 0.001 );
+    waitSync( test.context.delay );
     provider.fileWrite({ filePath : _.mapKeys( files )[ 4 ], purging : 0, data : 'c' });
-    waitSync( 0.001 );
+    waitSync( test.context.delay );
     provider.fileWrite({ filePath : _.mapKeys( files )[ 6 ], purging : 0, data : 'd' });
 
     test.shouldBe( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ) );
@@ -948,6 +963,39 @@ function severalPaths( test )
   _.fileProvider.fieldReset( 'safe', 0 );
 }
 
+//
+
+function tester( test )
+{
+  var self = this;
+
+  var suite = test.suite;
+  var tests = suite.tests;
+
+  var runsLimit = 5;
+
+  var tests =
+  {
+    restoreLinksComplex : restoreLinksComplex
+  }
+
+  for( var t in tests )
+  {
+    var ok = true;
+    for( var i = 0; i < runsLimit; i++ )
+    {
+      tests[ t ].call( self, test );
+      if( test.report.testCheckFails > 0 )
+      {
+        ok = false;
+        break;
+      }
+    }
+    if( !ok )
+    break;
+  }
+}
+
 // --
 // define class
 // --
@@ -967,6 +1015,7 @@ var Self =
   context :
   {
     testRootDirectory : null,
+    delay : null
   },
 
   tests :
@@ -977,6 +1026,8 @@ var Self =
     restoreLinksComplex : restoreLinksComplex,
     filesLinkSame : filesLinkSame,
     severalPaths : severalPaths,
+
+    tester : tester,
 
   },
 
