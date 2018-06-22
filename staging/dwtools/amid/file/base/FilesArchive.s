@@ -304,7 +304,7 @@ function restoreLinksEnd()
 
     if( mostLinked.absolutePath !== newest.absolutePath )
     {
-      var read = provider.fileRead( newest.absolutePath );
+      var read = provider.fileRead({ filePath : newest.absolutePath, encoding : provider._bufferEncodingGet() });
       provider.fileWrite( mostLinked.absolutePath,read );
     }
 
