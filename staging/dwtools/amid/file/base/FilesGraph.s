@@ -43,7 +43,7 @@ function init( o )
 // {
 //   var self = this;
 //
-//   _.assert( arguments.length === 2, 'expects exactly two argument' );
+//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 //
 //   var head = _.FileRecord.from( head );
 //   var dependency = self._headToTailsFor( head );
@@ -59,7 +59,7 @@ function init( o )
 // {
 //   var self = this;
 //
-//   _.assert( arguments.length === 2, 'expects exactly two argument' );
+//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 //
 //   var head = _.FileRecord.from( head );
 //   var dependency = self._headToTailsFor( head );
@@ -90,7 +90,7 @@ function _eachHeadPre( routine,args )
   _.routineOptions( routine,op );
   _.assert( args.length === 1 || args.length === 2 );
   _.assert( _.pathIsAbsolute( op.path ) );
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   op.visited = op.visited || [];
 
@@ -120,7 +120,7 @@ function _eachHeadBody( it,op )
   var self = this;
   var result = 1;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   // _.assert( self.nodesMap[ it.path ] );
 
   if( _.arrayHas( op.visited,it.path ) )
@@ -367,7 +367,7 @@ function dependencyAdd( head,tails )
   if( tails instanceof _.FileRecord )
   tails = [ tails ];
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( head instanceof _.FileRecord );
   _.assert( _.arrayIs( tails ) );
 
@@ -590,7 +590,7 @@ function _nodeFromRecord( node,record )
   var self = this;
   var provider = self.provider;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( record instanceof _.FileRecord );
 
   node.absolute = record.absolute;
@@ -625,7 +625,7 @@ function _nodeRecordSame( node,record )
   var self = this;
   var provider = self.provider;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.mapIs( node ) );
   _.assert( record instanceof _.FileRecord );
 
@@ -689,7 +689,7 @@ function storageLoadEnd( storageFilePath,mapExtend )
   var self = this;
   var fileProvider = self.fileProvider;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   _.mapExtend( self.unprocessedMap,mapExtend.nodesMap );
 

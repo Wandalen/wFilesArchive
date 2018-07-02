@@ -129,7 +129,7 @@ function storageLoadEnd( storageFilePath,mapExtend )
   var self = this;
   var fileProvider = self.fileProvider;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   var storage = _.mapExtend( self.storageToStore,mapExtend );
   self.storageToStore = storage;
