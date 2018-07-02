@@ -11,7 +11,7 @@ var Self = function wFileStorage( o )
   if( !( this instanceof Self ) )
   if( o instanceof Self )
   {
-    _.assert( arguments.length === 1 );
+    _.assert( arguments.length === 1, 'expects single argument' );
     return o;
   }
   else
@@ -28,7 +28,7 @@ function _storageSave( o )
   var self = this;
   var fileProvider = self.fileProvider;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptions( _storageSave,arguments );
 
   if( self.verbosity >= 3 )
@@ -98,7 +98,7 @@ function storageLoad( storageDirPath )
   var storageDirPath = _.pathGet( storageDirPath );
   var storageFilePath = _.pathJoin( storageDirPath , self.storageFileName );
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   if( !fileProvider.fileStat( storageFilePath ) )
   return false;
@@ -129,7 +129,7 @@ function storageLoadEnd( storageFilePath,mapExtend )
   var self = this;
   var fileProvider = self.fileProvider;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   var storage = _.mapExtend( self.storageToStore,mapExtend );
   self.storageToStore = storage;
