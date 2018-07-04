@@ -1009,7 +1009,7 @@ function tester( test )
 var Self =
 {
 
-  name : 'FileFilter.Archive',
+  name : 'Tools/mid/files/fileFilter/Archive',
   silencing : 1,
   // verbosity : 4,
   // importanceOfNegative : 5,
