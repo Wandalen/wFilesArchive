@@ -11,7 +11,7 @@ var Self = function wFilesArchive( o )
   if( !( this instanceof Self ) )
   if( o instanceof Self )
   {
-    _.assert( arguments.length === 1 );
+    _.assert( arguments.length === 1, 'expects single argument' );
     return o;
   }
   else
@@ -355,7 +355,7 @@ function _verbositySet( val )
 {
   var archive = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   if( !_.numberIs( val ) )
   val = val ? 1 : 0;
