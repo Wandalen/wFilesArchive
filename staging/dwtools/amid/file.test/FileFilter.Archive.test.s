@@ -96,7 +96,7 @@ function archive( test )
   var testRoutineDir = _.pathJoin( this.testRootDirectory, test.name );
   _.fileProvider.fieldSet( 'safe', 0 );
 
-  test.description = 'multilevel files tree';
+  test.case = 'multilevel files tree';
 
   /* prepare tree */
 
@@ -176,7 +176,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, first link will be broken';
+  test.case = 'three files linked, first link will be broken';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -200,7 +200,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, 0 link will be broken, content 0 changed';
+  test.case = 'three files linked, 0 link will be broken, content 0 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -220,7 +220,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, 1 link will be broken, content 1 changed';
+  test.case = 'three files linked, 1 link will be broken, content 1 changed';
   provider.filesDelete( testRoutineDir );
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -245,7 +245,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, 0 link will be broken, content 2 changed';
+  test.case = 'three files linked, 0 link will be broken, content 2 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -270,7 +270,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, 2 link will be broken, content 0 changed';
+  test.case = 'three files linked, 2 link will be broken, content 0 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -295,7 +295,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, 2 link will be broken, content 1 changed';
+  test.case = 'three files linked, 2 link will be broken, content 1 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -320,7 +320,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, 2 link will be broken, content 2 changed';
+  test.case = 'three files linked, 2 link will be broken, content 2 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -345,7 +345,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, all links will be broken';
+  test.case = 'three files linked, all links will be broken';
   provider.filesDelete( testRoutineDir );
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -375,7 +375,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, size of first is changed after breaking the link, write 1 last'
+  test.case = 'three files linked, size of first is changed after breaking the link, write 1 last'
   var paths = [ 'a', 'b', 'c' ];
   provider.filesDelete( testRoutineDir );
   paths.forEach( ( p, i ) =>
@@ -400,7 +400,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, size of first is changed after breaking the link, write 0 last'
+  test.case = 'three files linked, size of first is changed after breaking the link, write 0 last'
   var paths = [ 'a', 'b', 'c' ];
   provider.filesDelete( testRoutineDir );
   paths.forEach( ( p, i ) =>
@@ -425,7 +425,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, fourth is linked with the third file';
+  test.case = 'three files linked, fourth is linked with the third file';
   provider.filesDelete( testRoutineDir );
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
@@ -467,7 +467,7 @@ function restoreLinks( test )
   provider.archive.comparingRelyOnHardLinks = 1;
   provider.resolvingSoftLink = 1;
 
-  test.description = 'three files linked, size of file is changed';
+  test.case = 'three files linked, size of file is changed';
   var paths = [ 'a', 'b', 'c' ];
   provider.filesDelete( testRoutineDir );
   paths.forEach( ( p, i ) =>
@@ -487,7 +487,7 @@ function restoreLinks( test )
 
   //
 
-  test.description = 'three files linked, changing content of a file, but saving size';
+  test.case = 'three files linked, changing content of a file, but saving size';
   var paths = [ 'a', 'b', 'c' ];
   provider.filesDelete( testRoutineDir );
   paths.forEach( ( p, i ) =>
@@ -567,7 +567,7 @@ function restoreLinksComplex( test )
   function run()
   {
 
-    test.description = 'complex case, no content changing';
+    test.case = 'complex case, no content changing';
     var files = begin();
 
     /* make links and save info in archive */
@@ -650,7 +650,7 @@ function restoreLinksComplex( test )
 
     //
 
-    test.description = 'complex case, different content change';
+    test.case = 'complex case, different content change';
     var files = begin();
 
     /* make links and save info in archive */
@@ -728,7 +728,7 @@ function restoreLinksComplex( test )
 
     //
 
-    test.description = 'complex case, no content changing';
+    test.case = 'complex case, no content changing';
     var files = begin();
 
     /* make links and save info in archive */
@@ -822,7 +822,7 @@ function filesLinkSame( test )
   function begin()
   {
 
-    test.description = 'prepare';
+    test.case = 'prepare';
 
     _.fileProvider.filesDeleteForce( context.testRootDirectory );
 
@@ -853,7 +853,7 @@ function filesLinkSame( test )
 
   begin();
 
-  test.description = 'consideringFileName : 0';
+  test.case = 'consideringFileName : 0';
 
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 0 });
@@ -872,7 +872,7 @@ function filesLinkSame( test )
 
   begin();
 
-  test.description = 'consideringFileName : 1';
+  test.case = 'consideringFileName : 1';
 
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
@@ -905,7 +905,7 @@ function severalPaths( test )
   function begin()
   {
 
-    test.description = 'prepare';
+    test.case = 'prepare';
 
     _.fileProvider.filesDeleteForce( context.testRootDirectory );
 
@@ -948,7 +948,7 @@ function severalPaths( test )
 
   begin();
 
-  test.description = 'consideringFileName : 1';
+  test.case = 'consideringFileName : 1';
 
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
