@@ -1,14 +1,14 @@
 {
   "name": "wfilesarchive",
-  "version": "0.3.24",
+  "version": "0.3.26",
   "engine": "node >= 6.0.0",
   "description": "Files Archive",
   "license": "MIT",
-  "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
+  "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
   "contributors": [
     {
       "name": "Kostiantyn Wandalen",
-      "email": "wtory.net@domainsbyproxy.com>"
+      "email": "wanalen@willbe.so>"
     },
     {
       "name": "Volodymyr M.",
