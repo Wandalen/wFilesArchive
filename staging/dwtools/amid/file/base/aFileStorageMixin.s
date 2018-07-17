@@ -1,6 +1,6 @@
 ( function _aFileStorageMixin_s_() {
 
-'use strict'; /**/
+'use strict';
 
 //
 

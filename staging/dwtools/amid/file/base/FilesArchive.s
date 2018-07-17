@@ -1,6 +1,6 @@
 ( function _FilesArchive_s_() {
 
-'use strict'; /**/
+'use strict';
 
 //
 
