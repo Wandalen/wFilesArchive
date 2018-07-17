@@ -1,10 +1,11 @@
 ( function _aFileStorageMixin_s_() {
 
-'use strict';
+'use strict'; /**/
 
 //
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = null;
 var Self = function wFileStorage( o )
 {
@@ -209,13 +210,11 @@ var _Self = _.classMake
   withClass : true,
 });
 
-//
-
-_global_[ Self.name ] = _[ Self.nameShort ] = Self;
-
 // --
 // export
 // --
+
+_global_[ Self.name ] = _[ Self.nameShort ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )
