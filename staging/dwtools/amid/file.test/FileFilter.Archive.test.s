@@ -509,6 +509,8 @@ function restoreLinks( test )
 
 }
 
+restoreLinks.timeOut = 10000;
+
 //
 
 function restoreLinksComplex( test )
@@ -1004,7 +1006,7 @@ function tester( test )
   var suite = test.suite;
   var tests = suite.tests;
 
-  var runsLimit = 5;
+  var runsLimit = 500000;
 
   var tests =
   {
