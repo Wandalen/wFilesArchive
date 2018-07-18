@@ -509,7 +509,7 @@ function restoreLinks( test )
 
 }
 
-restoreLinks.timeOut = 30000;
+restoreLinks.timeOut = 10000;
 
 //
 
@@ -837,6 +837,8 @@ function restoreLinksComplex( test )
 
   _.fileProvider.fieldReset( 'safe', 0 );
 }
+
+restoreLinksComplex.timeOut = 10000;
 
 //
 
