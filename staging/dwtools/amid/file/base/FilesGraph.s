@@ -1,19 +1,18 @@
 ( function _FilesGraph_s_() {
 
-'use strict'; /**/
+'use strict';
 
 //
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = null;
 var Self = function wFilesGraph( o )
 {
+  _.assert( arguments.length === 0 || arguments.length === 1, 'expects single argument' );
   if( !( this instanceof Self ) )
   if( o instanceof Self )
-  {
-    _.assert( arguments.length === 1, 'expects single argument' );
-    return o;
-  }
+  return o;
   else
   return new( _.routineJoin( Self, Self, arguments ) );
   return Self.prototype.init.apply( this,arguments );
@@ -775,19 +774,19 @@ function actionEnd( actionName )
 //
 // --
 
-function _verbositySet( val )
-{
-  var self = this;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-
-  if( !_.numberIs( val ) )
-  val = val ? 1 : 0;
-  if( val < 0 )
-  val = 0;
-
-  self[ verbositySymbol ] = val;
-}
+// function _verbositySet( val )
+// {
+//   var self = this;
+//
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//
+//   if( !_.numberIs( val ) )
+//   val = val ? 1 : 0;
+//   if( val < 0 )
+//   val = 0;
+//
+//   self[ verbositySymbol ] = val;
+// }
 
 //
 
@@ -897,7 +896,7 @@ var Forbids =
 
 var Accessors =
 {
-  verbosity : 'verbosity',
+  // verbosity : 'verbosity',
   storageToStore : 'storageToStore',
 }
 
@@ -962,13 +961,11 @@ var Proto =
   actionBegin : actionBegin,
   actionEnd : actionEnd,
 
-
   //
 
-  _verbositySet : _verbositySet,
+  // _verbositySet : _verbositySet,
   _storageToStoreSet : _storageToStoreSet,
   _storageToStoreGet : _storageToStoreGet,
-
 
   //
 
@@ -996,6 +993,7 @@ _.classMake
 
 _.Copyable.mixin( Self );
 _.FileStorage.mixin( Self );
+_.Verbal.mixin( Self );
 _global_[ Self.name ] = _[ Self.nameShort ] = Self;
 
 // --

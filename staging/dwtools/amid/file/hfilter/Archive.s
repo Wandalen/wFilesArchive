@@ -1,22 +1,21 @@
 ( function _Archive_s_() {
 
-'use strict'; /**/
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
 
-  var _global = _global_; var _ = _global_.wTools;
+  var _global = _global_;
+  var _ = _global_.wTools;
 
-  if( !_.FileProvider )
-  require( '../FileMid.s' );
-
-  require( '../base/FilesArchive.s' );
+  require( '../FilesArchive.s' );
 
 }
 
 //
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Abstract = _.FileProvider.Abstract;
 var Partial = _.FileProvider.Partial;
 var Default = _.FileProvider.Default;

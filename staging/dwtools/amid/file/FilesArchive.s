@@ -1,6 +1,6 @@
 (function _FilesArchive_s_() {
 
-'use strict'; /**/
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
@@ -22,18 +22,21 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  var _global = _global_; var _ = _global_.wTools;
+  var _ = _global_.wTools;
 
+  _.include( 'wVerbal' );
   _.include( 'wFiles' );
+  _.include( 'wFileStorage' );
 
-  require( './base/aFileStorageMixin.s' );
+  // require( './base/aFileStorageMixin.s' );
   require( './base/FilesArchive.s' );
   require( './base/FilesGraph.s' );
   require( './hfilter/Archive.s' );
 
 }
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 
 // --
 // export
