@@ -509,8 +509,6 @@ function restoreLinks( test )
 
 }
 
-restoreLinks.timeOut = 30000;
-
 //
 
 function restoreLinksComplex( test )
@@ -838,8 +836,6 @@ function restoreLinksComplex( test )
   _.fileProvider.fieldReset( 'safe', 0 );
 }
 
-restoreLinksComplex.timeOut = 60000;
-
 //
 
 function filesLinkSame( test )
@@ -1044,6 +1040,8 @@ var Self =
   // verbosity : 4,
   // importanceOfNegative : 5,
   // routine : 'restoreLinks',
+
+  routineTimeOut : 9999999999999999,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
