@@ -509,6 +509,7 @@ function restoreLinks( test )
 
 }
 
+restoreLinks.timeOut = 30000;
 
 //
 
@@ -1038,7 +1039,7 @@ var Self =
 
   name : 'Tools/mid/files/fileFilter/Archive',
   silencing : 1,
-  verbosity : 10,
+  // verbosity : 4,
   // importanceOfNegative : 5,
   // routine : 'restoreLinks',
 
