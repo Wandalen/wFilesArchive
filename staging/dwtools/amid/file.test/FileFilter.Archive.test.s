@@ -1037,7 +1037,7 @@ var Self =
 
   name : 'Tools/mid/files/fileFilter/Archive',
   silencing : 1,
-  // verbosity : 4,
+  verbosity : 4,
   // importanceOfNegative : 5,
   // routine : 'restoreLinks',
 
