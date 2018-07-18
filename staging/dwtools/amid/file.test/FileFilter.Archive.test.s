@@ -539,6 +539,7 @@ function restoreLinksComplex( test )
   function begin()
   {
     var files = {};
+    var inos = [];
     var _files =
     {
       'a1' : '3', /* 0 */
@@ -557,6 +558,30 @@ function restoreLinksComplex( test )
       files[ k ] = e;
       waitSync( test.context.delay )
       provider.fileWrite( k, e );
+
+      var ino = provider.fileStat( k ).ino;
+      var i = inos.indexOf( ino );
+
+      if( i !== -1 )
+      {
+        for( var i = 0; i < 10; i++ )
+        {
+          provider.fileDelete( k );
+          provider.fileWrite( k,e );
+          ino = provider.fileStat( k ).ino;
+          if( inos.indexOf( ino ) === -1 )
+          break;
+        }
+      }
+
+      ino = provider.fileStat( k ).ino;
+      i = inos.indexOf( ino );
+      _.assert( i === -1, 'ino duplication' );
+
+      inos.push( ino );
+
+      // logger.log( _.mapOwnKeys( _files ) );
+      // logger.log( inos );
     });
 
     return files;
