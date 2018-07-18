@@ -1,6 +1,6 @@
 {
   "name": "wfilesarchive",
-  "version": "0.3.27",
+  "version": "0.3.34",
   "engine": "node >= 6.0.0",
   "description": "Files Archive",
   "license": "MIT",
@@ -33,7 +33,9 @@
   },
   "dependencies": {
     "wTools": "",
-    "wFiles": ""
+    "wFiles": "",
+    "wverbal": "",
+    "wfilestorage": ""
   },
   "devDependencies": {
     "wTesting": "",

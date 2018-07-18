@@ -1,10 +1,11 @@
 ( function _FilesArchive_s_() {
 
-'use strict'; /**/
+'use strict';
 
 //
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = null;
 var Self = function wFilesArchive( o )
 {
@@ -351,22 +352,22 @@ function restoreLinksEnd()
 //
 // --
 
-function _verbositySet( val )
-{
-  var archive = this;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-
-  if( !_.numberIs( val ) )
-  val = val ? 1 : 0;
-  if( val < 0 )
-  val = 0;
-
-  archive[ verbositySymbol ] = val;
-}
+// function _verbositySet( val )
+// {
+//   var archive = this;
+//
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//
+//   if( !_.numberIs( val ) )
+//   val = val ? 1 : 0;
+//   if( val < 0 )
+//   val = 0;
+//
+//   archive[ verbositySymbol ] = val;
+// }
 
 // --
-//
+// vars
 // --
 
 var verbositySymbol = Symbol.for( 'verbosity' );
@@ -383,6 +384,10 @@ var mask =
     /(^|\/)\.(?!$|\/)/,
   ],
 };
+
+// --
+// relationships
+// --
 
 var Composes =
 {
@@ -437,7 +442,7 @@ var Forbids =
 
 var Accessors =
 {
-  verbosity : 'verbosity',
+  // verbosity : 'verbosity',
   storageToStore : 'storageToStore',
 }
 
@@ -457,13 +462,11 @@ var Proto =
   restoreLinksBegin : restoreLinksBegin,
   restoreLinksEnd : restoreLinksEnd,
 
-
   //
 
-  _verbositySet : _verbositySet,
+  // _verbositySet : _verbositySet,
   _storageToStoreSet : _.setterAlias_functor({ original : 'fileMap', alias : 'storageToStore' }),
   _storageToStoreGet : _.getterAlias_functor({ original : 'fileMap', alias : 'storageToStore' }),
-
 
   //
 
@@ -491,6 +494,7 @@ _.classMake
 
 _.Copyable.mixin( Self );
 _.FileStorage.mixin( Self );
+_.Verbal.mixin( Self );
 _global_[ Self.name ] = _[ Self.nameShort ] = Self;
 
 // --
