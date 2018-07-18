@@ -1045,8 +1045,6 @@ var Self =
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
 
-  routine : restoreLinks,
-
   context :
   {
     testRootDirectory : null,
