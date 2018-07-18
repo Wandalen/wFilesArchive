@@ -509,7 +509,7 @@ function restoreLinks( test )
 
 }
 
-restoreLinks.timeOut = 10000;
+restoreLinks.timeOut = 15000;
 
 //
 
