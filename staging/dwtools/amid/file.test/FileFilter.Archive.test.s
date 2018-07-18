@@ -509,6 +509,8 @@ function restoreLinks( test )
 
 }
 
+restoreLinks.timeOut = 30000;
+
 //
 
 function restoreLinksComplex( test )
@@ -836,6 +838,8 @@ function restoreLinksComplex( test )
   _.fileProvider.fieldReset( 'safe', 0 );
 }
 
+restoreLinksComplex.timeOut = 80000;
+
 //
 
 function filesLinkSame( test )
@@ -1037,11 +1041,9 @@ var Self =
 
   name : 'Tools/mid/files/fileFilter/Archive',
   silencing : 1,
-  verbosity : 4,
+  // verbosity : 4,
   // importanceOfNegative : 5,
   // routine : 'restoreLinks',
-
-  routineTimeOut : 9999999999999999,
 
   onSuiteBegin : onSuiteBegin,
   onSuiteEnd : onSuiteEnd,
