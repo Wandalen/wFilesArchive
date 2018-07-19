@@ -517,7 +517,7 @@ function restoreLinksComplex( test )
   var testRoutineDir = _.pathJoin( this.testRootDirectory, test.name );
   _.fileProvider.fieldSet( 'safe', 0 );
 
-  var provider = _.FileFilter.Archive({ original : new _.FileProvider.Default/**//**//**/() });
+  var provider = _.FileFilter.Archive({ original : new _.FileProvider.Default() });
   provider.verbosity = 0;
   provider.archive.verbosity = 0;
   provider.archive.basePath = testRoutineDir;
