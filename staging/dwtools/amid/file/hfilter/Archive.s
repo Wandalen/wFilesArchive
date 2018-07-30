@@ -30,7 +30,7 @@ var Self = function wFileFilterArchive( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'Archive';
+Self.shortName = 'Archive';
 
 // --
 //
@@ -116,7 +116,7 @@ _.Copyable.mixin( Self );
 //
 
 _.FileFilter = _.FileFilter || Object.create( null );
-_.FileFilter[ Self.nameShort ] = Self;
+_.FileFilter[ Self.shortName ] = Self;
 
 // --
 // export

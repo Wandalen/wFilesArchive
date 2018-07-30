@@ -18,7 +18,7 @@ var Self = function wFilesGraph( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'FilesGraph';
+Self.shortName = 'FilesGraph';
 
 //
 
@@ -994,7 +994,7 @@ _.classMake
 _.Copyable.mixin( Self );
 _.FileStorage.mixin( Self );
 _.Verbal.mixin( Self );
-_global_[ Self.name ] = _[ Self.nameShort ] = Self;
+_global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 // --
 // export
