@@ -120,7 +120,7 @@ function _eachHeadBody( it,op )
   var result = 1;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  // _.assert( self.nodesMap[ it.path ] );
+  // _.assert( !!self.nodesMap[ it.path ] );
 
   if( _.arrayHas( op.visited,it.path ) )
   return;
@@ -969,7 +969,7 @@ var Proto =
 
   //
 
-  constructor : Self,
+  /* constructor * : * Self, */
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
