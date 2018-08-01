@@ -56,7 +56,7 @@ function filesUpdate()
 
   var globIn = _.strJoin( archive.basePath, '/**' );
   if( archive.verbosity >= 3 )
-  logger.log( 'filesUpdate globIn',globIn );
+  logger.log( ': filesUpdate', globIn );
 
   /* */
 
@@ -73,8 +73,8 @@ function filesUpdate()
     if( archive.fileMapAutoLoading )
     archive.storageLoad( record.absolute );
 
-    if( archive.verbosity >= 5 )
-    logger.log( 'investigating ' + record.absolute );
+    if( archive.verbosity >= 7 )
+    logger.log( '. investigating ' + record.absolute );
 
     if( fileMapOld[ record.absolute ] )
     {
@@ -100,8 +100,8 @@ function filesUpdate()
       }
       else
       {
-        if( archive.verbosity >= 3 )
-        logger.log( 'change ' + record.absolute );
+        if( archive.verbosity >= 5 )
+        logger.log( '. change ' + record.absolute );
         archive.fileModifiedMap[ record.absolute ] = d;
         d = _.mapExtend( null,d );
       }
@@ -149,23 +149,23 @@ function filesUpdate()
   if( archive.fileMapAutosaving )
   archive.storageSave();
 
-  if( archive.verbosity >= 5 )
+
+  if( archive.verbosity >= 8 )
   {
     logger.log( 'fileAddedMap',archive.fileAddedMap );
     logger.log( 'fileRemovedMap',archive.fileRemovedMap );
     logger.log( 'fileModifiedMap',archive.fileModifiedMap );
   }
-  else if( archive.verbosity >= 4 )
+  else if( archive.verbosity >= 6 )
   {
     logger.log( 'fileAddedMap', _.entityLength( archive.fileAddedMap ) );
     logger.log( 'fileRemovedMap', _.entityLength( archive.fileRemovedMap ) );
     logger.log( 'fileModifiedMap', _.entityLength( archive.fileModifiedMap ) );
   }
 
-  if( archive.verbosity >= 3 )
+  if( archive.verbosity >= 4 )
   {
-    logger.log( _.entityLength( fileMapNew ),'file(s)' );
-    logger.log( _.timeSpent( 'Spent',time ) );
+    logger.log( '. filesUpdate', globIn, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
   }
 
   return archive;
@@ -316,7 +316,7 @@ function restoreLinksEnd()
 
     /* verbosity */
 
-    if( archive.verbosity >= 3 )
+    if( archive.verbosity >= 4 )
     logger.log( 'modified',_.toStr( _.entitySelect( filesWithHash,'*.absolutePath' ),{ levels : 2 } ) );
 
     /*  */
@@ -344,8 +344,8 @@ function restoreLinksEnd()
 
   }
 
-  if( archive.verbosity >= 2 )
-  logger.log( 'Restored',restored,'links' );
+  if( archive.verbosity >= 1 )
+  logger.log( '+ Restored',restored,'links' );
 }
 
 // --
