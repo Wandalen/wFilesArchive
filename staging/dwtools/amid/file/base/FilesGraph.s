@@ -2,6 +2,14 @@
 
 'use strict';
 
+/**
+  @module Tools/mid/FilesArchive - Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.
+*/
+
+/**
+ * @file files/FilesGraph.s.
+ */
+
 //
 
 var _global = _global_;
@@ -88,7 +96,7 @@ function _eachHeadPre( routine,args )
 
   _.routineOptions( routine,op );
   _.assert( args.length === 1 || args.length === 2 );
-  _.assert( _.pathIsAbsolute( op.path ) );
+  _.assert( _.path.pathIsAbsolute( op.path ) );
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   op.visited = op.visited || [];
@@ -183,7 +191,7 @@ function fileChange( path )
   var result = 0;
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.pathIsAbsolute( path ) );
+  _.assert( _.path.pathIsAbsolute( path ) );
 
   function onUp( it,op )
   {
@@ -742,10 +750,10 @@ function actionBegin( actionName )
 
   /* path */
 
-  self.srcPath = _.pathNormalize( self.srcPath );
-  self.dstPath = _.pathNormalize( self.dstPath );
+  self.srcPath = _.path.pathNormalize( self.srcPath );
+  self.dstPath = _.path.pathNormalize( self.dstPath );
   if( self.basePath === null )
-  self.basePath = _.pathCommon([ self.srcPath, self.dstPath ]);
+  self.basePath = _.path.pathCommon([ self.srcPath, self.dstPath ]);
 
   /* storage */
 
@@ -969,7 +977,7 @@ var Proto =
 
   //
 
-  /* constructor * : * Self, */
+  
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,

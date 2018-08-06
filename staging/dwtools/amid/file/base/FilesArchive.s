@@ -2,6 +2,14 @@
 
 'use strict';
 
+/**
+  @module Tools/mid/FilesArchive - Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.
+*/
+
+/**
+ * @file files/FilesArchive.s.
+ */
+
 //
 
 var _global = _global_;
@@ -222,7 +230,7 @@ function filesLinkSame( o )
       var byName = {};
       _.entityFilter( files,function( path )
       {
-        var name = _.pathNameWithExtension( path );
+        var name = _.path.pathNameWithExtension( path );
         if( byName[ name ] )
         byName[ name ].push( path );
         else
@@ -472,7 +480,7 @@ var Proto =
 
   //
 
-  /* constructor * : * Self, */
+  
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
