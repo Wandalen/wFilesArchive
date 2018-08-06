@@ -104,7 +104,7 @@ var Extend =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,

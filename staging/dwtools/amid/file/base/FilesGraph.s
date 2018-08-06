@@ -96,7 +96,7 @@ function _eachHeadPre( routine,args )
 
   _.routineOptions( routine,op );
   _.assert( args.length === 1 || args.length === 2 );
-  _.assert( _.path.pathIsAbsolute( op.path ) );
+  _.assert( _.path.isAbsolute( op.path ) );
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   op.visited = op.visited || [];
@@ -191,7 +191,7 @@ function fileChange( path )
   var result = 0;
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.path.pathIsAbsolute( path ) );
+  _.assert( _.path.isAbsolute( path ) );
 
   function onUp( it,op )
   {
@@ -750,10 +750,10 @@ function actionBegin( actionName )
 
   /* path */
 
-  self.srcPath = _.path.pathNormalize( self.srcPath );
-  self.dstPath = _.path.pathNormalize( self.dstPath );
+  self.srcPath = _.path.normalize( self.srcPath );
+  self.dstPath = _.path.normalize( self.dstPath );
   if( self.basePath === null )
-  self.basePath = _.path.pathCommon([ self.srcPath, self.dstPath ]);
+  self.basePath = _.path.common([ self.srcPath, self.dstPath ]);
 
   /* storage */
 
@@ -852,12 +852,12 @@ var Composes =
   unporcessedDstUnmapping : 1,
   unporcessedDstDeleting : 1,
 
-  changedMap : Object.create( null ),
-  unprocessedMap : Object.create( null ),
+  changedMap : _.define.own( {} ),
+  unprocessedMap : _.define.own( {} ),
 
-  nodesMap : Object.create( null ),
-  headsForTailMap : Object.create( null ),
-  tailsForHeadMap : Object.create( null ),
+  nodesMap : _.define.own( {} ),
+  headsForTailMap : _.define.own( {} ),
+  tailsForHeadMap : _.define.own( {} ),
 
 }
 
@@ -977,7 +977,7 @@ var Proto =
 
   //
 
-  
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -990,7 +990,7 @@ var Proto =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,

@@ -230,7 +230,7 @@ function filesLinkSame( o )
       var byName = {};
       _.entityFilter( files,function( path )
       {
-        var name = _.path.pathNameWithExtension( path );
+        var name = _.path.nameWithExtension( path );
         if( byName[ name ] )
         byName[ name ].push( path );
         else
@@ -409,20 +409,20 @@ var Composes =
   replacingByNewest : 1,
   maxSize : null,
 
-  // dependencyMap : Object.create( null ),
-  fileByHashMap : Object.create( null ),
+  // dependencyMap : _.define.own( {} ),
+  fileByHashMap : _.define.own( {} ),
 
-  fileMap : Object.create( null ),
-  fileAddedMap : Object.create( null ),
-  fileRemovedMap : Object.create( null ),
-  fileModifiedMap : Object.create( null ),
+  fileMap : _.define.own( {} ),
+  fileAddedMap : _.define.own( {} ),
+  fileRemovedMap : _.define.own( {} ),
+  fileModifiedMap : _.define.own( {} ),
 
   fileHashMap : null,
 
   fileMapAutosaving : 0,
   fileMapAutoLoading : 1,
 
-  mask : mask,
+  mask : _.define.own( mask ), /* !!! not shallow clone required */
 
   storageFileName : '.warchive',
 
@@ -480,7 +480,7 @@ var Proto =
 
   //
 
-  
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -493,7 +493,7 @@ var Proto =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,
