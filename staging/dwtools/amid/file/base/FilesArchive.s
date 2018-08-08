@@ -230,7 +230,7 @@ function filesLinkSame( o )
       var byName = {};
       _.entityFilter( files,function( path )
       {
-        var name = _.path.nameWithExtension( path );
+        var name = _.path.fullName( path );
         if( byName[ name ] )
         byName[ name ].push( path );
         else
