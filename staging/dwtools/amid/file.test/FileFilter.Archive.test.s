@@ -1003,7 +1003,7 @@ function tester( test )
 }
 
 // --
-// define class
+// declare
 // --
 
 var Self =
