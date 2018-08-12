@@ -940,9 +940,9 @@ function severalPaths( test )
       dstPath : dir,
     });
 
-    test.is( !!provider.fileStat( _.path.join( dir,'dir1/a' ) ) );
-    test.is( !!provider.fileStat( _.path.join( dir,'dir2/a' ) ) );
-    test.is( !!provider.fileStat( _.path.join( dir,'dir3/x' ) ) );
+    test.is( !!provider.fileStat( _.path.join( dir, 'dir1/a' ) ) );
+    test.is( !!provider.fileStat( _.path.join( dir, 'dir2/a' ) ) );
+    test.is( !!provider.fileStat( _.path.join( dir, 'dir3/x' ) ) );
 
   }
 
@@ -957,8 +957,10 @@ function severalPaths( test )
   test.is( !!provider.fileStat( _.path.join( dir,'dir2/a' ) ) );
   test.is( !!provider.fileStat( _.path.join( dir,'dir3/x' ) ) );
 
+  debugger;
   test.is( provider.filesAreHardLinked( _.path.join( dir,'dir1/a' ),_.path.join( dir,'dir2/a' ) ) );
   test.is( provider.filesAreHardLinked( _.path.join( dir,'dir2/x' ),_.path.join( dir,'dir3/x' ) ) );
+  debugger;
 
   test.is( !provider.filesAreHardLinked( _.path.join( dir,'dir1/a' ),_.path.join( dir,'dir1/b' ) ) );
   test.is( !provider.filesAreHardLinked( _.path.join( dir,'dir1/b' ),_.path.join( dir,'dir2/x' ) ) );

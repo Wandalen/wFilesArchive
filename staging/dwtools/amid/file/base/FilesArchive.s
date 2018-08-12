@@ -62,9 +62,9 @@ function filesUpdate()
 
   _.assert( _.strIsNotEmpty( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
 
-  var globIn = _.strJoin( archive.basePath, '/**' );
+  var glob = _.strJoin( archive.basePath, '/**' );
   if( archive.verbosity >= 3 )
-  logger.log( ': filesUpdate', globIn );
+  logger.log( ': filesUpdate', glob );
 
   /* */
 
@@ -143,7 +143,7 @@ function filesUpdate()
 
   var files = fileProvider.filesFind
   ({
-    globIn : globIn,
+    glob : glob,
     maskAll : archive.mask,
     onUp : onFile,
     includingTerminals : 1,
@@ -173,7 +173,7 @@ function filesUpdate()
 
   if( archive.verbosity >= 4 )
   {
-    logger.log( '. filesUpdate', globIn, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
+    logger.log( '. filesUpdate', glob, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
   }
 
   return archive;
@@ -215,12 +215,10 @@ function filesLinkSame( o )
   var fileHashMap = archive.filesHashMapForm();
   var o = _.routineOptions( filesLinkSame,arguments );
 
+  debugger;
   for( var f in fileHashMap )
   {
     var files = fileHashMap[ f ];
-
-    // if( _.strHas( files[ 0 ],'zTest.ss' ) )
-    // debugger;
 
     if( files.length < 2 )
     continue;
@@ -228,6 +226,7 @@ function filesLinkSame( o )
     if( o.consideringFileName )
     {
       var byName = {};
+      debugger;
       _.entityFilter( files,function( path )
       {
         var name = _.path.fullName( path );
