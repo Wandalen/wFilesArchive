@@ -28,9 +28,8 @@ if( typeof module !== 'undefined' )
   _.include( 'wFiles' );
   _.include( 'wFileStorage' );
 
-  // require( './base/aFileStorageMixin.s' );
-  require( './base/FilesArchive.s' );
-  require( './base/FilesGraph.s' );
+  require( './alayer2/FilesArchive.s' );
+  require( './alayer2/FilesGraph.s' );
   require( './hfilter/Archive.s' );
 
 }

@@ -15,9 +15,9 @@
       "email": "volodymyr.migdal@gmail.com"
     }
   ],
-  "main": "staging/dwtools/amid/file/FilesArchive.s",
+  "main": "staging/dwtools/amid/files/FilesArchive.s",
   "files": [
-    "staging/dwtools/amid/file",
+    "staging/dwtools/amid/files",
     "production"
   ],
   "scripts": {
