@@ -157,7 +157,6 @@ function filesUpdate()
   if( archive.fileMapAutosaving )
   archive.storageSave();
 
-
   if( archive.verbosity >= 8 )
   {
     logger.log( 'fileAddedMap',archive.fileAddedMap );
