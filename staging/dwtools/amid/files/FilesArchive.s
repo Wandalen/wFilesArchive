@@ -26,7 +26,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wVerbal' );
   _.include( 'wFiles' );
-  _.include( 'wFileStorage' );
+  _.include( 'wStateStorage' );
 
   require( './alayer2/FilesArchive.s' );
   require( './alayer2/FilesGraph.s' );

@@ -12,10 +12,10 @@
 
 //
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = null;
-var Self = function wFilesArchive( o )
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = null;
+let Self = function wFilesArchive( o )
 {
   if( !( this instanceof Self ) )
   if( o instanceof Self )
@@ -34,7 +34,7 @@ Self.shortName = 'FilesArchive';
 
 function init( o )
 {
-  var archive = this;
+  let archive = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
@@ -50,11 +50,11 @@ function init( o )
 
 function filesUpdate()
 {
-  var archive = this;
-  var fileProvider = archive.fileProvider;
-  var time = _.timeNow();
+  let archive = this;
+  let fileProvider = archive.fileProvider;
+  let time = _.timeNow();
 
-  var fileMapOld = archive.fileMap;
+  let fileMapOld = archive.fileMap;
   archive.fileAddedMap = Object.create( null );
   archive.fileRemovedMap = null;
   archive.fileModifiedMap = Object.create( null );
@@ -62,36 +62,80 @@ function filesUpdate()
 
   _.assert( _.strIsNotEmpty( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
 
-  var glob = _.strJoin( archive.basePath, '/**' );
+  let glob = _.strJoin( archive.basePath, '/**' );
   if( archive.verbosity >= 3 )
-  logger.log( ': filesUpdate', glob );
+  logger.log( ' : filesUpdate', glob );
 
   /* */
 
-  var fileMapNew = Object.create( null );
+  let fileMapNew = Object.create( null );
+
+  /* */
+
+  archive.mask = _.regexpMakeObject( archive.mask );
+
+  let files = fileProvider.filesFind
+  ({
+    glob : glob,
+    maskAll : archive.mask,
+    onUp : onFile,
+    includingTerminals : 1,
+    includingDirectories : 1,
+    recursive : 1,
+  });
+
+  archive.fileRemovedMap = fileMapOld;
+  archive.fileMap = fileMapNew;
+
+  debugger;
+  if( archive.fileMapAutosaving )
+  archive.storageSave();
+
+  if( archive.verbosity >= 8 )
+  {
+    logger.log( 'fileAddedMap',archive.fileAddedMap );
+    logger.log( 'fileRemovedMap',archive.fileRemovedMap );
+    logger.log( 'fileModifiedMap',archive.fileModifiedMap );
+  }
+  else if( archive.verbosity >= 6 )
+  {
+    logger.log( 'fileAddedMap', _.entityLength( archive.fileAddedMap ) );
+    logger.log( 'fileRemovedMap', _.entityLength( archive.fileRemovedMap ) );
+    logger.log( 'fileModifiedMap', _.entityLength( archive.fileModifiedMap ) );
+  }
+
+  if( archive.verbosity >= 4 )
+  {
+    logger.log( ' . filesUpdate', glob, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
+  }
+
+  return archive;
+
+  /* */
+
   function onFile( record,op )
   {
-    var d = null;
-    var isDir = record.stat.isDirectory();
-
-    // if( _.strHas( record.relative,'StringTools2.test.s' ) )
-    // debugger;
+    let d = null;
+    let isDir = record.stat.isDirectory();
 
     if( isDir )
     if( archive.fileMapAutoLoading )
-    archive.storageLoad( record.absolute );
+    {
+      debugger;
+      let loaded = archive._storageLoad( record.absolute );
+      if( !loaded && record.isBase )
+      archive.storageLoaded( {}, { storageFilePath : archive.storageFileFromDirPath( record.absolute ) } );
+    }
 
     if( archive.verbosity >= 7 )
-    logger.log( '. investigating ' + record.absolute );
+    logger.log( ' . investigating ' + record.absolute );
 
     if( fileMapOld[ record.absolute ] )
     {
       d = _.mapExtend( null,fileMapOld[ record.absolute ] );
       delete fileMapOld[ record.absolute ];
-      // debugger;
-      var same = true
+      let same = true;
       same = same && d.mtime === record.stat.mtime.getTime();
-      // same = same && d.ctime === record.stat.ctime.getTime();
       same = same && d.birthtime === record.stat.birthtime.getTime();
       same = same && ( isDir || d.size === record.stat.size );
       if( same && archive.comparingRelyOnHardLinks && !isDir )
@@ -109,7 +153,7 @@ function filesUpdate()
       else
       {
         if( archive.verbosity >= 5 )
-        logger.log( '. change ' + record.absolute );
+        logger.log( ' . change ' + record.absolute );
         archive.fileModifiedMap[ record.absolute ] = d;
         d = _.mapExtend( null,d );
       }
@@ -137,60 +181,21 @@ function filesUpdate()
     return d;
   }
 
-  /* */
-
-  archive.mask = _.regexpMakeObject( archive.mask );
-
-  var files = fileProvider.filesFind
-  ({
-    glob : glob,
-    maskAll : archive.mask,
-    onUp : onFile,
-    includingTerminals : 1,
-    includingDirectories : 1,
-    recursive : 1,
-  });
-
-  archive.fileRemovedMap = fileMapOld;
-  archive.fileMap = fileMapNew;
-
-  if( archive.fileMapAutosaving )
-  archive.storageSave();
-
-  if( archive.verbosity >= 8 )
-  {
-    logger.log( 'fileAddedMap',archive.fileAddedMap );
-    logger.log( 'fileRemovedMap',archive.fileRemovedMap );
-    logger.log( 'fileModifiedMap',archive.fileModifiedMap );
-  }
-  else if( archive.verbosity >= 6 )
-  {
-    logger.log( 'fileAddedMap', _.entityLength( archive.fileAddedMap ) );
-    logger.log( 'fileRemovedMap', _.entityLength( archive.fileRemovedMap ) );
-    logger.log( 'fileModifiedMap', _.entityLength( archive.fileModifiedMap ) );
-  }
-
-  if( archive.verbosity >= 4 )
-  {
-    logger.log( '. filesUpdate', glob, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
-  }
-
-  return archive;
 }
 
 //
 
 function filesHashMapForm()
 {
-  var archive = this;
+  let archive = this;
 
   _.assert( !archive.fileHashMap );
 
   archive.fileHashMap = Object.create( null );
 
-  for( var f in archive.fileMap )
+  for( let f in archive.fileMap )
   {
-    var file = archive.fileMap[ f ];
+    let file = archive.fileMap[ f ];
     if( file.hash )
     if( archive.fileHashMap[ file.hash ] )
     archive.fileHashMap[ file.hash ].push( file.absolutePath );
@@ -199,7 +204,7 @@ function filesHashMapForm()
   }
 
   // debugger;
-  // for( var h in archive.fileHashMap )
+  // for( let h in archive.fileHashMap )
   // logger.log( archive.fileHashMap[ h ].length, _.toStr( archive.fileHashMap[ h ],{ levels : 3, wrap : 0 } ) );
 
   return archive.fileHashMap;
@@ -209,32 +214,32 @@ function filesHashMapForm()
 
 function filesLinkSame( o )
 {
-  var archive = this;
-  var provider = archive.fileProvider;
-  var fileHashMap = archive.filesHashMapForm();
-  var o = _.routineOptions( filesLinkSame,arguments );
+  let archive = this;
+  let provider = archive.fileProvider;
+  let fileHashMap = archive.filesHashMapForm();
+  o = _.routineOptions( filesLinkSame,arguments );
 
   debugger;
-  for( var f in fileHashMap )
+  for( let f in fileHashMap )
   {
-    var files = fileHashMap[ f ];
+    let files = fileHashMap[ f ];
 
     if( files.length < 2 )
     continue;
 
     if( o.consideringFileName )
     {
-      var byName = {};
+      let byName = {};
       debugger;
       _.entityFilter( files,function( path )
       {
-        var name = _.path.fullName( path );
+        let name = _.path.fullName( path );
         if( byName[ name ] )
         byName[ name ].push( path );
         else
         byName[ name ] = [ path ];
       });
-      for( var name in byName )
+      for( let name in byName )
       provider.linkHard({ dstPath : byName[ name ], verbosity : archive.verbosity });
     }
     else
@@ -257,8 +262,8 @@ filesLinkSame.defaults =
 
 function restoreLinksBegin()
 {
-  var archive = this;
-  var provider = archive.fileProvider;
+  let archive = this;
+  let provider = archive.fileProvider;
 
   archive.filesUpdate();
 
@@ -268,26 +273,26 @@ function restoreLinksBegin()
 
 function restoreLinksEnd()
 {
-  var archive = this;
-  var provider = archive.fileProvider;
-  var fileMap1 = _.mapExtend( null, archive.fileMap );
-  var fileHashMap = archive.filesHashMapForm();
-  var restored = 0;
+  let archive = this;
+  let provider = archive.fileProvider;
+  let fileMap1 = _.mapExtend( null, archive.fileMap );
+  let fileHashMap = archive.filesHashMapForm();
+  let restored = 0;
 
   archive.filesUpdate();
 
   _.assert( archive.fileMap,'restoreLinksBegin should be called before calling restoreLinksEnd' );
 
-  var fileMap2 = _.mapExtend( null,archive.fileMap );
-  var fileModifiedMap = archive.fileModifiedMap;
-  var linkedMap = Object.create( null );
+  let fileMap2 = _.mapExtend( null,archive.fileMap );
+  let fileModifiedMap = archive.fileModifiedMap;
+  let linkedMap = Object.create( null );
 
   /* */
 
-  for( var f in fileModifiedMap )
+  for( let f in fileModifiedMap )
   {
-    var modified = fileModifiedMap[ f ];
-    var filesWithHash = fileHashMap[ modified.hash ];
+    let modified = fileModifiedMap[ f ];
+    let filesWithHash = fileHashMap[ modified.hash ];
 
     if( linkedMap[ f ] )
     continue;
@@ -306,12 +311,12 @@ function restoreLinksEnd()
     else
     filesWithHash.sort( ( e1,e2 ) => e1.mtime-e2.mtime );
 
-    var newest = filesWithHash[ 0 ];
-    var mostLinked = _.entityMax( filesWithHash,( e ) => e.nlink ).element;
+    let newest = filesWithHash[ 0 ];
+    let mostLinked = _.entityMax( filesWithHash,( e ) => e.nlink ).element;
 
     if( mostLinked.absolutePath !== newest.absolutePath )
     {
-      var read = provider.fileRead({ filePath : newest.absolutePath, encoding : provider._bufferEncodingGet() });
+      let read = provider.fileRead({ filePath : newest.absolutePath, encoding : provider._bufferEncodingGet() });
       provider.fileWrite( mostLinked.absolutePath,read );
     }
 
@@ -327,17 +332,17 @@ function restoreLinksEnd()
 
     /*  */
 
-    var srcPath = mostLinked.absolutePath;
-    var srcFile = mostLinked;
+    let srcPath = mostLinked.absolutePath;
+    let srcFile = mostLinked;
     linkedMap[ srcPath ] = srcFile;
-    for( var last = 0 ; last < filesWithHash.length ; last++ )
+    for( let last = 0 ; last < filesWithHash.length ; last++ )
     {
-      var dstPath = filesWithHash[ last ].absolutePath;
+      let dstPath = filesWithHash[ last ].absolutePath;
       if( srcFile.absolutePath === dstPath )
       continue;
       if( linkedMap[ dstPath ] )
       continue;
-      var dstFile = filesWithHash[ last ];
+      let dstFile = filesWithHash[ last ];
       /* if this files where linked before changes, relink them */
       if( srcFile.hash2 === dstFile.hash2 )
       {
@@ -354,30 +359,120 @@ function restoreLinksEnd()
   logger.log( '+ Restored',restored,'links' );
 }
 
-// --
 //
+
+function _loggerGet()
+{
+  let self = this;
+  let fileProvider = self.fileProvider;
+  if( fileProvider )
+  return fileProvider.logger;
+  return null;
+}
+
+// --
+// storage
 // --
 
-// function _verbositySet( val )
-// {
-//   var archive = this;
+function storageDirPathGet( storageDirPath )
+{
+  let self = this;
+  let fileProvider = self.fileProvider;
+
+  // debugger;
+  // if( storageDirPath )
+  // storageDirPath = fileProvider.path.pathsJoin( self.basePath, storageDirPath );
+  // else
+  // storageDirPath = self.basePath;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( !!storageDirPath );
+  _.assert( _.every( storageDirPath, ( path ) => fileProvider.path.isAbsolute( path ) ) );
+
+  return storageDirPath;
+}
+
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+
+function storageFilePathToSaveGet( storageDirPath )
+{
+  let self = this;
+  let fileProvider = self.fileProvider;
+  let storageFilePath = null;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+
+  storageFilePath = _.entitySelect( self.loadedStorages, '*.filePath' );
+
+  _.sure
+  (
+    _.every( storageFilePath, ( storageFilePath ) => _.fileProvider.directoryIs( _.fileProvider.path.dir( storageFilePath ) ) ),
+    () => 'Directory for storage file does not exist ' + _.strQuote( storageFilePath )
+  );
+
+  return storageFilePath;
+}
+
 //
-//   if( !_.numberIs( val ) )
-//   val = val ? 1 : 0;
-//   if( val < 0 )
-//   val = 0;
+
+function storageToSave( o )
+{
+  let self = this;
+
+  o = _.routineOptions( storageToSave, arguments );
+
+  let storage = self.fileMap;
+
+  if( o.splitting )
+  {
+    let storageDirPath = _.path.dir( o.storageFilePath );
+    let fileMap = self.fileMap;
+    storage = Object.create( null );
+    for( let m in fileMap )
+    {
+      if( _.strBegins( m, storageDirPath ) )
+      storage[ m ] = fileMap[ m ];
+    }
+  }
+
+  return storage;
+}
+
+storageToSave.defaults =
+{
+  storageFilePath : null,
+  splitting : 1,
+}
+
 //
-//   archive[ verbositySymbol ] = val;
-// }
+
+function storageLoaded( storage, op )
+{
+  let self = this;
+  let fileProvider = self.fileProvider;
+
+  _.sure( self.storageIs( storage ), () => 'Strange storage : ' + _.toStrShort( storage ) );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( _.strIs( op.storageFilePath ) );
+
+  if( self.loadedStorages !== undefined )
+  {
+    _.assert( _.arrayIs( self.loadedStorages ), () => 'expects {-self.loadedStorages-}, but got ' + _.strTypeOf( self.loadedStorages ) );
+    self.loadedStorages.push({ filePath : op.storageFilePath });
+  }
+
+  debugger;
+  _.mapExtend( self.fileMap, storage );
+
+  return true;
+}
 
 // --
 // vars
 // --
 
-var verbositySymbol = Symbol.for( 'verbosity' );
-var mask =
+let verbositySymbol = Symbol.for( 'verbosity' );
+let mask =
 {
   excludeAny :
   [
@@ -397,7 +492,7 @@ var mask =
 // relations
 // --
 
-var Composes =
+let Composes =
 {
   verbosity : 2,
 
@@ -407,7 +502,6 @@ var Composes =
   replacingByNewest : 1,
   maxSize : null,
 
-  // dependencyMap : _.define.own( {} ),
   fileByHashMap : _.define.own( {} ),
 
   fileMap : _.define.own( {} ),
@@ -426,39 +520,40 @@ var Composes =
 
 }
 
-var Aggregates =
+let Aggregates =
 {
 }
 
-var Associates =
+let Associates =
 {
   fileProvider : null,
 }
 
-var Restricts =
+let Restricts =
+{
+  loadedStorages : _.define.own([]),
+}
+
+let Statics =
 {
 }
 
-var Statics =
-{
-}
-
-var Forbids =
+let Forbids =
 {
   dependencyMap : 'dependencyMap',
 }
 
-var Accessors =
+let Accessors =
 {
-  // verbosity : 'verbosity',
-  storageToStore : 'storageToStore',
+  logger : { readOnly : 1 },
+  // storage : 'storage',
 }
 
 // --
 // declare
 // --
 
-var Proto =
+let Proto =
 {
 
   init : init,
@@ -470,14 +565,18 @@ var Proto =
   restoreLinksBegin : restoreLinksBegin,
   restoreLinksEnd : restoreLinksEnd,
 
+  _loggerGet : _loggerGet,
+
+  // storage
+
+  storageDirPathGet : storageDirPathGet,
+  storageFilePathToSaveGet : storageFilePathToSaveGet,
+  storageToSave : storageToSave,
+  storageLoaded : storageLoaded,
+  // _storageSet : _.setterAlias_functor({ original : 'fileMap', alias : 'storage' }),
+  // _storageGet : _.getterAlias_functor({ original : 'fileMap', alias : 'storage' }),
+
   //
-
-  // _verbositySet : _verbositySet,
-  _storageToStoreSet : _.setterAlias_functor({ original : 'fileMap', alias : 'storageToStore' }),
-  _storageToStoreGet : _.getterAlias_functor({ original : 'fileMap', alias : 'storageToStore' }),
-
-  //
-
 
   Composes : Composes,
   Aggregates : Aggregates,
@@ -501,7 +600,7 @@ _.classDeclare
 //
 
 _.Copyable.mixin( Self );
-_.FileStorage.mixin( Self );
+_.StateStorage.mixin( Self );
 _.Verbal.mixin( Self );
 _global_[ Self.name ] = _[ Self.shortName ] = Self;
 
