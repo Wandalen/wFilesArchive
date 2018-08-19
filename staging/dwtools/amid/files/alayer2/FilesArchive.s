@@ -387,7 +387,7 @@ function storageDirPathGet( storageDirPath )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( !!storageDirPath );
-  _.assert( _.every( storageDirPath, ( path ) => fileProvider.path.isAbsolute( path ) ) );
+  _.assert( _.all( storageDirPath, ( path ) => fileProvider.path.isAbsolute( path ) ) );
 
   return storageDirPath;
 }
@@ -406,7 +406,7 @@ function storageFilePathToSaveGet( storageDirPath )
 
   _.sure
   (
-    _.every( storageFilePath, ( storageFilePath ) => _.fileProvider.directoryIs( _.fileProvider.path.dir( storageFilePath ) ) ),
+    _.all( storageFilePath, ( storageFilePath ) => _.fileProvider.directoryIs( _.fileProvider.path.dir( storageFilePath ) ) ),
     () => 'Directory for storage file does not exist ' + _.strQuote( storageFilePath )
   );
 
