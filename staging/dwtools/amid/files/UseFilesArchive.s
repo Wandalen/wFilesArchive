@@ -1,4 +1,4 @@
-(function _FilesArchive_s_() {
+(function _UseFilesArchive_s_() {
 
 'use strict';
 
@@ -28,9 +28,9 @@ if( typeof module !== 'undefined' )
   _.include( 'wFiles' );
   _.include( 'wStateStorage' );
 
-  require( './alayer2/FilesArchive.s' );
-  require( './alayer2/FilesGraph.s' );
-  require( './hfilter/Archive.s' );
+  require( './l8_filter/Archive.s' );
+  require( './l9/FilesArchive.s' );
+  require( './l9/FilesGraph.s' );
 
 }
 

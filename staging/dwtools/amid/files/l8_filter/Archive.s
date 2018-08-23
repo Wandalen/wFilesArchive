@@ -8,7 +8,7 @@ if( typeof module !== 'undefined' )
   var _global = _global_;
   var _ = _global_.wTools;
 
-  require( '../FilesArchive.s' );
+  require( '../UseFilesArchive.s' );
 
 }
 
@@ -89,7 +89,7 @@ var Extend =
 
   //
 
-  
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
