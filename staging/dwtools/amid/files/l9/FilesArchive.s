@@ -518,6 +518,8 @@ let Composes =
 
   storageFileName : '.warchive',
 
+  storageSaveAsJs : true
+
 }
 
 let Aggregates =

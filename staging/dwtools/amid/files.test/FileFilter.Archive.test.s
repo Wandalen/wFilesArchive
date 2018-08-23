@@ -155,8 +155,10 @@ function archive( test )
   var archivePath = _.path.join( provider.archive.basePath, provider.archive.storageFileName );
   var savedOnDisk = !!provider.fileStat( archivePath );
   test.is( savedOnDisk );
-  var arcive = provider.fileReadJson( archivePath );
-  test.identical( arcive, provider.archive.fileMap );
+  var archive = provider.fileReadJs( archivePath );
+  logger.log( _.entityDiff(  archive, provider.archive.fileMap ) )
+  test.identical( archive, provider.archive.fileMap );
+
 
   _.fileProvider.fieldReset( 'safe', 0 );
 }
