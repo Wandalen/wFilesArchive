@@ -43,9 +43,9 @@ var Parent = _.Tester;
 function onSuiteBegin()
 {
   if( !isBrowser )
-  this.testRootDirectory = _.dirTempMake( _.pathJoin( __dirname, '../..'  ) );
+  this.testRootDirectory = _.path.dirTempMake( _.path.join( __dirname, '../..'  ) );
   else
-  this.testRootDirectory = _.pathCurrent();
+  this.testRootDirectory = _.path.current();
 
   this.delay = _.fileProvider.systemBitrateTimeGet() / 1000;
 }
@@ -78,12 +78,12 @@ function flatMapFromTree( tree, currentPath, paths )
   {
     if( _.objectIs( tree[ k ] ) )
     {
-      paths[ _.pathResolve( currentPath, k ) ] = Object.create( null );
+      paths[ _.path.resolve( currentPath, k ) ] = Object.create( null );
 
-      flatMapFromTree( tree[ k ], _.pathJoin( currentPath, k ), paths );
+      flatMapFromTree( tree[ k ], _.path.join( currentPath, k ), paths );
     }
     else
-    paths[ _.pathResolve( currentPath, k ) ] = tree[ k ];
+    paths[ _.path.resolve( currentPath, k ) ] = tree[ k ];
   }
 
   return paths;
@@ -93,7 +93,7 @@ function flatMapFromTree( tree, currentPath, paths )
 
 function archive( test )
 {
-  var testRoutineDir = _.pathJoin( this.testRootDirectory, test.name );
+  var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
   _.fileProvider.fieldSet( 'safe', 0 );
 
   test.case = 'multilevel files tree';
@@ -152,11 +152,13 @@ function archive( test )
 
   /* check how archive saves fileMap of disk */
 
-  var archivePath = _.pathJoin( provider.archive.basePath, provider.archive.storageFileName );
+  var archivePath = _.path.join( provider.archive.basePath, provider.archive.storageFileName );
   var savedOnDisk = !!provider.fileStat( archivePath );
   test.is( savedOnDisk );
-  var arcive = provider.fileReadJson( archivePath );
-  test.identical( arcive, provider.archive.fileMap );
+  var archive = provider.fileReadJs( archivePath );
+  logger.log( _.entityDiff(  archive, provider.archive.fileMap ) )
+  test.identical( archive, provider.archive.fileMap );
+
 
   _.fileProvider.fieldReset( 'safe', 0 );
 }
@@ -165,7 +167,7 @@ function archive( test )
 
 function restoreLinks( test )
 {
-  var testRoutineDir = _.pathJoin( this.testRootDirectory, test.name );
+  var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
   _.fileProvider.fieldSet( 'safe', 0 );
 
   var provider = _.FileFilter.Archive();
@@ -181,7 +183,7 @@ function restoreLinks( test )
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -205,7 +207,7 @@ function restoreLinks( test )
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -225,7 +227,7 @@ function restoreLinks( test )
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -250,7 +252,7 @@ function restoreLinks( test )
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -275,7 +277,7 @@ function restoreLinks( test )
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -300,7 +302,7 @@ function restoreLinks( test )
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -325,7 +327,7 @@ function restoreLinks( test )
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -350,7 +352,7 @@ function restoreLinks( test )
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -380,7 +382,7 @@ function restoreLinks( test )
   provider.filesDelete( testRoutineDir );
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -405,7 +407,7 @@ function restoreLinks( test )
   provider.filesDelete( testRoutineDir );
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -430,14 +432,14 @@ function restoreLinks( test )
   var paths = [ 'a', 'b', 'c' ];
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
 
   /* linking fourth with second and saving info */
 
-  paths[ 3 ] = _.pathJoin( testRoutineDir, 'e' );
+  paths[ 3 ] = _.path.join( testRoutineDir, 'e' );
   provider.linkHard( paths[ 3 ], paths[ 2 ] );
   provider.archive.restoreLinksBegin();
 
@@ -472,7 +474,7 @@ function restoreLinks( test )
   provider.filesDelete( testRoutineDir );
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -492,7 +494,7 @@ function restoreLinks( test )
   provider.filesDelete( testRoutineDir );
   paths.forEach( ( p, i ) =>
   {
-    paths[ i ] = _.pathJoin( testRoutineDir, p );
+    paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
   provider.linkHard({ dstPath : paths });
@@ -509,17 +511,15 @@ function restoreLinks( test )
 
 }
 
-restoreLinks.timeOut = 30000;
-
 //
 
 function restoreLinksComplex( test )
 {
 
-  var testRoutineDir = _.pathJoin( this.testRootDirectory, test.name );
+  var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
   _.fileProvider.fieldSet( 'safe', 0 );
 
-  var provider = _.FileFilter.Archive({ original : new _.FileProvider.Default/**//**//**/() });
+  var provider = _.FileFilter.Archive({ original : new _.FileProvider.Default() });
   provider.verbosity = 0;
   provider.archive.verbosity = 0;
   provider.archive.basePath = testRoutineDir;
@@ -541,7 +541,6 @@ function restoreLinksComplex( test )
   function begin()
   {
     var files = {};
-    var inos = [];
     var _files =
     {
       'a1' : '3', /* 0 */
@@ -556,34 +555,10 @@ function restoreLinksComplex( test )
     provider.filesDelete( testRoutineDir );
     _.each( _files, ( e, k ) =>
     {
-      k = _.pathJoin( testRoutineDir, k );
+      k = _.path.join( testRoutineDir, k );
       files[ k ] = e;
       waitSync( test.context.delay )
       provider.fileWrite( k, e );
-
-      var ino = provider.fileStat( k ).ino;
-      var i = inos.indexOf( ino );
-
-      if( i !== -1 )
-      {
-        for( var i = 0; i < 10; i++ )
-        {
-          provider.fileDelete( k );
-          provider.fileWrite( k,e );
-          ino = provider.fileStat( k ).ino;
-          if( inos.indexOf( ino ) === -1 )
-          break;
-        }
-      }
-
-      ino = provider.fileStat( k ).ino;
-      i = inos.indexOf( ino );
-      _.assert( i === -1, 'ino duplication' );
-
-      inos.push( ino );
-
-      // logger.log( _.mapOwnKeys( _files ) );
-      // logger.log( inos );
     });
 
     return files;
@@ -605,7 +580,6 @@ function restoreLinksComplex( test )
     test.is( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ) );
     test.is( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ) );
     test.is( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 6, 8 ) ) );
-
 
 
     provider.archive.restoreLinksBegin();
@@ -838,14 +812,12 @@ function restoreLinksComplex( test )
   _.fileProvider.fieldReset( 'safe', 0 );
 }
 
-restoreLinksComplex.timeOut = 80000;
-
 //
 
 function filesLinkSame( test )
 {
   var context = this;
-  var dir = _.pathJoin( context.testRootDirectory, test.name );
+  var dir = _.path.join( context.testRootDirectory, test.name );
   _.fileProvider.fieldSet( 'safe', 0 );
   var provider;
 
@@ -876,8 +848,8 @@ function filesLinkSame( test )
       dstPath : dir,
     });
 
-    test.is( !!provider.fileStat( _.pathJoin( dir,'a' ) ) );
-    test.is( !!provider.fileStat( _.pathJoin( dir,'dir/a' ) ) );
+    test.is( !!provider.fileStat( _.path.join( dir,'a' ) ) );
+    test.is( !!provider.fileStat( _.path.join( dir,'dir/a' ) ) );
 
   }
 
@@ -888,14 +860,14 @@ function filesLinkSame( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 0 });
 
-  test.is( !!provider.fileStat( _.pathJoin( dir,'a' ) ) );
-  test.is( !!provider.fileStat( _.pathJoin( dir,'dir/a' ) ) );
+  test.is( !!provider.fileStat( _.path.join( dir,'a' ) ) );
+  test.is( !!provider.fileStat( _.path.join( dir,'dir/a' ) ) );
 
-  test.is( !provider.filesAreHardLinked( _.pathJoin( dir,'a' ),_.pathJoin( dir,'b' ) ) );
-  test.is( !provider.filesAreHardLinked( _.pathJoin( dir,'a' ),_.pathJoin( dir,'dir/x' ) ) );
+  test.is( !provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'b' ) ) );
+  test.is( !provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'dir/x' ) ) );
 
-  test.is( provider.filesAreHardLinked( _.pathJoin( dir,'a' ),_.pathJoin( dir,'c' ),_.pathJoin( dir,'dir/a' ) ) );
-  test.is( provider.filesAreHardLinked( _.pathJoin( dir,'b' ),_.pathJoin( dir,'dir/x' ) ) );
+  test.is( provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'c' ),_.path.join( dir,'dir/a' ) ) );
+  test.is( provider.filesAreHardLinked( _.path.join( dir,'b' ),_.path.join( dir,'dir/x' ) ) );
 
   provider.finit();
   provider.archive.finit();
@@ -907,15 +879,15 @@ function filesLinkSame( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
 
-  test.is( !!provider.fileStat( _.pathJoin( dir,'a' ) ) );
-  test.is( !!provider.fileStat( _.pathJoin( dir,'dir/a' ) ) );
+  test.is( !!provider.fileStat( _.path.join( dir,'a' ) ) );
+  test.is( !!provider.fileStat( _.path.join( dir,'dir/a' ) ) );
 
-  test.is( !provider.filesAreHardLinked( _.pathJoin( dir,'a' ),_.pathJoin( dir,'b' ) ) );
-  test.is( !provider.filesAreHardLinked( _.pathJoin( dir,'a' ),_.pathJoin( dir,'dir/x' ) ) );
+  test.is( !provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'b' ) ) );
+  test.is( !provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'dir/x' ) ) );
 
-  test.is( provider.filesAreHardLinked( _.pathJoin( dir,'a' ),_.pathJoin( dir,'dir/a' ) ) );
-  test.is( !provider.filesAreHardLinked( _.pathJoin( dir,'a' ),_.pathJoin( dir,'c' ) ) );
-  test.is( !provider.filesAreHardLinked( _.pathJoin( dir,'b' ),_.pathJoin( dir,'dir/x' ) ) );
+  test.is( provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'dir/a' ) ) );
+  test.is( !provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'c' ) ) );
+  test.is( !provider.filesAreHardLinked( _.path.join( dir,'b' ),_.path.join( dir,'dir/x' ) ) );
 
   provider.finit();
   provider.archive.finit();
@@ -928,7 +900,7 @@ function filesLinkSame( test )
 function severalPaths( test )
 {
   var context = this;
-  var dir = _.pathJoin( context.testRootDirectory, test.name );
+  var dir = _.path.join( context.testRootDirectory, test.name );
   _.fileProvider.fieldSet( 'safe', 0 );
   var provider;
 
@@ -960,7 +932,7 @@ function severalPaths( test )
     }
 
     provider = _.FileFilter.Archive();
-    provider.archive.basePath = [ _.pathJoin( dir,'dir1' ), _.pathJoin( dir,'dir2' ), _.pathJoin( dir,'dir3' ) ];
+    provider.archive.basePath = [ _.path.join( dir,'dir1' ), _.path.join( dir,'dir2' ), _.path.join( dir,'dir3' ) ];
     provider.archive.fileMapAutosaving = 0;
 
     _.FileProvider.Extract.readToProvider
@@ -970,9 +942,9 @@ function severalPaths( test )
       dstPath : dir,
     });
 
-    test.is( !!provider.fileStat( _.pathJoin( dir,'dir1/a' ) ) );
-    test.is( !!provider.fileStat( _.pathJoin( dir,'dir2/a' ) ) );
-    test.is( !!provider.fileStat( _.pathJoin( dir,'dir3/x' ) ) );
+    test.is( !!provider.fileStat( _.path.join( dir, 'dir1/a' ) ) );
+    test.is( !!provider.fileStat( _.path.join( dir, 'dir2/a' ) ) );
+    test.is( !!provider.fileStat( _.path.join( dir, 'dir3/x' ) ) );
 
   }
 
@@ -983,15 +955,17 @@ function severalPaths( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
 
-  test.is( !!provider.fileStat( _.pathJoin( dir,'dir1/a' ) ) );
-  test.is( !!provider.fileStat( _.pathJoin( dir,'dir2/a' ) ) );
-  test.is( !!provider.fileStat( _.pathJoin( dir,'dir3/x' ) ) );
+  test.is( !!provider.fileStat( _.path.join( dir,'dir1/a' ) ) );
+  test.is( !!provider.fileStat( _.path.join( dir,'dir2/a' ) ) );
+  test.is( !!provider.fileStat( _.path.join( dir,'dir3/x' ) ) );
 
-  test.is( provider.filesAreHardLinked( _.pathJoin( dir,'dir1/a' ),_.pathJoin( dir,'dir2/a' ) ) );
-  test.is( provider.filesAreHardLinked( _.pathJoin( dir,'dir2/x' ),_.pathJoin( dir,'dir3/x' ) ) );
+  debugger;
+  test.is( provider.filesAreHardLinked( _.path.join( dir,'dir1/a' ),_.path.join( dir,'dir2/a' ) ) );
+  test.is( provider.filesAreHardLinked( _.path.join( dir,'dir2/x' ),_.path.join( dir,'dir3/x' ) ) );
+  debugger;
 
-  test.is( !provider.filesAreHardLinked( _.pathJoin( dir,'dir1/a' ),_.pathJoin( dir,'dir1/b' ) ) );
-  test.is( !provider.filesAreHardLinked( _.pathJoin( dir,'dir1/b' ),_.pathJoin( dir,'dir2/x' ) ) );
+  test.is( !provider.filesAreHardLinked( _.path.join( dir,'dir1/a' ),_.path.join( dir,'dir1/b' ) ) );
+  test.is( !provider.filesAreHardLinked( _.path.join( dir,'dir1/b' ),_.path.join( dir,'dir2/x' ) ) );
 
   provider.finit();
   provider.archive.finit();
@@ -1008,7 +982,7 @@ function tester( test )
   var suite = test.suite;
   var tests = suite.tests;
 
-  var runsLimit = 500000;
+  var runsLimit = 5;
 
   var tests =
   {
@@ -1033,7 +1007,7 @@ function tester( test )
 }
 
 // --
-// define class
+// declare
 // --
 
 var Self =
