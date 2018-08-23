@@ -2,29 +2,32 @@
 
 'use strict';
 
+/**
+  @module Tools/mid/FilesArchive - Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.
+*/
+
+/**
+ * @file files/FilesGraph.s.
+ */
+
 //
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = null;
-var Self = function wFilesGraph( o )
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = null;
+let Self = function wFilesGraph( o )
 {
   _.assert( arguments.length === 0 || arguments.length === 1, 'expects single argument' );
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.instanceConstructor( Self, this, arguments );
 }
 
-Self.nameShort = 'FilesGraph';
+Self.shortName = 'FilesGraph';
 
 //
 
 function init( o )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
@@ -40,12 +43,12 @@ function init( o )
 
 // function contentUpdate( head,data )
 // {
-//   var self = this;
+//   let self = this;
 //
 //   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 //
-//   var head = _.FileRecord.from( head );
-//   var dependency = self._headToTailsFor( head );
+//   let head = _.FileRecord.from( head );
+//   let dependency = self._headToTailsFor( head );
 //
 //   dependency.node.hash = self._hashFor( data );
 //
@@ -56,12 +59,12 @@ function init( o )
 //
 // function statUpdate( head,stat )
 // {
-//   var self = this;
+//   let self = this;
 //
 //   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 //
-//   var head = _.FileRecord.from( head );
-//   var dependency = self._headToTailsFor( head );
+//   let head = _.FileRecord.from( head );
+//   let dependency = self._headToTailsFor( head );
 //
 //   dependency.node.mtime = stat.mtime.getTime();
 //   dependency.node.ctime = stat.ctime.getTime();
@@ -77,9 +80,9 @@ function init( o )
 
 function _eachHeadPre( routine,args )
 {
-  var self = this;
-  var result = 0;
-  var op;
+  let self = this;
+  let result = 0;
+  let op;
 
   if( args.length === 2 )
   op = { path : args[ 0 ], onUp : args[ 1 ] };
@@ -88,12 +91,12 @@ function _eachHeadPre( routine,args )
 
   _.routineOptions( routine,op );
   _.assert( args.length === 1 || args.length === 2 );
-  _.assert( _.pathIsAbsolute( op.path ) );
+  _.assert( _.path.isAbsolute( op.path ) );
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   op.visited = op.visited || [];
 
-  var path = op.path;
+  let path = op.path;
 
   delete op.path;
 
@@ -101,13 +104,13 @@ function _eachHeadPre( routine,args )
 
   op.iterationNew = function iterationNew( path )
   {
-    var it = Object.create( op.operation );
+    let it = Object.create( op.operation );
     it.prevPath = this.path || null;
     it.path = path;
     return it;
   }
 
-  var it = op.iterationNew( path )
+  let it = op.iterationNew( path )
 
   return [ it,op ];
 }
@@ -116,11 +119,11 @@ function _eachHeadPre( routine,args )
 
 function _eachHeadBody( it,op )
 {
-  var self = this;
-  var result = 1;
+  let self = this;
+  let result = 1;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  // _.assert( self.nodesMap[ it.path ] );
+  // _.assert( !!self.nodesMap[ it.path ] );
 
   if( _.arrayHas( op.visited,it.path ) )
   return;
@@ -130,12 +133,12 @@ function _eachHeadBody( it,op )
   if( op.onUp )
   op.onUp( it,op );
 
-  var dep = self.headsForTailMap[ it.path ];
+  let dep = self.headsForTailMap[ it.path ];
 
   if( !dep )
   return result;
 
-  for( var h in dep.heads )
+  for( let h in dep.heads )
   {
     result += self.eachHead.body.call( self,it.iterationNew( h ),op );
   }
@@ -157,9 +160,9 @@ _eachHeadBody.defaults =
 
 function eachHead( o )
 {
-  var self = this;
-  var args = self.eachHead.preArguments.call( self, self.eachHead, arguments );
-  var result = self.eachHead.body.apply( self, args );
+  let self = this;
+  let args = self.eachHead.preArguments.call( self, self.eachHead, arguments );
+  let result = self.eachHead.body.apply( self, args );
   return result;
 }
 
@@ -179,11 +182,11 @@ eachHead.defaults =
 
 function fileChange( path )
 {
-  var self = this;
-  var result = 0;
+  let self = this;
+  let result = 0;
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.pathIsAbsolute( path ) );
+  _.assert( _.path.isAbsolute( path ) );
 
   function onUp( it,op )
   {
@@ -196,20 +199,20 @@ function fileChange( path )
     logger.log( '. change',it.path );
   }
 
-  var result = self.eachHead( path,onUp );
+  let result = self.eachHead( path,onUp );
 }
 
 //
 
 function filesUpdate( record )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
   if( _.arrayIs( record ) )
   {
-    for( var r = 0 ; r < record.length ; r++ )
+    for( let r = 0 ; r < record.length ; r++ )
     self.filesUpdate( record[ r ] );
     return self;
   }
@@ -233,33 +236,33 @@ function filesUpdate( record )
 
 function fileDeletedUpdate( path )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
   /* */
 
-  var dep = self.tailsForHeadMap[ path ]
+  let dep = self.tailsForHeadMap[ path ]
   if( dep )
-  for( var t in dep.tails )
+  for( let t in dep.tails )
   {
-    var tail = self.headsForTailMap[ t ];
+    let tail = self.headsForTailMap[ t ];
     _.assert( tail );
-    var head = tail.heads[ path ];
+    let head = tail.heads[ path ];
     _.assert( head );
     delete tail.heads[ path ]
   }
 
   /* */
 
-  var dep = self.headsForTailMap[ path ]
+  let dep = self.headsForTailMap[ path ]
   if( dep )
-  for( var h in dep.heads )
+  for( let h in dep.heads )
   {
     debugger; xxx
-    var head = self.tailsForHeadMap[ h ];
+    let head = self.tailsForHeadMap[ h ];
     _.assert( head );
-    var tail = head.tails[ path ];
+    let tail = head.tails[ path ];
     _.assert( tail );
     delete head.tails[ path ]
   }
@@ -276,7 +279,7 @@ function fileDeletedUpdate( path )
 
 function fileIsUpToDate( head )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( head instanceof _.FileRecord );
@@ -291,17 +294,17 @@ function fileIsUpToDate( head )
 
 function unprocessedDelete()
 {
-  var self = this;
-  var fileProvider = self.fileProvider;
+  let self = this;
+  let fileProvider = self.fileProvider;
 
   _.assert( arguments.length === 0 );
 
   if( !self.unporcessedDstUnmapping )
   return;
 
-  for( var n in self.unprocessedMap )
+  for( let n in self.unprocessedMap )
   {
-    var node = self.unprocessedMap[ n ];
+    let node = self.unprocessedMap[ n ];
 
     if( _.strBegins( n,self.dstPath ) )
     {
@@ -320,17 +323,17 @@ function unprocessedDelete()
 
 function unprocessedReport()
 {
-  var self = this;
-  var fileProvider = self.fileProvider;
+  let self = this;
+  let fileProvider = self.fileProvider;
 
   _.assert( arguments.length === 0 );
 
-  var unprocessedMapKeys = _.mapKeys( self.unprocessedMap );
+  let unprocessedMapKeys = _.mapKeys( self.unprocessedMap );
   if( unprocessedMapKeys.length )
   {
 
     if( self.verbosity >= 4 )
-    for( var n in self.unprocessedMap )
+    for( let n in self.unprocessedMap )
     {
 
       if( _.strBegins( n,self.dstPath ) )
@@ -361,7 +364,7 @@ function unprocessedReport()
 
 function dependencyAdd( head,tails )
 {
-  var self = this;
+  let self = this;
 
   if( tails instanceof _.FileRecord )
   tails = [ tails ];
@@ -376,21 +379,21 @@ function dependencyAdd( head,tails )
   /* */
 
   delete self.unprocessedMap[ head.absolute ];
-  for( var t = 0 ; t < tails.length ; t++ )
+  for( let t = 0 ; t < tails.length ; t++ )
   {
-    var tailRecord = tails[ t ];
+    let tailRecord = tails[ t ];
     delete self.unprocessedMap[ tailRecord.absolute ];
   }
 
   /* */
 
-  var headToTails = self._headToTailsFor( head );
-  for( var t = 0 ; t < tails.length ; t++ )
+  let headToTails = self._headToTailsFor( head );
+  for( let t = 0 ; t < tails.length ; t++ )
   {
-    var tailRecord = tails[ t ];
+    let tailRecord = tails[ t ];
     _.assert( tailRecord instanceof _.FileRecord );
 
-    // var tailNode = self.nodesMap[ headToTails.tails[ tailRecord.absolute ] ];
+    // let tailNode = self.nodesMap[ headToTails.tails[ tailRecord.absolute ] ];
     // if( tailNode )
     // _.assert( self._nodeRecordSame( tailNode, tailRecord ) );
 
@@ -400,14 +403,14 @@ function dependencyAdd( head,tails )
 
   /* */
 
-  for( var t = 0 ; t < tails.length ; t++ )
+  for( let t = 0 ; t < tails.length ; t++ )
   {
-    var tailRecord = tails[ t ];
+    let tailRecord = tails[ t ];
     _.assert( tailRecord instanceof _.FileRecord );
 
-    var tailToHeads = self._tailToHeadsFor( tailRecord );
+    let tailToHeads = self._tailToHeadsFor( tailRecord );
 
-    // var headNode = self.nodesMap[ tailToHeads.heads[ head.absolute ] ];
+    // let headNode = self.nodesMap[ tailToHeads.heads[ head.absolute ] ];
     // if( headNode )
     // _.assert( self._nodeRecordSame( headNode, head ) );
 
@@ -424,12 +427,12 @@ function dependencyAdd( head,tails )
 
 function _headToTailsFor( headRecord )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( headRecord instanceof _.FileRecord );
 
-  var dependency = self.tailsForHeadMap[ headRecord.absolute ];
+  let dependency = self.tailsForHeadMap[ headRecord.absolute ];
 
   if( !dependency )
   {
@@ -451,12 +454,12 @@ function _headToTailsFor( headRecord )
 
 function _tailToHeadsFor( tailRecord )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( tailRecord instanceof _.FileRecord );
 
-  var dependency = self.headsForTailMap[ tailRecord.absolute ];
+  let dependency = self.headsForTailMap[ tailRecord.absolute ];
 
   if( !dependency )
   {
@@ -480,12 +483,12 @@ function _tailToHeadsFor( tailRecord )
 
 function _nodeMake( record )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( !self.nodesMap[ record.absolute ] );
 
-  var node = Object.create( null );
+  let node = Object.create( null );
   self._nodeFromRecord( node,record );
   Object.preventExtensions( node );
   self.nodesMap[ record.absolute ] = node;
@@ -497,11 +500,11 @@ function _nodeMake( record )
 
 function _nodeFor( record )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  var node = self.nodesMap[ record.absolute ];
+  let node = self.nodesMap[ record.absolute ];
 
   if( node )
   {
@@ -518,11 +521,11 @@ function _nodeFor( record )
 
 function _nodeForChanging( record )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  var node = self.nodesMap[ record.absolute ];
+  let node = self.nodesMap[ record.absolute ];
 
   if( !node )
   {
@@ -547,11 +550,11 @@ function _nodeForChanging( record )
 
 function _nodeForUpdating( record )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  var node = self.nodesMap[ record.absolute ];
+  let node = self.nodesMap[ record.absolute ];
 
   if( !node )
   {
@@ -586,8 +589,8 @@ function _nodeForUpdating( record )
 
 function _nodeFromRecord( node,record )
 {
-  var self = this;
-  var provider = self.provider;
+  let self = this;
+  let provider = self.provider;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( record instanceof _.FileRecord );
@@ -621,8 +624,8 @@ function _nodeFromRecord( node,record )
 
 function _nodeRecordSame( node,record )
 {
-  var self = this;
-  var provider = self.provider;
+  let self = this;
+  let provider = self.provider;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.mapIs( node ) );
@@ -662,9 +665,9 @@ function _nodeRecordSame( node,record )
 function _hashFor( src )
 {
 
-  var result;
-  var crypto = require( 'crypto' );
-  var md5sum = crypto.createHash( 'md5' );
+  let result;
+  let crypto = require( 'crypto' );
+  let md5sum = crypto.createHash( 'md5' );
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
@@ -683,17 +686,17 @@ function _hashFor( src )
 
 //
 
-function storageLoadEnd( storageFilePath,mapExtend )
+function storageLoaded( storageFilePath,mapExtend )
 {
-  var self = this;
-  var fileProvider = self.fileProvider;
+  let self = this;
+  let fileProvider = self.fileProvider;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   _.mapExtend( self.unprocessedMap,mapExtend.nodesMap );
 
-  var storage = _.mapExtend( self.storageToStore,mapExtend );
-  self.storageToStore = storage;
+  let storage = _.mapExtend( self.storageToSave,mapExtend );
+  self.storageToSave = storage;
 
   return true;
 }
@@ -704,7 +707,7 @@ function storageLoadEnd( storageFilePath,mapExtend )
 
 function actionReset()
 {
-  var self = this;
+  let self = this;
   self.basePath = null;
 }
 
@@ -712,7 +715,7 @@ function actionReset()
 
 function actionFuture( actionName )
 {
-  var self = this;
+  let self = this;
 
   _.assert( _.strIs( actionName ) || actionName === null );
 
@@ -724,7 +727,7 @@ function actionFuture( actionName )
 
 function actionBegin( actionName )
 {
-  var self = this;
+  let self = this;
 
   _.assert( self.currentAction === null );
   _.assert( _.strIs( actionName ) || actionName === null );
@@ -742,14 +745,14 @@ function actionBegin( actionName )
 
   /* path */
 
-  self.srcPath = _.pathNormalize( self.srcPath );
-  self.dstPath = _.pathNormalize( self.dstPath );
+  self.srcPath = _.path.normalize( self.srcPath );
+  self.dstPath = _.path.normalize( self.dstPath );
   if( self.basePath === null )
-  self.basePath = _.pathCommon([ self.srcPath, self.dstPath ]);
+  self.basePath = _.path.common([ self.srcPath, self.dstPath ]);
 
   /* storage */
 
-  self.storageLoad( self.dstPath );
+  self._storageLoad( self.dstPath );
 
 }
 
@@ -757,7 +760,7 @@ function actionBegin( actionName )
 
 function actionEnd( actionName )
 {
-  var self = this;
+  let self = this;
 
   _.assert( self.currentAction === actionName || actionName === undefined );
   _.assert( arguments.length === 0 || arguments.length === 1 );
@@ -776,7 +779,7 @@ function actionEnd( actionName )
 
 // function _verbositySet( val )
 // {
-//   var self = this;
+//   let self = this;
 //
 //   _.assert( arguments.length === 1, 'expects single argument' );
 //
@@ -790,9 +793,9 @@ function actionEnd( actionName )
 
 //
 
-function _storageToStoreSet( storage )
+function _storageToSaveSet( storage )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
@@ -805,10 +808,10 @@ function _storageToStoreSet( storage )
 
 //
 
-function _storageToStoreGet()
+function _storageToSaveGet()
 {
-  var self = this;
-  var storage = Object.create( null );
+  let self = this;
+  let storage = Object.create( null );
 
   // storage.changedMap = self.changedMap;
   storage.nodesMap = self.nodesMap;
@@ -827,9 +830,9 @@ function _storageToStoreGet()
   - unprocessedMap could not have path without nodes
 */
 
-var verbositySymbol = Symbol.for( 'verbosity' );
+let verbositySymbol = Symbol.for( 'verbosity' );
 
-var Composes =
+let Composes =
 {
 
   verbosity : 5,
@@ -844,33 +847,33 @@ var Composes =
   unporcessedDstUnmapping : 1,
   unporcessedDstDeleting : 1,
 
-  changedMap : Object.create( null ),
-  unprocessedMap : Object.create( null ),
+  changedMap : _.define.own( {} ),
+  unprocessedMap : _.define.own( {} ),
 
-  nodesMap : Object.create( null ),
-  headsForTailMap : Object.create( null ),
-  tailsForHeadMap : Object.create( null ),
+  nodesMap : _.define.own( {} ),
+  headsForTailMap : _.define.own( {} ),
+  tailsForHeadMap : _.define.own( {} ),
 
 }
 
-var Aggregates =
+let Aggregates =
 {
 }
 
-var Associates =
+let Associates =
 {
   fileProvider : null,
 }
 
-var Restricts =
+let Restricts =
 {
 }
 
-var Statics =
+let Statics =
 {
 }
 
-var Forbids =
+let Forbids =
 {
 
   comparingRelyOnHardLinks : 'comparingRelyOnHardLinks',
@@ -894,17 +897,17 @@ var Forbids =
 
 }
 
-var Accessors =
+let Accessors =
 {
   // verbosity : 'verbosity',
-  storageToStore : 'storageToStore',
+  storageToSave : 'storageToSave',
 }
 
 // --
-// define class
+// declare
 // --
 
-var Proto =
+let Proto =
 {
 
   init : init,
@@ -918,7 +921,6 @@ var Proto =
   _eachHeadBody : _eachHeadBody,
   eachHead : eachHead,
 
-
   // file
 
   fileChange : fileChange,
@@ -929,13 +931,11 @@ var Proto =
   unprocessedDelete : unprocessedDelete,
   unprocessedReport : unprocessedReport,
 
-
   // dependency
 
   dependencyAdd : dependencyAdd,
   _headToTailsFor : _headToTailsFor,
   _tailToHeadsFor : _tailToHeadsFor,
-
 
   // node
 
@@ -947,12 +947,10 @@ var Proto =
   _nodeFromRecord : _nodeFromRecord,
   _nodeRecordSame : _nodeRecordSame,
 
-
   // etc
 
   _hashFor : _hashFor,
-  storageLoadEnd : storageLoadEnd,
-
+  storageLoaded : storageLoaded,
 
   // action
 
@@ -964,12 +962,12 @@ var Proto =
   //
 
   // _verbositySet : _verbositySet,
-  _storageToStoreSet : _storageToStoreSet,
-  _storageToStoreGet : _storageToStoreGet,
+  _storageToSaveSet : _storageToSaveSet,
+  _storageToSaveGet : _storageToSaveGet,
 
   //
 
-  constructor : Self,
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -982,7 +980,7 @@ var Proto =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,
@@ -992,9 +990,9 @@ _.classMake
 //
 
 _.Copyable.mixin( Self );
-_.FileStorage.mixin( Self );
+_.StateStorage.mixin( Self );
 _.Verbal.mixin( Self );
-_global_[ Self.name ] = _[ Self.nameShort ] = Self;
+_global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 // --
 // export

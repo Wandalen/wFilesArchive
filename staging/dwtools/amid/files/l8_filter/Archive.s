@@ -8,7 +8,7 @@ if( typeof module !== 'undefined' )
   var _global = _global_;
   var _ = _global_.wTools;
 
-  require( '../FilesArchive.s' );
+  require( '../UseFilesArchive.s' );
 
 }
 
@@ -22,15 +22,10 @@ var Default = _.FileProvider.Default;
 var Parent = Abstract;
 var Self = function wFileFilterArchive( o )
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.instanceConstructor( Self, this, arguments );
 }
 
-Self.nameShort = 'Archive';
+Self.shortName = 'Archive';
 
 // --
 //
@@ -81,7 +76,7 @@ var Restricts =
 }
 
 // --
-// define class
+// declare
 // --
 
 var Extend =
@@ -94,7 +89,7 @@ var Extend =
 
   //
 
-  constructor : Self,
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -104,7 +99,7 @@ var Extend =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,
@@ -116,7 +111,7 @@ _.Copyable.mixin( Self );
 //
 
 _.FileFilter = _.FileFilter || Object.create( null );
-_.FileFilter[ Self.nameShort ] = Self;
+_.FileFilter[ Self.shortName ] = Self;
 
 // --
 // export
