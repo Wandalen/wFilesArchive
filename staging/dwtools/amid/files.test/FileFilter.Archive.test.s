@@ -814,7 +814,7 @@ function restoreLinksComplex( test )
   _.fileProvider.fieldReset( 'safe', 0 );
 }
 
-restoreLinksComplex.timeOut = 30000;
+restoreLinksComplex.timeOut = 120000;
 
 //
 
