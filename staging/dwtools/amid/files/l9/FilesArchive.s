@@ -316,7 +316,7 @@ function restoreLinksEnd()
 
     if( mostLinked.absolutePath !== newest.absolutePath )
     {
-      let read = provider.fileRead({ filePath : newest.absolutePath, encoding : provider._bufferEncodingGet() });
+      let read = provider.fileRead({ filePath : newest.absolutePath, encoding : 'original.type' });
       provider.fileWrite( mostLinked.absolutePath,read );
     }
 
