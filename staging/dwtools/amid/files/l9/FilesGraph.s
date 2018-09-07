@@ -559,7 +559,7 @@ function _nodeForUpdating( record )
   if( !node )
   {
 
-    if( !record.inclusion )
+    if( !record.isActual )
     {
       debugger;
       self.fileChange( record.absolute );
