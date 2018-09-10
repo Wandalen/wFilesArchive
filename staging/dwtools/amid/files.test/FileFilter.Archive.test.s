@@ -43,7 +43,7 @@ var Parent = _.Tester;
 function onSuiteBegin()
 {
   if( !isBrowser )
-  this.testRootDirectory = _.path.dirTempMake( _.path.join( __dirname, '../..'  ) );
+  this.testRootDirectory = _.path.dirTempOpen( _.path.join( __dirname, '../..'  ) );
   else
   this.testRootDirectory = _.path.current();
 
