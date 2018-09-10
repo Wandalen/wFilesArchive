@@ -76,11 +76,16 @@ function filesUpdate()
 
   let files = fileProvider.filesFind
   ({
-    glob : glob,
-    maskAll : archive.mask,
+    filter :
+    {
+      glob : glob,
+      maskAll : archive.mask,
+      maskTransientAll : archive.mask,
+    },
     onUp : onFile,
     includingTerminals : 1,
-    includingDirectories : 1,
+    includingDirectories_ : 1,
+    includingTransients : 0,
     recursive : 1,
   });
 
