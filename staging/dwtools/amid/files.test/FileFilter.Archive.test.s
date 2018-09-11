@@ -43,7 +43,7 @@ var Parent = _.Tester;
 function onSuiteBegin()
 {
   if( !isBrowser )
-  this.testRootDirectory = _.path.dirTempOpen( _.path.join( __dirname, '../..'  ) );
+  this.testRootDirectory = _.path.dirTempOpen( _.path.join( __dirname, '../..'  ), 'Archive' );
   else
   this.testRootDirectory = _.path.current();
 
@@ -56,6 +56,7 @@ function onSuiteEnd()
 {
   if( !isBrowser )
   {
+    _.assert( _.strEnds( this.testRootDirectory, 'Archive' ) )
     _.fileProvider.fieldSet( 'safe', 0 );
     _.fileProvider.filesDelete( this.testRootDirectory );
     _.fileProvider.fieldReset( 'safe', 0 );
