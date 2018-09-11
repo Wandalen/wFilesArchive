@@ -74,6 +74,7 @@ function filesUpdate()
 
   archive.mask = _.regexpMakeObject( archive.mask );
 
+  debugger;
   let files = fileProvider.filesFind
   ({
     filter :
