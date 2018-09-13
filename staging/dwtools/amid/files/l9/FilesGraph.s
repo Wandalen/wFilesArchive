@@ -748,7 +748,7 @@ function actionBegin( actionName )
   self.srcPath = _.path.normalize( self.srcPath );
   self.dstPath = _.path.normalize( self.dstPath );
   if( self.basePath === null )
-  self.basePath = _.path.common([ self.srcPath, self.dstPath ]);
+  self.basePath = _.path.common( self.srcPath, self.dstPath );
 
   /* storage */
 
