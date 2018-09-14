@@ -387,7 +387,7 @@ function storageDirPathGet( storageDirPath )
 
   // debugger;
   // if( storageDirPath )
-  // storageDirPath = fileProvider.path.pathsJoin( self.basePath, storageDirPath );
+  // storageDirPath = fileProvider.path.s.join( self.basePath, storageDirPath );
   // else
   // storageDirPath = self.basePath;
 
