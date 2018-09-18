@@ -62,9 +62,9 @@ function filesUpdate()
 
   _.assert( _.strIsNotEmpty( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
 
-  let glob = _.strJoin( archive.basePath, '/**' );
+  let filePath = _.strJoin( archive.basePath, '/**' );
   if( archive.verbosity >= 3 )
-  logger.log( ' : filesUpdate', glob );
+  logger.log( ' : filesUpdate', filePath );
 
   /* */
 
@@ -77,9 +77,9 @@ function filesUpdate()
   debugger;
   let files = fileProvider.filesFind
   ({
+    filePath : filePath,
     filter :
     {
-      glob : glob,
       maskAll : archive.mask,
       maskTransientAll : archive.mask,
     },
@@ -112,7 +112,7 @@ function filesUpdate()
 
   if( archive.verbosity >= 4 )
   {
-    logger.log( ' . filesUpdate', glob, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
+    logger.log( ' . filesUpdate', filePath, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
   }
 
   return archive;
@@ -129,7 +129,7 @@ function filesUpdate()
     {
       debugger;
       let loaded = archive._storageLoad( record.absolute );
-      if( !loaded && record.isBase )
+      if( !loaded && record.isBranch )
       archive.storageLoaded( {}, { storageFilePath : archive.storageFileFromDirPath( record.absolute ) } );
     }
 
