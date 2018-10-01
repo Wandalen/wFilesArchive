@@ -72,7 +72,7 @@ function filesUpdate()
 
   /* */
 
-  archive.mask = _.regexpMakeObject( archive.mask );
+  archive.mask = _.RegexpObject( archive.mask );
 
   debugger;
   let files = fileProvider.filesFind
