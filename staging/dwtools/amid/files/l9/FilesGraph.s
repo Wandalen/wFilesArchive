@@ -752,7 +752,7 @@ function actionBegin( actionName )
 
   /* storage */
 
-  self._storageLoad( self.dstPath );
+  self._storageFilesRead( self.dstPath );
 
 }
 

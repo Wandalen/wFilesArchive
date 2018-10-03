@@ -128,7 +128,7 @@ function filesUpdate()
     if( archive.fileMapAutoLoading )
     {
       debugger;
-      let loaded = archive._storageLoad( record.absolute );
+      let loaded = archive._storageFilesRead( record.absolute );
       if( !loaded && record.isBranch )
       archive.storageLoaded( {}, { storageFilePath : archive.storageFileFromDirPath( record.absolute ) } );
     }
@@ -380,23 +380,17 @@ function _loggerGet()
 // storage
 // --
 
-function storageDirPathGet( storageDirPath )
-{
-  let self = this;
-  let fileProvider = self.fileProvider;
-
-  // debugger;
-  // if( storageDirPath )
-  // storageDirPath = fileProvider.path.s.join( self.basePath, storageDirPath );
-  // else
-  // storageDirPath = self.basePath;
-
-  _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( !!storageDirPath );
-  _.assert( _.all( storageDirPath, ( path ) => fileProvider.path.isAbsolute( path ) ) );
-
-  return storageDirPath;
-}
+// function storageDirPathGet( storageDirPath )
+// {
+//   let self = this;
+//   let fileProvider = self.fileProvider;
+//
+//   _.assert( arguments.length === 0 || arguments.length === 1 );
+//   _.assert( !!storageDirPath );
+//   _.assert( _.all( storageDirPath, ( path ) => fileProvider.path.isAbsolute( path ) ) );
+//
+//   return storageDirPath;
+// }
 
 //
 
@@ -408,7 +402,7 @@ function storageFilePathToSaveGet( storageDirPath )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  storageFilePath = _.entitySelect( self.loadedStorages, '*.filePath' );
+  storageFilePath = _.entitySelect( self.storagesLoaded, '*.filePath' );
 
   _.sure
   (
@@ -461,10 +455,10 @@ function storageLoaded( storage, op )
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( op.storageFilePath ) );
 
-  if( self.loadedStorages !== undefined )
+  if( self.storagesLoaded !== undefined )
   {
-    _.assert( _.arrayIs( self.loadedStorages ), () => 'expects {-self.loadedStorages-}, but got ' + _.strTypeOf( self.loadedStorages ) );
-    self.loadedStorages.push({ filePath : op.storageFilePath });
+    _.assert( _.arrayIs( self.storagesLoaded ), () => 'expects {-self.storagesLoaded-}, but got ' + _.strTypeOf( self.storagesLoaded ) );
+    self.storagesLoaded.push({ filePath : op.storageFilePath });
   }
 
   debugger;
@@ -539,7 +533,7 @@ let Associates =
 
 let Restricts =
 {
-  loadedStorages : _.define.own([]),
+  storagesLoaded : _.define.own([]),
 }
 
 let Statics =
@@ -577,7 +571,7 @@ let Proto =
 
   // storage
 
-  storageDirPathGet : storageDirPathGet,
+  // storageDirPathGet : storageDirPathGet,
   storageFilePathToSaveGet : storageFilePathToSaveGet,
   storageToSave : storageToSave,
   storageLoaded : storageLoaded,
