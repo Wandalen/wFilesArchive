@@ -130,7 +130,7 @@ function filesUpdate()
       debugger;
       let loaded = archive._storageFilesRead( record.absolute );
       if( !loaded && record.isBranch )
-      archive.storageLoaded( {}, { storageFilePath : archive.storageFileFromDirPath( record.absolute ) } );
+      archive.storageLoaded({ storageFilePath : archive.storageFileFromDirPath( record.absolute ), storage : storage });
     }
 
     if( archive.verbosity >= 7 )
@@ -446,23 +446,23 @@ storageToSave.defaults =
 
 //
 
-function storageLoaded( storage, op )
+function storageLoaded( o )
 {
   let self = this;
   let fileProvider = self.fileProvider;
 
-  _.sure( self.storageIs( storage ), () => 'Strange storage : ' + _.toStrShort( storage ) );
+  _.sure( self.storageIs( o.storage ), () => 'Strange storage : ' + _.toStrShort( o.storage ) );
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( _.strIs( op.storageFilePath ) );
+  _.assert( _.strIs( o.storageFilePath ) );
 
   if( self.storagesLoaded !== undefined )
   {
     _.assert( _.arrayIs( self.storagesLoaded ), () => 'expects {-self.storagesLoaded-}, but got ' + _.strTypeOf( self.storagesLoaded ) );
-    self.storagesLoaded.push({ filePath : op.storageFilePath });
+    self.storagesLoaded.push({ filePath : o.storageFilePath });
   }
 
   debugger;
-  _.mapExtend( self.fileMap, storage );
+  _.mapExtend( self.fileMap, o.storage );
 
   return true;
 }

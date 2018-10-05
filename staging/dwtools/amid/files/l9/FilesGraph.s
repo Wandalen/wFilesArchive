@@ -686,16 +686,18 @@ function _hashFor( src )
 
 //
 
-function storageLoaded( storageFilePath,mapExtend )
+function storageLoaded( o )
 {
   let self = this;
   let fileProvider = self.fileProvider;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 1 );
 
-  _.mapExtend( self.unprocessedMap,mapExtend.nodesMap );
+  _.mapExtend( self.unprocessedMap, o.storage.nodesMap );
 
-  let storage = _.mapExtend( self.storageToSave,mapExtend );
+  xxx
+
+  let storage = _.mapExtend( self.storageToSave, o.storage );
   self.storageToSave = storage;
 
   return true;
