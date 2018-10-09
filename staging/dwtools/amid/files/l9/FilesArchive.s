@@ -86,7 +86,7 @@ function filesUpdate()
     onUp : onFile,
     includingTerminals : 1,
     includingDirectories : 1,
-    includingTransients : 0,
+    includingTransient : 0,
     recursive : 1,
   });
 
