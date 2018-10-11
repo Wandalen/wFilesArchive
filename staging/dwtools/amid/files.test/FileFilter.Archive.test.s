@@ -608,8 +608,8 @@ function restoreLinksComplex( test )
 
     /* restore links and check if they works now */
 
-    var records1 = provider.fileRecords( _.mapKeys( files ).slice( 0, 3 ) );
-    var records2 = provider.fileRecords( _.mapKeys( files ).slice( 3, 6 ) );
+    var records1 = provider.fileRecordContext().fileRecords( _.mapKeys( files ).slice( 0, 3 ) );
+    var records2 = provider.fileRecordContext().fileRecords( _.mapKeys( files ).slice( 3, 6 ) );
 
     logger.log( _.entitySelect( records1, '*.stat.mtime' ).map( ( t ) => t.getTime() ) )
     logger.log( _.entitySelect( records2, '*.stat.mtime' ).map( ( t ) => t.getTime() ) )
