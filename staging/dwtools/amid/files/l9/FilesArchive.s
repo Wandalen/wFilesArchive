@@ -60,7 +60,7 @@ function filesUpdate()
   archive.fileModifiedMap = Object.create( null );
   archive.fileHashMap = null;
 
-  _.assert( _.strIsNotEmpty( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
+  _.assert( _.strDefined( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
 
   let filePath = _.strJoin( archive.basePath, '/**' );
   if( archive.verbosity >= 3 )
@@ -287,7 +287,7 @@ function restoreLinksEnd()
 
   archive.filesUpdate();
 
-  _.assert( archive.fileMap,'restoreLinksBegin should be called before calling restoreLinksEnd' );
+  _.assert( !!archive.fileMap,'restoreLinksBegin should be called before calling restoreLinksEnd' );
 
   let fileMap2 = _.mapExtend( null,archive.fileMap );
   let fileModifiedMap = archive.fileModifiedMap;
@@ -303,8 +303,13 @@ function restoreLinksEnd()
     if( linkedMap[ f ] )
     continue;
 
+    if( !modified.hash )
+    continue;
+
     if( modified.hash === undefined )
     continue;
+
+    debugger;
 
     /* remove removed files and use old file descriptors */
 
@@ -350,7 +355,10 @@ function restoreLinksEnd()
       continue;
       let dstFile = filesWithHash[ last ];
       /* if this files where linked before changes, relink them */
-      if( srcFile.hash2 === dstFile.hash2 )
+      _.assert( !!srcFile.hash2 ); debugger;
+      _.assert( !!srcFile.size >= 0 );
+      _.assert( !!dstFile.size >= 0 );
+      if( srcFile.hash2 && srcFile.hash2 === dstFile.hash2 && srcFile.size > 0 )
       {
         debugger;
         restored += 1;
@@ -575,8 +583,8 @@ let Proto =
   storageFilePathToSaveGet : storageFilePathToSaveGet,
   storageToSave : storageToSave,
   storageLoaded : storageLoaded,
-  // _storageSet : _.setterAlias_functor({ original : 'fileMap', alias : 'storage' }),
-  // _storageGet : _.getterAlias_functor({ original : 'fileMap', alias : 'storage' }),
+  // _storageSet : _.accessor.setter.alias({ original : 'fileMap', alias : 'storage' }),
+  // _storageGet : _.accessor.getter.alias({ original : 'fileMap', alias : 'storage' }),
 
   //
 
