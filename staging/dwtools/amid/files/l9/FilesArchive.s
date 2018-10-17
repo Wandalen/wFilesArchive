@@ -361,6 +361,7 @@ function restoreLinksEnd()
       if( srcFile.hash2 && srcFile.hash2 === dstFile.hash2 && srcFile.size > 0 )
       {
         debugger;
+        _.assert( dstFile.size === srcFile.size );
         restored += 1;
         provider.linkHard({ dstPath : dstPath, srcPath : srcPath, verbosity : archive.verbosity });
         linkedMap[ dstPath ] = filesWithHash[ last ];
