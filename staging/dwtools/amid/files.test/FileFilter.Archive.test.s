@@ -980,6 +980,112 @@ function severalPaths( test )
 
 //
 
+function inodeExperiment( test )
+{
+  let context = this;
+  _.fileProvider.fieldSet( 'safe', 0 );
+
+  if( Config.platform !== 'nodejs' )
+  if( process.platform !== 'win32' )
+  {
+    test.identical( 1,1 );
+    return;
+  }
+
+  let dirname = _.path.join( context.testRootDirectory, test.name );
+  let pathsSameIno;
+
+  for( var i = 0; i < 10; i++ )
+  {
+    pathsSameIno = begin();
+    if( pathsSameIno )
+    break;
+  }
+
+  if( !pathsSameIno )
+  {
+    if( typeof BigInt === 'undefined' )
+    {
+      test.case = 'should be two files with same ino';
+      test.identical( pathsSameIno.length, 2 );
+    }
+    else
+    {
+      test.case = 'should be no files with same ino';
+      test.identical( pathsSameIno, undefined );
+    }
+    return;
+  }
+
+  /**/
+
+  var provider = _.FileFilter.Archive();
+  provider.archive.basePath = dirname;
+  provider.archive.verbosity = 10;
+  provider.archive.fileMapAutosaving = 0;
+  provider.archive.comparingRelyOnHardLinks = 0;
+
+  provider.archive.restoreLinksBegin();
+
+  test.case = 'files with same ino should not have same hash'
+  let hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hash;
+  let hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash;
+  test.notIdentical( hash1, hash2 );
+
+  test.case = 'files with same ino should not have same hash2'
+  hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hash2;
+  hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash2;
+  test.notIdentical( hash1, hash2 )
+
+  provider.linkHard({ dstPath : pathsSameIno });
+  test.is( provider.filesAreHardLinked.apply( provider, pathsSameIno ) )
+
+  provider.archive.restoreLinksEnd();
+
+  test.case = 'restored files should not be linked';
+  test.is( !provider.filesAreHardLinked.apply( provider, pathsSameIno ) )
+  test.case = 'restored files should not have same hash';
+  hash1 = provider.fileHash( pathsSameIno[ 0 ] );
+  hash2 = provider.fileHash( pathsSameIno[ 1 ] );
+  test.notIdentical( hash1, hash2 );
+  test.case = 'restored files should not be same';
+  test.is( !provider.filesAreSame.apply( provider, pathsSameIno ) );
+
+  provider.finit();
+  provider.archive.finit();
+
+  _.fileProvider.fieldReset( 'safe', 0 );
+
+  /* */
+
+  function begin()
+  {
+    let inodes = {};
+    let pathsSameIno;
+
+    _.fileProvider.filesDelete( dirname );
+
+    for( let i = 0; i < 300; i++ )
+    {
+      let path = _.path.join( dirname, '' + i );
+      _.fileProvider.fileWrite( path,path );
+      let stat = _.fileProvider.fileStat( path );
+      if( inodes[ stat.ino ] )
+      {
+        pathsSameIno = [ inodes[ stat.ino ], path ];
+        logger.log( 'Inode duplication!' );
+        logger.log( _.toStr( pathsSameIno ) );
+        break;
+      }
+
+      inodes[ stat.ino ] = path;
+    }
+    return pathsSameIno;
+  }
+}
+
+//
+
 function tester( test )
 {
   var self = this;
@@ -1041,6 +1147,7 @@ var Self =
     restoreLinksComplex : restoreLinksComplex,
     filesLinkSame : filesLinkSame,
     severalPaths : severalPaths,
+    inodeExperiment : inodeExperiment,
 
     // tester : tester,
 

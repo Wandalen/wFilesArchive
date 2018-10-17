@@ -413,6 +413,9 @@ function storageFilePathToSaveGet( storageDirPath )
 
   storageFilePath = _.entitySelect( self.storagesLoaded, '*.filePath' );
 
+  if( !storageFilePath.length )
+  storageFilePath = fileProvider.path.join( self.basePath, self.storageFileName );
+
   _.sure
   (
     _.all( storageFilePath, ( storageFilePath ) => _.fileProvider.directoryIs( _.fileProvider.path.dir( storageFilePath ) ) ),
