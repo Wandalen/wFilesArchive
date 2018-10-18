@@ -183,6 +183,7 @@ eachHead.defaults =
 function fileChange( path )
 {
   let self = this;
+  let fileProvider = self.fileProvider;
   let result = 0;
 
   _.assert( arguments.length === 1, 'expects single argument' );
@@ -192,7 +193,7 @@ function fileChange( path )
   {
     debugger;
     self.changedMap[ it.path ] = true;
-    if( self.verbosity >= 3 )
+    if( fileProvider.verbosity >= 3 )
     if( it.prevPath )
     logger.log( '. change',it.path,'by',it.prevPath );
     else
@@ -309,7 +310,7 @@ function unprocessedDelete()
     if( _.strBegins( n,self.dstPath ) )
     {
       if( !self.unporcessedDstDeleting )
-      fileProvider.fileDelete({ filePath : n, verbosity : self.verbosity });
+      fileProvider.fileDelete({ filePath : n, verbosity : fileProvider.verbosity });
     }
 
     delete self.unprocessedMap[ n ];
@@ -332,7 +333,7 @@ function unprocessedReport()
   if( unprocessedMapKeys.length )
   {
 
-    if( self.verbosity >= 4 )
+    if( fileProvider.verbosity >= 4 )
     for( let n in self.unprocessedMap )
     {
 
@@ -351,7 +352,7 @@ function unprocessedReport()
 
     }
 
-    if( self.verbosity >= 2 )
+    if( fileProvider.verbosity >= 2 )
     logger.log( unprocessedMapKeys.length + ' unprocessed files' );
 
   }
@@ -837,7 +838,7 @@ let verbositySymbol = Symbol.for( 'verbosity' );
 let Composes =
 {
 
-  verbosity : 5,
+  // verbosity : 5,
 
   currentAction : null,
   futureAction : null,
@@ -896,6 +897,8 @@ let Forbids =
 
   mask : 'mask',
   dependencyMap : 'dependencyMap',
+
+  verbosity : 'verbosity',
 
 }
 
@@ -993,7 +996,8 @@ _.classDeclare
 
 _.Copyable.mixin( Self );
 _.StateStorage.mixin( Self );
-_.Verbal.mixin( Self );
+// _.Verbal.mixin( Self );
+
 _global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 // --

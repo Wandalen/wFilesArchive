@@ -94,7 +94,7 @@ function filesUpdate()
   archive.fileMap = fileMapNew;
 
   debugger;
-  if( archive.fileMapAutosaving )
+  if( archive.fileMapAutosaving && 0 ) /* xxx */
   archive.storageSave();
 
   if( archive.verbosity >= 8 )
