@@ -980,6 +980,129 @@ function severalPaths( test )
 
 //
 
+function storageOperations( test )
+{
+  let context = this;
+  _.fileProvider.fieldSet( 'safe', 0 );
+  let dir = _.path.join( context.testRootDirectory, test.name );
+
+  _.fileProvider.filesDelete( dir );
+
+  let filesTree =
+  {
+    dir1 :
+    {
+      a : '1',
+      b : '3',
+      c : '1',
+      d : '5',
+    },
+    dir2 :
+    {
+      a : '1',
+      x : '3'
+    },
+    dir3 :
+    {
+      x : '3',
+    },
+  }
+
+  var provider = _.FileFilter.Archive();
+  provider.archive.basePath = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ] );
+  provider.archive.verbosity = 0;
+  provider.archive.fileMapAutosaving = 1;
+  provider.archive.fileMapAutoLoading = 0;
+
+  _.FileProvider.Extract.readToProvider
+  ({
+    filesTree : filesTree,
+    dstProvider : provider,
+    dstPath : dir,
+  });
+
+  provider.archive.filesUpdate();
+
+
+  test.identical( provider.archive.storagesLoaded, [] );
+
+  var archivePaths = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ], provider.archive.storageFileName );
+  var records = provider.fileRecordContext().fileRecords( archivePaths );
+  records.forEach( ( r ) =>
+  {
+    let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
+    test.case = 'archive saved on disk and fileMap are same';
+    test.contains( provider.archive.fileMap, filesMap );
+  });
+
+  provider.finit();
+  provider.archive.finit();
+
+  /* load->update */
+
+  var provider = _.FileFilter.Archive();
+  provider.archive.basePath = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ] );
+  provider.archive.verbosity = 0;
+  provider.archive.fileMapAutosaving = 0;
+  provider.archive.fileMapAutoLoading = 1;
+
+  provider.archive.filesUpdate();
+
+  var archivePaths = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ], provider.archive.storageFileName );
+
+  test.case = 'storages are loaded from disk';
+  var loadedStorages = _.entitySelect( provider.archive.storagesLoaded, '*.filePath' );
+  test.identical( loadedStorages, archivePaths );
+
+  var filePaths = _.mapOwnKeys( provider.archive.fileMap );
+  records.forEach( ( r ) =>
+  {
+    let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
+
+    test.case = 'archive on disk and fileMap have same files';
+    test.is( _.arraySetContainAll( filePaths, _.mapOwnKeys( filesMap ) ) );
+
+    test.case = 'archive on disk is not updated';
+    let upToDate = _.all( _.mapOwnKeys( filesMap ), ( filePath ) =>
+    {
+      return _.entityIdentical( filesMap[ filePath ], provider.archive.fileMap[ filePath ] );
+    });
+    test.is( !upToDate );
+  });
+
+  provider.finit();
+  provider.archive.finit();
+
+  /* load->update->save */
+
+  var provider = _.FileFilter.Archive();
+  provider.archive.basePath = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ] );
+  provider.archive.verbosity = 0;
+  provider.archive.fileMapAutosaving = 1;
+  provider.archive.fileMapAutoLoading = 1;
+
+  provider.archive.filesUpdate();
+
+  var archivePaths = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ], provider.archive.storageFileName );
+  var loadedStorages = _.entitySelect( provider.archive.storagesLoaded, '*.filePath' );
+  test.identical( loadedStorages, archivePaths );
+
+  var records = provider.fileRecordContext().fileRecords( archivePaths );
+  records.forEach( ( r ) =>
+  {
+    let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
+    test.case = 'archive saved on disk and fileMap are same';
+    test.contains( provider.archive.fileMap, filesMap );
+  });
+
+  provider.finit();
+  provider.archive.finit();
+
+  _.fileProvider.fieldReset( 'safe', 0 );
+}
+
+//
+
 function inodeExperiment( test )
 {
   let context = this;
@@ -1147,6 +1270,7 @@ var Self =
     restoreLinksComplex : restoreLinksComplex,
     filesLinkSame : filesLinkSame,
     severalPaths : severalPaths,
+    storageOperations : storageOperations,
     inodeExperiment : inodeExperiment,
 
     // tester : tester,

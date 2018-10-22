@@ -94,7 +94,7 @@ function filesUpdate()
   archive.fileMap = fileMapNew;
 
   debugger;
-  if( archive.fileMapAutosaving && 0 ) /* xxx */
+  if( archive.fileMapAutosaving ) /* xxx */
   archive.storageSave();
 
   if( archive.verbosity >= 8 )
@@ -129,8 +129,10 @@ function filesUpdate()
     {
       debugger;
       let loaded = archive._storageFilesRead( record.absolute );
-      if( !loaded && record.isBranch )
-      archive.storageLoaded({ storageFilePath : archive.storageFileFromDirPath( record.absolute ), storage : storage });
+      let storagageFilePath = archive.storageFileFromDirPath( record.absolute );
+      let storage = loaded[ storagageFilePath ].storage;
+      if( storage && record.isBranch )
+      archive.storageLoaded({ storageFilePath : storagageFilePath, storage : storage });
     }
 
     if( archive.verbosity >= 7 )
@@ -414,7 +416,7 @@ function storageFilePathToSaveGet( storageDirPath )
   storageFilePath = _.entitySelect( self.storagesLoaded, '*.filePath' );
 
   if( !storageFilePath.length )
-  storageFilePath = fileProvider.path.join( self.basePath, self.storageFileName );
+  storageFilePath = fileProvider.path.s.join( self.basePath, self.storageFileName );
 
   _.sure
   (
@@ -464,7 +466,7 @@ function storageLoaded( o )
   let fileProvider = self.fileProvider;
 
   _.sure( self.storageIs( o.storage ), () => 'Strange storage : ' + _.toStrShort( o.storage ) );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 1, 'expects exactly two arguments' );
   _.assert( _.strIs( o.storageFilePath ) );
 
   if( self.storagesLoaded !== undefined )
