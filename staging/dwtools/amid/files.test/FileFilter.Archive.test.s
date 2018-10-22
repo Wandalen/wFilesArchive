@@ -1030,7 +1030,7 @@ function storageOperations( test )
   var records = provider.fileRecordContext().fileRecords( archivePaths );
   records.forEach( ( r ) =>
   {
-    let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'structure.js' });
+    let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
     test.case = 'archive saved on disk and fileMap are same';
     test.contains( provider.archive.fileMap, filesMap );
   });
@@ -1057,7 +1057,7 @@ function storageOperations( test )
   var filePaths = _.mapOwnKeys( provider.archive.fileMap );
   records.forEach( ( r ) =>
   {
-    let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'structure.js' });
+    let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
 
     test.case = 'archive on disk and fileMap have same files';
     test.is( _.arraySetContainAll( filePaths, _.mapOwnKeys( filesMap ) ) );
@@ -1090,7 +1090,7 @@ function storageOperations( test )
   var records = provider.fileRecordContext().fileRecords( archivePaths );
   records.forEach( ( r ) =>
   {
-    let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'structure.js' });
+    let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
     test.case = 'archive saved on disk and fileMap are same';
     test.contains( provider.archive.fileMap, filesMap );
   });
