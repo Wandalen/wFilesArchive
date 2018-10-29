@@ -17,7 +17,7 @@ let _ = _global_.wTools;
 let Parent = null;
 let Self = function wFilesGraph( o )
 {
-  _.assert( arguments.length === 0 || arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 0 || arguments.length === 1, 'Expects single argument' );
   return _.instanceConstructor( Self, this, arguments );
 }
 
@@ -186,7 +186,7 @@ function fileChange( path )
   let fileProvider = self.fileProvider;
   let result = 0;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.path.isAbsolute( path ) );
 
   function onUp( it,op )
@@ -209,7 +209,7 @@ function filesUpdate( record )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( _.arrayIs( record ) )
   {
@@ -239,7 +239,7 @@ function fileDeletedUpdate( path )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   /* */
 
@@ -282,7 +282,7 @@ function fileIsUpToDate( head )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( head instanceof _.FileRecord );
 
   if( self.changedMap[ head.absolute ] )
@@ -430,7 +430,7 @@ function _headToTailsFor( headRecord )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( headRecord instanceof _.FileRecord );
 
   let dependency = self.tailsForHeadMap[ headRecord.absolute ];
@@ -457,7 +457,7 @@ function _tailToHeadsFor( tailRecord )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( tailRecord instanceof _.FileRecord );
 
   let dependency = self.headsForTailMap[ tailRecord.absolute ];
@@ -486,7 +486,7 @@ function _nodeMake( record )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( !self.nodesMap[ record.absolute ] );
 
   let node = Object.create( null );
@@ -503,7 +503,7 @@ function _nodeFor( record )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   let node = self.nodesMap[ record.absolute ];
 
@@ -524,7 +524,7 @@ function _nodeForChanging( record )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   let node = self.nodesMap[ record.absolute ];
 
@@ -553,7 +553,7 @@ function _nodeForUpdating( record )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   let node = self.nodesMap[ record.absolute ];
 
@@ -670,7 +670,7 @@ function _hashFor( src )
   let crypto = require( 'crypto' );
   let md5sum = crypto.createHash( 'md5' );
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   try
   {
@@ -734,7 +734,7 @@ function actionBegin( actionName )
 
   _.assert( self.currentAction === null );
   _.assert( _.strIs( actionName ) || actionName === null );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   /* name */
 
@@ -784,7 +784,7 @@ function actionEnd( actionName )
 // {
 //   let self = this;
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //
 //   if( !_.numberIs( val ) )
 //   val = val ? 1 : 0;
@@ -800,7 +800,7 @@ function _storageToSaveSet( storage )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   // self.changedMap = storage.changedMap;
   self.nodesMap = storage.nodesMap;

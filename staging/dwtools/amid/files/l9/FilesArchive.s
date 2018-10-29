@@ -20,7 +20,7 @@ let Self = function wFilesArchive( o )
   if( !( this instanceof Self ) )
   if( o instanceof Self )
   {
-    _.assert( arguments.length === 1, 'expects single argument' );
+    _.assert( arguments.length === 1, 'Expects single argument' );
     return o;
   }
   else
@@ -471,7 +471,7 @@ function storageLoaded( o )
 
   if( self.storagesLoaded !== undefined )
   {
-    _.assert( _.arrayIs( self.storagesLoaded ), () => 'expects {-self.storagesLoaded-}, but got ' + _.strTypeOf( self.storagesLoaded ) );
+    _.assert( _.arrayIs( self.storagesLoaded ), () => 'Expects {-self.storagesLoaded-}, but got ' + _.strTypeOf( self.storagesLoaded ) );
     self.storagesLoaded.push({ filePath : o.storageFilePath });
   }
 
