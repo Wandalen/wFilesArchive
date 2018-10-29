@@ -45,7 +45,7 @@ function init( o )
 // {
 //   let self = this;
 //
-//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
+//   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 //
 //   let head = _.FileRecord.from( head );
 //   let dependency = self._headToTailsFor( head );
@@ -61,7 +61,7 @@ function init( o )
 // {
 //   let self = this;
 //
-//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
+//   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 //
 //   let head = _.FileRecord.from( head );
 //   let dependency = self._headToTailsFor( head );
@@ -92,7 +92,7 @@ function _eachHeadPre( routine,args )
   _.routineOptions( routine,op );
   _.assert( args.length === 1 || args.length === 2 );
   _.assert( _.path.isAbsolute( op.path ) );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   op.visited = op.visited || [];
 
@@ -122,7 +122,7 @@ function _eachHeadBody( it,op )
   let self = this;
   let result = 1;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   // _.assert( !!self.nodesMap[ it.path ] );
 
   if( _.arrayHas( op.visited,it.path ) )
@@ -370,7 +370,7 @@ function dependencyAdd( head,tails )
   if( tails instanceof _.FileRecord )
   tails = [ tails ];
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( head instanceof _.FileRecord );
   _.assert( _.arrayIs( tails ) );
 
@@ -593,7 +593,7 @@ function _nodeFromRecord( node,record )
   let self = this;
   let provider = self.provider;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( record instanceof _.FileRecord );
 
   node.absolute = record.absolute;
@@ -628,7 +628,7 @@ function _nodeRecordSame( node,record )
   let self = this;
   let provider = self.provider;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.mapIs( node ) );
   _.assert( record instanceof _.FileRecord );
 

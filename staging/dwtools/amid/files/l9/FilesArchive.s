@@ -466,7 +466,7 @@ function storageLoaded( o )
   let fileProvider = self.fileProvider;
 
   _.sure( self.storageIs( o.storage ), () => 'Strange storage : ' + _.toStrShort( o.storage ) );
-  _.assert( arguments.length === 1, 'expects exactly two arguments' );
+  _.assert( arguments.length === 1, 'Expects exactly two arguments' );
   _.assert( _.strIs( o.storageFilePath ) );
 
   if( self.storagesLoaded !== undefined )
