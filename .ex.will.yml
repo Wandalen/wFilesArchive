@@ -1,0 +1,52 @@
+
+about :
+
+  name : wFilesArchive
+  description : Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.
+  version : 0.3.73
+  enabled : 1
+  interpreters :
+  - nodejs >= 6.0.0
+  - chrome >= 60.0.0
+  - firefox >= 60.0.0
+  keywords :
+  - wTools
+
+execution :
+
+  scripts :
+    test : wtest staging
+    docgen : wdocgen staging
+
+path :
+
+  repository : git+https://github.com/Wandalen/wFilesArchive.git
+  bugs : https://github.com/Wandalen/wFilesArchive/issues
+  entry.debug : {path::out.debug}/dwtools/abase/____
+  entry.release : {path::out.release}/dwtools/abase/____
+
+build :
+
+  .debug.raw.export :
+    default : 1
+    setting :
+      debug : 1
+      raw : 1
+      export : 1
+      filesPath : path::out.debug
+      entryPath : path::entry.debug
+    steps :
+      - build::.debug
+      - step::export
+
+  .release.compiled.export :
+    setting :
+      debug : 0
+      raw : 0
+      export : 1
+      filesPath : path::out.release
+      entryPath : path::entry.release
+    steps :
+      - build::.release.compiled
+      - step::export
+

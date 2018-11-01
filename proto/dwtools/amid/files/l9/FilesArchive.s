@@ -20,7 +20,7 @@ let Self = function wFilesArchive( o )
   if( !( this instanceof Self ) )
   if( o instanceof Self )
   {
-    _.assert( arguments.length === 1, 'Expects single argument' );
+    _.assert( arguments.length === 1, 'expects single argument' );
     return o;
   }
   else
@@ -60,11 +60,11 @@ function filesUpdate()
   archive.fileModifiedMap = Object.create( null );
   archive.fileHashMap = null;
 
-  _.assert( _.strDefined( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
+  _.assert( _.strIsNotEmpty( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
 
-  let filePath = _.strJoin( archive.basePath, '/**' );
+  let glob = _.strJoin( archive.basePath, '/**' );
   if( archive.verbosity >= 3 )
-  logger.log( ' : filesUpdate', filePath );
+  logger.log( ' : filesUpdate', glob );
 
   /* */
 
@@ -72,20 +72,15 @@ function filesUpdate()
 
   /* */
 
-  archive.mask = _.RegexpObject( archive.mask );
+  archive.mask = _.regexpMakeObject( archive.mask );
 
   let files = fileProvider.filesFind
   ({
-    filePath : filePath,
-    filter :
-    {
-      maskAll : archive.mask,
-      maskTransientAll : archive.mask,
-    },
+    glob : glob,
+    maskAll : archive.mask,
     onUp : onFile,
     includingTerminals : 1,
     includingDirectories : 1,
-    includingTransient : 0,
     recursive : 1,
   });
 
@@ -93,7 +88,7 @@ function filesUpdate()
   archive.fileMap = fileMapNew;
 
   debugger;
-  if( archive.fileMapAutosaving ) /* xxx */
+  if( archive.fileMapAutosaving )
   archive.storageSave();
 
   if( archive.verbosity >= 8 )
@@ -111,7 +106,7 @@ function filesUpdate()
 
   if( archive.verbosity >= 4 )
   {
-    logger.log( ' . filesUpdate', filePath, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
+    logger.log( ' . filesUpdate', glob, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
   }
 
   return archive;
@@ -126,11 +121,10 @@ function filesUpdate()
     if( isDir )
     if( archive.fileMapAutoLoading )
     {
-      let loaded = archive._storageFilesRead( record.absolute );
-      let storagageFilePath = archive.storageFileFromDirPath( record.absolute );
-      let storage = loaded[ storagageFilePath ].storage;
-      if( storage && record.isBranch )
-      archive.storageLoaded({ storageFilePath : storagageFilePath, storage : storage });
+      debugger;
+      let loaded = archive._storageLoad( record.absolute );
+      if( !loaded && record.isBase )
+      archive.storageLoaded( {}, { storageFilePath : archive.storageFileFromDirPath( record.absolute ) } );
     }
 
     if( archive.verbosity >= 7 )
@@ -287,7 +281,7 @@ function restoreLinksEnd()
 
   archive.filesUpdate();
 
-  _.assert( !!archive.fileMap,'restoreLinksBegin should be called before calling restoreLinksEnd' );
+  _.assert( archive.fileMap,'restoreLinksBegin should be called before calling restoreLinksEnd' );
 
   let fileMap2 = _.mapExtend( null,archive.fileMap );
   let fileModifiedMap = archive.fileModifiedMap;
@@ -303,13 +297,8 @@ function restoreLinksEnd()
     if( linkedMap[ f ] )
     continue;
 
-    if( !modified.hash )
-    continue;
-
     if( modified.hash === undefined )
     continue;
-
-    debugger;
 
     /* remove removed files and use old file descriptors */
 
@@ -327,7 +316,7 @@ function restoreLinksEnd()
 
     if( mostLinked.absolutePath !== newest.absolutePath )
     {
-      let read = provider.fileRead({ filePath : newest.absolutePath, encoding : 'original.type' });
+      let read = provider.fileRead({ filePath : newest.absolutePath, encoding : provider._bufferEncodingGet() });
       provider.fileWrite( mostLinked.absolutePath,read );
     }
 
@@ -355,13 +344,9 @@ function restoreLinksEnd()
       continue;
       let dstFile = filesWithHash[ last ];
       /* if this files where linked before changes, relink them */
-      _.assert( !!srcFile.hash2 ); debugger;
-      _.assert( !!srcFile.size >= 0 );
-      _.assert( !!dstFile.size >= 0 );
-      if( srcFile.hash2 && srcFile.hash2 === dstFile.hash2 && srcFile.size > 0 )
+      if( srcFile.hash2 === dstFile.hash2 )
       {
         debugger;
-        _.assert( dstFile.size === srcFile.size );
         restored += 1;
         provider.linkHard({ dstPath : dstPath, srcPath : srcPath, verbosity : archive.verbosity });
         linkedMap[ dstPath ] = filesWithHash[ last ];
@@ -389,17 +374,23 @@ function _loggerGet()
 // storage
 // --
 
-// function storageDirPathGet( storageDirPath )
-// {
-//   let self = this;
-//   let fileProvider = self.fileProvider;
-//
-//   _.assert( arguments.length === 0 || arguments.length === 1 );
-//   _.assert( !!storageDirPath );
-//   _.assert( _.all( storageDirPath, ( path ) => fileProvider.path.isAbsolute( path ) ) );
-//
-//   return storageDirPath;
-// }
+function storageDirPathGet( storageDirPath )
+{
+  let self = this;
+  let fileProvider = self.fileProvider;
+
+  // debugger;
+  // if( storageDirPath )
+  // storageDirPath = fileProvider.path.pathsJoin( self.basePath, storageDirPath );
+  // else
+  // storageDirPath = self.basePath;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( !!storageDirPath );
+  _.assert( _.all( storageDirPath, ( path ) => fileProvider.path.isAbsolute( path ) ) );
+
+  return storageDirPath;
+}
 
 //
 
@@ -411,10 +402,7 @@ function storageFilePathToSaveGet( storageDirPath )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  storageFilePath = _.entitySelect( self.storagesLoaded, '*.filePath' );
-
-  if( !storageFilePath.length )
-  storageFilePath = fileProvider.path.s.join( self.basePath, self.storageFileName );
+  storageFilePath = _.entitySelect( self.loadedStorages, '*.filePath' );
 
   _.sure
   (
@@ -458,22 +446,23 @@ storageToSave.defaults =
 
 //
 
-function storageLoaded( o )
+function storageLoaded( storage, op )
 {
   let self = this;
   let fileProvider = self.fileProvider;
 
-  _.sure( self.storageIs( o.storage ), () => 'Strange storage : ' + _.toStrShort( o.storage ) );
-  _.assert( arguments.length === 1, 'Expects exactly two arguments' );
-  _.assert( _.strIs( o.storageFilePath ) );
+  _.sure( self.storageIs( storage ), () => 'Strange storage : ' + _.toStrShort( storage ) );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( _.strIs( op.storageFilePath ) );
 
-  if( self.storagesLoaded !== undefined )
+  if( self.loadedStorages !== undefined )
   {
-    _.assert( _.arrayIs( self.storagesLoaded ), () => 'Expects {-self.storagesLoaded-}, but got ' + _.strTypeOf( self.storagesLoaded ) );
-    self.storagesLoaded.push({ filePath : o.storageFilePath });
+    _.assert( _.arrayIs( self.loadedStorages ), () => 'expects {-self.loadedStorages-}, but got ' + _.strTypeOf( self.loadedStorages ) );
+    self.loadedStorages.push({ filePath : op.storageFilePath });
   }
 
-  _.mapExtend( self.fileMap, o.storage );
+  debugger;
+  _.mapExtend( self.fileMap, storage );
 
   return true;
 }
@@ -492,7 +481,6 @@ let mask =
     /\.git$/,
     /\.svn$/,
     /\.hg$/,
-    /\.DS_Store$/,
     /\.tmp($|\/|\.)/,
     /\.big($|\/|\.)/,
     /(^|\/)\.(?!$|\/)/,
@@ -530,8 +518,6 @@ let Composes =
 
   storageFileName : '.warchive',
 
-  storageSaveAsJs : true
-
 }
 
 let Aggregates =
@@ -545,7 +531,7 @@ let Associates =
 
 let Restricts =
 {
-  storagesLoaded : _.define.own([]),
+  loadedStorages : _.define.own([]),
 }
 
 let Statics =
@@ -583,12 +569,12 @@ let Proto =
 
   // storage
 
-  // storageDirPathGet : storageDirPathGet,
+  storageDirPathGet : storageDirPathGet,
   storageFilePathToSaveGet : storageFilePathToSaveGet,
   storageToSave : storageToSave,
   storageLoaded : storageLoaded,
-  // _storageSet : _.accessor.setter.alias({ original : 'fileMap', alias : 'storage' }),
-  // _storageGet : _.accessor.getter.alias({ original : 'fileMap', alias : 'storage' }),
+  // _storageSet : _.setterAlias_functor({ original : 'fileMap', alias : 'storage' }),
+  // _storageGet : _.getterAlias_functor({ original : 'fileMap', alias : 'storage' }),
 
   //
 
