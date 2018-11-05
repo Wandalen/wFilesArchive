@@ -15,14 +15,14 @@
       "email": "volodymyr.migdal@gmail.com"
     }
   ],
-  "main": "staging/dwtools/amid/files/UseFilesArchive.s",
+  "main": "proto/dwtools/amid/files/UseFilesArchive.s",
   "files": [
-    "staging/dwtools/amid/files",
+    "proto/dwtools/amid/files",
     "production"
   ],
   "scripts": {
     "test": "wtest staging",
-    "make_doc": "./doc.sh"
+    "docgen": "wdocgen proto"
   },
   "repository": {
     "type": "git",
