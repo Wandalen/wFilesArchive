@@ -331,7 +331,7 @@ function restoreLinksEnd()
     /* verbosity */
 
     if( archive.verbosity >= 4 )
-    logger.log( 'modified',_.toStr( _.entitySelect( filesWithHash,'*.absolutePath' ),{ levels : 2 } ) );
+    logger.log( 'modified',_.toStr( _.entitySelect( filesWithHash,'*/absolutePath' ),{ levels : 2 } ) );
 
     /*  */
 
@@ -403,7 +403,7 @@ function storageFilePathToSaveGet( storageDirPath )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  storageFilePath = _.entitySelect( self.storagesLoaded, '*.filePath' );
+  storageFilePath = _.entitySelect( self.storagesLoaded, '*/filePath' );
 
   if( !storageFilePath.length )
   storageFilePath = fileProvider.path.s.join( self.basePath, self.storageFileName );
