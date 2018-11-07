@@ -611,8 +611,8 @@ function restoreLinksComplex( test )
     var records1 = provider.fileRecordContext().fileRecords( _.mapKeys( files ).slice( 0, 3 ) );
     var records2 = provider.fileRecordContext().fileRecords( _.mapKeys( files ).slice( 3, 6 ) );
 
-    logger.log( _.entitySelect( records1, '*.stat.mtime' ).map( ( t ) => t.getTime() ) )
-    logger.log( _.entitySelect( records2, '*.stat.mtime' ).map( ( t ) => t.getTime() ) )
+    logger.log( _.entitySelect( records1, '*/stat/mtime' ).map( ( t ) => t.getTime() ) )
+    logger.log( _.entitySelect( records2, '*/stat/mtime' ).map( ( t ) => t.getTime() ) )
 
     provider.archive.restoreLinksEnd();
 
@@ -1051,7 +1051,7 @@ function storageOperations( test )
   var archivePaths = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ], provider.archive.storageFileName );
 
   test.case = 'storages are loaded from disk';
-  var loadedStorages = _.entitySelect( provider.archive.storagesLoaded, '*.filePath' );
+  var loadedStorages = _.entitySelect( provider.archive.storagesLoaded, '*/filePath' );
   test.identical( loadedStorages, archivePaths );
 
   var filePaths = _.mapOwnKeys( provider.archive.fileMap );
@@ -1084,7 +1084,7 @@ function storageOperations( test )
   provider.archive.filesUpdate();
 
   var archivePaths = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ], provider.archive.storageFileName );
-  var loadedStorages = _.entitySelect( provider.archive.storagesLoaded, '*.filePath' );
+  var loadedStorages = _.entitySelect( provider.archive.storagesLoaded, '*/filePath' );
   test.identical( loadedStorages, archivePaths );
 
   var records = provider.fileRecordContext().fileRecords( archivePaths );
