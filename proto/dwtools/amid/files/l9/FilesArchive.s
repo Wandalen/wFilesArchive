@@ -54,7 +54,7 @@ function filesUpdate()
 
   _.assert( _.strDefined( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
 
-  let filePath = _.strJoin( archive.basePath, '/**' );
+  let filePath = _.strJoin([ archive.basePath, '/**' ]);
   if( archive.verbosity >= 3 )
   logger.log( ' : filesUpdate', filePath );
 
