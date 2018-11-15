@@ -174,7 +174,7 @@ function filesUpdate()
       d.size = record.stat.size;
       if( archive.maxSize === null || record.stat.size <= archive.maxSize )
       d.hash = fileProvider.fileHash({ filePath : record.absolute, throwing : 0, sync : 1 });
-      d.hash2 = _.fileStatHashGet( record.stat );
+      d.hash2 = _.statResolvedReadHashGet( record.stat );
       d.nlink = record.stat.nlink;
     }
 

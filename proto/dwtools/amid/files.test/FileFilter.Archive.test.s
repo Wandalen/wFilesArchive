@@ -154,7 +154,7 @@ function archive( test )
   /* check how archive saves fileMap of disk */
 
   var archivePath = _.path.join( provider.archive.basePath, provider.archive.storageFileName );
-  var savedOnDisk = !!provider.fileStat( archivePath );
+  var savedOnDisk = !!provider.statResolvedRead( archivePath );
   test.is( savedOnDisk );
   var archive = provider.fileReadJs( archivePath );
   logger.log( _.entityDiff(  archive, provider.archive.fileMap ) )
@@ -853,8 +853,8 @@ function filesLinkSame( test )
       dstPath : dir,
     });
 
-    test.is( !!provider.fileStat( _.path.join( dir,'a' ) ) );
-    test.is( !!provider.fileStat( _.path.join( dir,'dir/a' ) ) );
+    test.is( !!provider.statResolvedRead( _.path.join( dir,'a' ) ) );
+    test.is( !!provider.statResolvedRead( _.path.join( dir,'dir/a' ) ) );
 
   }
 
@@ -865,8 +865,8 @@ function filesLinkSame( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 0 });
 
-  test.is( !!provider.fileStat( _.path.join( dir,'a' ) ) );
-  test.is( !!provider.fileStat( _.path.join( dir,'dir/a' ) ) );
+  test.is( !!provider.statResolvedRead( _.path.join( dir,'a' ) ) );
+  test.is( !!provider.statResolvedRead( _.path.join( dir,'dir/a' ) ) );
 
   test.is( !provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'b' ) ) );
   test.is( !provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'dir/x' ) ) );
@@ -884,8 +884,8 @@ function filesLinkSame( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
 
-  test.is( !!provider.fileStat( _.path.join( dir,'a' ) ) );
-  test.is( !!provider.fileStat( _.path.join( dir,'dir/a' ) ) );
+  test.is( !!provider.statResolvedRead( _.path.join( dir,'a' ) ) );
+  test.is( !!provider.statResolvedRead( _.path.join( dir,'dir/a' ) ) );
 
   test.is( !provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'b' ) ) );
   test.is( !provider.filesAreHardLinked( _.path.join( dir,'a' ),_.path.join( dir,'dir/x' ) ) );
@@ -947,9 +947,9 @@ function severalPaths( test )
       dstPath : dir,
     });
 
-    test.is( !!provider.fileStat( _.path.join( dir, 'dir1/a' ) ) );
-    test.is( !!provider.fileStat( _.path.join( dir, 'dir2/a' ) ) );
-    test.is( !!provider.fileStat( _.path.join( dir, 'dir3/x' ) ) );
+    test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir1/a' ) ) );
+    test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir2/a' ) ) );
+    test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir3/x' ) ) );
 
   }
 
@@ -960,9 +960,9 @@ function severalPaths( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
 
-  test.is( !!provider.fileStat( _.path.join( dir,'dir1/a' ) ) );
-  test.is( !!provider.fileStat( _.path.join( dir,'dir2/a' ) ) );
-  test.is( !!provider.fileStat( _.path.join( dir,'dir3/x' ) ) );
+  test.is( !!provider.statResolvedRead( _.path.join( dir,'dir1/a' ) ) );
+  test.is( !!provider.statResolvedRead( _.path.join( dir,'dir2/a' ) ) );
+  test.is( !!provider.statResolvedRead( _.path.join( dir,'dir3/x' ) ) );
 
   debugger;
   test.is( provider.filesAreHardLinked( _.path.join( dir,'dir1/a' ),_.path.join( dir,'dir2/a' ) ) );
@@ -1192,7 +1192,7 @@ function inodeExperiment( test )
     {
       let path = _.path.join( dirname, '' + i );
       _.fileProvider.fileWrite( path,path );
-      let stat = _.fileProvider.fileStat( path );
+      let stat = _.fileProvider.statResolvedRead( path );
       if( inodes[ stat.ino ] )
       {
         pathsSameIno = [ inodes[ stat.ino ], path ];
