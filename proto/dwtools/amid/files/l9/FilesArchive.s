@@ -36,6 +36,9 @@ function init( o )
   if( o )
   archive.copy( o );
 
+  if( archive.fileProvider && archive.fileProvider.safe >= 2 )
+  archive.fileProvider.safe = 1;
+
 }
 
 //
@@ -76,7 +79,7 @@ function filesUpdate()
     },
     onUp : onFile,
     includingTerminals : 1,
-    includingDirectories : 1,
+    includingDirs : 1,
     includingTransient : 0,
     recursive : 1,
   });
@@ -84,7 +87,7 @@ function filesUpdate()
   archive.fileRemovedMap = fileMapOld;
   archive.fileMap = fileMapNew;
 
-  debugger;
+  // debugger;
   if( archive.fileMapAutosaving ) /* xxx */
   archive.storageSave();
 
@@ -121,7 +124,7 @@ function filesUpdate()
       let loaded = archive._storageFilesRead( record.absolute );
       let storagageFilePath = archive.storageFileFromDirPath( record.absolute );
       let storage = loaded[ storagageFilePath ].storage;
-      if( storage && record.isBranch )
+      if( storage && record.isStem )
       archive.storageLoaded({ storageFilePath : storagageFilePath, storage : storage });
     }
 
@@ -301,8 +304,6 @@ function restoreLinksEnd()
     if( modified.hash === undefined )
     continue;
 
-    debugger;
-
     /* remove removed files and use old file descriptors */
 
     filesWithHash = _.entityFilter( filesWithHash,( e ) => fileMap2[ e ] ? fileMap2[ e ] : undefined );
@@ -410,7 +411,7 @@ function storageFilePathToSaveGet( storageDirPath )
 
   _.sure
   (
-    _.all( storageFilePath, ( storageFilePath ) => _.fileProvider.directoryIs( _.fileProvider.path.dir( storageFilePath ) ) ),
+    _.all( storageFilePath, ( storageFilePath ) => _.fileProvider.isDir( _.fileProvider.path.dir( storageFilePath ) ) ),
     () => 'Directory for storage file does not exist ' + _.strQuote( storageFilePath )
   );
 
@@ -614,9 +615,9 @@ _global_[ Self.name ] = _[ Self.shortName ] = Self;
 // export
 // --
 
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
+// if( typeof module !== 'undefined' )
+// if( _global_.WTOOLS_PRIVATE )
+// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
