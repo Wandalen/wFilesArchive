@@ -608,8 +608,8 @@ function restoreLinksComplex( test )
 
     /* restore links and check if they works now */
 
-    var records1 = provider.fileRecordContext().fileRecords( _.mapKeys( files ).slice( 0, 3 ) );
-    var records2 = provider.fileRecordContext().fileRecords( _.mapKeys( files ).slice( 3, 6 ) );
+    var records1 = provider.recordFactory().records( _.mapKeys( files ).slice( 0, 3 ) );
+    var records2 = provider.recordFactory().records( _.mapKeys( files ).slice( 3, 6 ) );
 
     logger.log( _.select( records1, '*/stat/mtime' ).map( ( t ) => t.getTime() ) )
     logger.log( _.select( records2, '*/stat/mtime' ).map( ( t ) => t.getTime() ) )
@@ -1027,7 +1027,7 @@ function storageOperations( test )
   test.identical( provider.archive.storagesLoaded, [] );
 
   var archivePaths = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ], provider.archive.storageFileName );
-  var records = provider.fileRecordContext().fileRecords( archivePaths );
+  var records = provider.recordFactory().records( archivePaths );
   records.forEach( ( r ) =>
   {
     let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
@@ -1087,7 +1087,7 @@ function storageOperations( test )
   var loadedStorages = _.select( provider.archive.storagesLoaded, '*/filePath' );
   test.identical( loadedStorages, archivePaths );
 
-  var records = provider.fileRecordContext().fileRecords( archivePaths );
+  var records = provider.recordFactory().records( archivePaths );
   records.forEach( ( r ) =>
   {
     let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
