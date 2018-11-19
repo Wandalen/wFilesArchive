@@ -34,7 +34,11 @@ function init( o )
   Object.preventExtensions( archive )
 
   if( o )
-  archive.copy( o );
+  {
+    if( o.fileProvider )
+    archive.fileProvider = o.fileProvider;
+    archive.copy( o );
+  }
 
   if( archive.fileProvider && archive.fileProvider.safe >= 2 )
   archive.fileProvider.safe = 1;
@@ -174,7 +178,7 @@ function filesUpdate()
       d.size = record.stat.size;
       if( archive.maxSize === null || record.stat.size <= archive.maxSize )
       d.hash = fileProvider.fileHash({ filePath : record.absolute, throwing : 0, sync : 1 });
-      d.hash2 = _.statResolvedReadHashGet( record.stat );
+      d.hash2 = _.statHash2Get( record.stat );
       d.nlink = record.stat.nlink;
     }
 
@@ -499,7 +503,7 @@ let mask =
 
 let Composes =
 {
-  verbosity : 2,
+  verbosity : 0,
 
   basePath : null,
 
