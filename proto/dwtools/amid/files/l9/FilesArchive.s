@@ -85,7 +85,7 @@ function filesUpdate()
     includingTerminals : 1,
     includingDirs : 1,
     includingTransient : 0,
-    recursive : 1,
+    recursive : '2',
   });
 
   archive.fileRemovedMap = fileMapOld;
