@@ -6,7 +6,7 @@ about:
     and keep links of hard linked files. FilesArchive provides means to define
     interdependence between files and to forward changes from dependencies to
     dependents. Use FilesArchive to avoid unnecessary CPU workload.
-  version: 0.3.95
+  version: 0.3.96
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -92,7 +92,7 @@ path:
 submodule: {}
 reflector:
   reflect.proto.0:
-    reflectMap:
+    filePath:
       ./proto: ./out.release
     srcFilter:
       maskAll:
@@ -116,7 +116,7 @@ reflector:
     inherit:
       - predefined.*
   reflect.proto.1:
-    reflectMap:
+    filePath:
       ./proto: ./out.debug
     srcFilter:
       maskAll:
@@ -162,15 +162,14 @@ reflector:
     inherit:
       - predefined.*
   exported.0:
-    reflectMap:
-      ./proto: true
+    filePath: ./proto
     srcFilter:
       prefixPath: .
     dstFilter:
       prefixPath: .
   exportedFiles.0:
     recursive: 0
-    reflectMap:
+    filePath:
       ./dwtools/Tools.s: true
       ./dwtools/amid/.DS_Store: true
       ./dwtools/amid/files/UseFilesArchive.s: true
@@ -285,7 +284,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.3.95
+    version: 0.3.96
     criterion:
       default: 1
       debug: 1
