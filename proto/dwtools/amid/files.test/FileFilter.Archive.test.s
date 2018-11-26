@@ -42,7 +42,7 @@ var Parent = wTester;
 
 function onSuiteBegin()
 {
-  if( !isBrowser )
+  if( Config.platform === 'nodejs' )
   this.testRootDirectory = _.path.dirTempOpen( _.path.join( __dirname, '../..'  ), 'Archive' );
   else
   this.testRootDirectory = _.path.current();
@@ -54,7 +54,7 @@ function onSuiteBegin()
 
 function onSuiteEnd()
 {
-  if( !isBrowser )
+  if( Config.platform === 'nodejs' )
   {
     _.assert( _.strEnds( this.testRootDirectory, 'Archive' ) )
     _.fileProvider.fieldSet( 'safe', 0 );

@@ -466,7 +466,7 @@ function storageLoaded( o )
 
   if( self.storagesLoaded !== undefined )
   {
-    _.assert( _.arrayIs( self.storagesLoaded ), () => 'Expects {-self.storagesLoaded-}, but got ' + _.strTypeOf( self.storagesLoaded ) );
+    _.assert( _.arrayIs( self.storagesLoaded ), () => 'Expects {-self.storagesLoaded-}, but got ' + _.strType( self.storagesLoaded ) );
     self.storagesLoaded.push({ filePath : o.storageFilePath });
   }
 
