@@ -13,7 +13,8 @@ if( typeof module !== 'undefined' )
 
   require( './l8_filter/Archive.s' );
   require( './l9/FilesArchive.s' );
-  require( './l9/FilesGraph.s' );
+  require( './l9/FilesGraphOld.s' );
+  require( './l9/FilesGraph2.s' );
 
 }
 

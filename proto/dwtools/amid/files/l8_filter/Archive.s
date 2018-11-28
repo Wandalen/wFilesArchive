@@ -5,8 +5,8 @@
 if( typeof module !== 'undefined' )
 {
 
-  var _global = _global_;
-  var _ = _global_.wTools;
+  let _global = _global_;
+  let _ = _global_.wTools;
 
   require( '../UseFilesArchive.s' );
 
@@ -14,13 +14,13 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Abstract = _.FileProvider.Abstract;
-var Partial = _.FileProvider.Partial;
-var Default = _.FileProvider.Default;
-var Parent = Abstract;
-var Self = function wFileFilterArchive( o )
+let _global = _global_;
+let _ = _global_.wTools;
+let Abstract = _.FileProvider.Abstract;
+let Partial = _.FileProvider.Partial;
+let Default = _.FileProvider.Default;
+let Parent = Abstract;
+let Self = function wFileFilterArchive( o )
 {
   return _.instanceConstructor( Self, this, arguments );
 }
@@ -33,7 +33,7 @@ Self.shortName = 'Archive';
 
 function init( o )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length <= 1 );
   _.instanceInit( self )
@@ -45,33 +45,33 @@ function init( o )
   if( !self.original )
   self.original = _.fileProvider;
 
-  var self = _.proxyMap( self, self.original );
+  let proxy = _.proxyMap( self, self.original );
 
-  if( !self.archive )
-  self.archive = new wFilesArchive({ fileProvider : self });
+  if( !proxy.archive )
+  proxy.archive = new wFilesArchive({ fileProvider : proxy });
 
-  return self;
+  return proxy;
 }
 
 // --
 // relationship
 // --
 
-var Composes =
+let Composes =
 {
 }
 
-var Aggregates =
+let Aggregates =
 {
 }
 
-var Associates =
+let Associates =
 {
   archive : null,
   original : null,
 }
 
-var Restricts =
+let Restricts =
 {
 }
 
@@ -79,7 +79,7 @@ var Restricts =
 // declare
 // --
 
-var Extend =
+let Extend =
 {
 
   init : init,

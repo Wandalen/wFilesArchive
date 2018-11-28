@@ -1,4 +1,4 @@
-( function _FilesGraph_s_() {
+( function _FilesGraphOld_s_() {
 
 'use strict';
 
@@ -7,7 +7,7 @@
 */
 
 /**
- * @file files/FilesGraph.s.
+ * @file files/FilesGraphOld.s.
  */
 
 //
@@ -15,13 +15,13 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = null;
-let Self = function wFilesGraph( o )
+let Self = function wFilesGraphOld( o )
 {
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects single argument' );
   return _.instanceConstructor( Self, this, arguments );
 }
 
-Self.shortName = 'FilesGraph';
+Self.shortName = 'FilesGraphOld';
 
 //
 
@@ -200,7 +200,7 @@ function fileChange( path )
     logger.log( '. change',it.path );
   }
 
-  let result = self.eachHead( path,onUp );
+  result = self.eachHead( path,onUp );
 }
 
 //
@@ -238,12 +238,13 @@ function filesUpdate( record )
 function fileDeletedUpdate( path )
 {
   let self = this;
+  let dep;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   /* */
 
-  let dep = self.tailsForHeadMap[ path ]
+  dep = self.tailsForHeadMap[ path ]
   if( dep )
   for( let t in dep.tails )
   {
@@ -256,7 +257,7 @@ function fileDeletedUpdate( path )
 
   /* */
 
-  let dep = self.headsForTailMap[ path ]
+  dep = self.headsForTailMap[ path ]
   if( dep )
   for( let h in dep.heads )
   {
@@ -611,7 +612,7 @@ function _nodeFromRecord( node,record )
   else
   {
     node.hash = record.hashGet();
-    node.hash2 = _.fileStatHashGet( record.stat );
+    node.hash2 = _.statHash2Get( record.stat );
     node.size = record.stat.size;
     node.mtime = record.stat.mtime.getTime();
     node.ctime = record.stat.ctime.getTime();
@@ -1004,9 +1005,9 @@ _global_[ Self.name ] = _[ Self.shortName ] = Self;
 // export
 // --
 
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-delete require.cache[ module.id ];
+// if( typeof module !== 'undefined' )
+// if( _global_.WTOOLS_PRIVATE )
+// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
