@@ -178,8 +178,8 @@ reflector:
       ./dwtools/amid/files/l9/FilesGraph.s: true
       ./dwtools/amid/files.test/FileFilter.Archive.test.s: true
     srcFilter:
-      basePath: ./proto
-      prefixPath: .
+      basePath: .
+      prefixPath: proto
     dstFilter:
       basePath: .
       prefixPath: .
