@@ -12,9 +12,11 @@ if( typeof module !== 'undefined' )
   _.include( 'wStateStorage' );
 
   require( './l8_filter/Archive.s' );
-  require( './l9/FilesArchive.s' );
-  require( './l9/FilesGraphOld.s' );
-  require( './l9/FilesGraph2.s' );
+  require( './l8_filter/Image.s' );
+
+  require( './l9/Archive.s' );
+  require( './l9/GraphOld.s' );
+  require( './l9/GraphArchive.s' );
 
 }
 
