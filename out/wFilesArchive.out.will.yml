@@ -55,16 +55,22 @@ path:
       - ./dwtools/Tools.s
       - ./dwtools/abase
       - ./dwtools/amid
-      - ./dwtools/amid/.DS_Store
       - ./dwtools/amid/files
       - ./dwtools/amid/files/UseFilesArchive.s
+      - ./dwtools/amid/files/-l9
+      - ./dwtools/amid/files/-l9/-FilesGraph.s
+      - ./dwtools/amid/files/-l9/FilesArchive.s
+      - ./dwtools/amid/files/-l9/FilesGraph2.s
+      - ./dwtools/amid/files/-l9/FilesGraphOld.s
       - ./dwtools/amid/files/l8_filter
       - ./dwtools/amid/files/l8_filter/Archive.s
       - ./dwtools/amid/files/l9
-      - ./dwtools/amid/files/l9/FilesArchive.s
-      - ./dwtools/amid/files/l9/FilesGraph.s
+      - ./dwtools/amid/files/l9/Archive.s
+      - ./dwtools/amid/files/l9/GraphArchive.s
+      - ./dwtools/amid/files/l9/GraphOld.s
       - ./dwtools/amid/files.test
       - ./dwtools/amid/files.test/FileFilter.Archive.test.s
+      - ./dwtools/amid/files.test/FilesGraph.test.s
       - ./dwtools/atop
     criterion:
       default: 1
@@ -76,12 +82,17 @@ path:
   exportedTerminals.0:
     path:
       - ./dwtools/Tools.s
-      - ./dwtools/amid/.DS_Store
       - ./dwtools/amid/files/UseFilesArchive.s
+      - ./dwtools/amid/files/-l9/-FilesGraph.s
+      - ./dwtools/amid/files/-l9/FilesArchive.s
+      - ./dwtools/amid/files/-l9/FilesGraph2.s
+      - ./dwtools/amid/files/-l9/FilesGraphOld.s
       - ./dwtools/amid/files/l8_filter/Archive.s
-      - ./dwtools/amid/files/l9/FilesArchive.s
-      - ./dwtools/amid/files/l9/FilesGraph.s
+      - ./dwtools/amid/files/l9/Archive.s
+      - ./dwtools/amid/files/l9/GraphArchive.s
+      - ./dwtools/amid/files/l9/GraphOld.s
       - ./dwtools/amid/files.test/FileFilter.Archive.test.s
+      - ./dwtools/amid/files.test/FilesGraph.test.s
     criterion:
       default: 1
       debug: 1
@@ -171,12 +182,17 @@ reflector:
     recursive: 0
     filePath:
       ./dwtools/Tools.s: true
-      ./dwtools/amid/.DS_Store: true
       ./dwtools/amid/files/UseFilesArchive.s: true
+      ./dwtools/amid/files/-l9/-FilesGraph.s: true
+      ./dwtools/amid/files/-l9/FilesArchive.s: true
+      ./dwtools/amid/files/-l9/FilesGraph2.s: true
+      ./dwtools/amid/files/-l9/FilesGraphOld.s: true
       ./dwtools/amid/files/l8_filter/Archive.s: true
-      ./dwtools/amid/files/l9/FilesArchive.s: true
-      ./dwtools/amid/files/l9/FilesGraph.s: true
+      ./dwtools/amid/files/l9/Archive.s: true
+      ./dwtools/amid/files/l9/GraphArchive.s: true
+      ./dwtools/amid/files/l9/GraphOld.s: true
       ./dwtools/amid/files.test/FileFilter.Archive.test.s: true
+      ./dwtools/amid/files.test/FilesGraph.test.s: true
     srcFilter:
       basePath: .
       prefixPath: proto
@@ -299,12 +315,17 @@ exported:
     exportedTerminalsPath:
       path:
         - ./dwtools/Tools.s
-        - ./dwtools/amid/.DS_Store
         - ./dwtools/amid/files/UseFilesArchive.s
+        - ./dwtools/amid/files/-l9/-FilesGraph.s
+        - ./dwtools/amid/files/-l9/FilesArchive.s
+        - ./dwtools/amid/files/-l9/FilesGraph2.s
+        - ./dwtools/amid/files/-l9/FilesGraphOld.s
         - ./dwtools/amid/files/l8_filter/Archive.s
-        - ./dwtools/amid/files/l9/FilesArchive.s
-        - ./dwtools/amid/files/l9/FilesGraph.s
+        - ./dwtools/amid/files/l9/Archive.s
+        - ./dwtools/amid/files/l9/GraphArchive.s
+        - ./dwtools/amid/files/l9/GraphOld.s
         - ./dwtools/amid/files.test/FileFilter.Archive.test.s
+        - ./dwtools/amid/files.test/FilesGraph.test.s
       criterion:
         default: 1
         debug: 1

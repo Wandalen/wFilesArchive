@@ -48,7 +48,7 @@ function trivial( test )
   var image = _.FileFilter.Image({ original : extract });
   let archive = new _.FilesGraphArchive({ fileProvider : image });
 
-  image.
+  archive.begin();
 
   image.filesDelete( '/dst' );
 
@@ -56,6 +56,8 @@ function trivial( test )
   ({
     reflectMap : { '/src' : '/dst' },
   });
+
+  archive.end();
 
   var expected = [ '/', '/dst', '/dst/f1', '/dst/d', '/dst/d/f2', '/dst/d/f3', '/src', '/src/f1', '/src/d', '/src/d/f2', '/src/d/f3' ];
   var files = extract.filesFindRecursive({ filePath : '/', outputFormat : 'absolute' })

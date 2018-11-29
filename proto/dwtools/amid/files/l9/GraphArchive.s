@@ -48,6 +48,12 @@ function form()
 
   self.fileProvider.onCallBegin = self.callLog;
 
+  if( self.delayedDeleting )
+  {
+    debugger;
+    x
+  }
+
 }
 
 //
@@ -101,6 +107,8 @@ function del( o )
 
   logger.log( 'del' );
 
+  // files.
+
 }
 
 del.defaults =
@@ -113,6 +121,7 @@ del.defaults =
 
 let Composes =
 {
+  delayedDeleting : 1,
 }
 
 let Aggregates =
@@ -122,6 +131,7 @@ let Aggregates =
 let Associates =
 {
   fileProvider : null,
+  files : _.define.ownInstanceOf( _.FileRecordFilter ),
 }
 
 let Restricts =
