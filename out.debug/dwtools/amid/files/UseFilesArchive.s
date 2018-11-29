@@ -12,7 +12,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wStateStorage' );
 
   require( './l8_filter/Archive.s' );
-  require( './l8_filter/Image.s' );
+  // require( './l8_filter/Image.s' );
 
   require( './l9/Archive.s' );
   require( './l9/GraphOld.s' );
