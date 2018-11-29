@@ -58,6 +58,34 @@ function form()
 
 //
 
+function callDelete( args, op )
+{
+  if( op.routineName !== 'fileDeleteAct' )
+  return;
+  let o = args[ 0 ];
+  _.assert( args.length === 1 );
+
+  xxx
+
+  return args;
+}
+
+//
+
+function callBeginDelete( args, op )
+{
+  if( op.routineName !== 'fileDeleteAct' )
+  return;
+  let o = args[ 0 ];
+  _.assert( args.length === 1 );
+
+  xxx
+
+  return args;
+}
+
+//
+
 function callLog( args, op )
 {
   if( !op.writes.length && !op.reads.length )
@@ -160,6 +188,8 @@ let Proto =
   init,
   form,
 
+  callDelete,
+  callBeginDelete,
   callLog,
 
   begin,
