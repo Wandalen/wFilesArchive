@@ -168,7 +168,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   test.is( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
@@ -192,7 +192,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   test.is( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   test.identical( provider.filesAreHardLinked( paths ), true );
@@ -212,7 +212,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   test.is( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
@@ -237,7 +237,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   test.is( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
@@ -262,7 +262,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   test.is( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
@@ -287,7 +287,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   test.is( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
@@ -312,7 +312,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   test.is( provider.filesAreHardLinked.apply( provider,paths ) );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
@@ -337,7 +337,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   provider.archive.restoreLinksBegin();
   paths.forEach( ( p, i ) =>
   {
@@ -367,7 +367,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
   waitSync( test.context.delay );
@@ -392,7 +392,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
   waitSync( test.context.delay );
@@ -417,12 +417,12 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
 
   /* linking fourth with second and saving info */
 
   paths[ 3 ] = _.path.join( testRoutineDir, 'e' );
-  provider.linkHard( paths[ 3 ], paths[ 2 ] );
+  provider.hardLink( paths[ 3 ], paths[ 2 ] );
   provider.archive.restoreLinksBegin();
 
   /*  breaking linkage and changing it content */
@@ -459,7 +459,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
   waitSync( test.context.delay );
@@ -479,7 +479,7 @@ function restoreLinks( test )
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
   });
-  provider.linkHard({ dstPath : paths });
+  provider.hardLink({ dstPath : paths });
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
   waitSync( test.context.delay );
@@ -558,8 +558,8 @@ function restoreLinksComplex( test )
 
     /* make links and save info in archive */
 
-    provider.linkHard({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
-    provider.linkHard({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
+    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
+    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
     test.is( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ) );
     test.is( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ) );
     test.is( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ) );
@@ -641,8 +641,8 @@ function restoreLinksComplex( test )
 
     /* make links and save info in archive */
 
-    provider.linkHard({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
-    provider.linkHard({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
+    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
+    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
     test.is( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ) );
     test.is( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ) );
     test.is( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ) );
@@ -719,8 +719,8 @@ function restoreLinksComplex( test )
 
     /* make links and save info in archive */
 
-    provider.linkHard({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
-    provider.linkHard({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
+    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
+    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
     test.is( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ) );
     test.is( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ) );
     test.is( !provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ) );
@@ -1141,7 +1141,7 @@ function inodeExperiment( test )
   hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash2;
   test.notIdentical( hash1, hash2 )
 
-  provider.linkHard({ dstPath : pathsSameIno });
+  provider.hardLink({ dstPath : pathsSameIno });
   test.is( provider.filesAreHardLinked.apply( provider, pathsSameIno ) )
 
   provider.archive.restoreLinksEnd();

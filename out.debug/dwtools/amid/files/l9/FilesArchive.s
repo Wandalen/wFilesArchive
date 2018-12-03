@@ -245,12 +245,12 @@ function filesLinkSame( o )
         byName[ name ] = [ path ];
       });
       for( let name in byName )
-      provider.linkHard({ dstPath : byName[ name ], verbosity : archive.verbosity });
+      provider.hardLink({ dstPath : byName[ name ], verbosity : archive.verbosity });
     }
     else
     {
       // console.log( 'archive.verbosity',archive.verbosity );
-      provider.linkHard({ dstPath : files, verbosity : archive.verbosity });
+      provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
     }
 
   }
@@ -360,7 +360,7 @@ function restoreLinksEnd()
         debugger;
         _.assert( dstFile.size === srcFile.size );
         restored += 1;
-        provider.linkHard({ dstPath : dstPath, srcPath : srcPath, verbosity : archive.verbosity });
+        provider.hardLink({ dstPath : dstPath, srcPath : srcPath, verbosity : archive.verbosity });
         linkedMap[ dstPath ] = filesWithHash[ last ];
       }
     }

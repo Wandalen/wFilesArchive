@@ -48,55 +48,60 @@ function form()
 
   self.fileProvider.onCallBegin = self.callLog;
 
-  if( self.delayedDeleting )
-  {
-    debugger;
-    x
-  }
+  // if( self.delayedDeleting )
+  // {
+  //   self.fileProvider.onCallBegin = self.callBeginDelete;
+  //   self.fileProvider.onCall = self.callDelete;
+  // }
 
 }
 
 //
 
-function callDelete( args, op )
+function callBeginDelete( op )
 {
   if( op.routineName !== 'fileDeleteAct' )
-  return;
-  let o = args[ 0 ];
-  _.assert( args.length === 1 );
-
-  xxx
-
-  return args;
+  return op.args;
+  let o2 = op.args[ 0 ];
+  _.assert( op.args.length === 1 );
+  _.assert( arguments.length === 1 );
+  logger.log( op.routine.name, 'callBeginDelete', _.select( o2, op.writes ).join( ', ' ) );
+  return op.args;
 }
 
 //
 
-function callBeginDelete( args, op )
+function callDelete( op )
 {
+  debugger;
   if( op.routineName !== 'fileDeleteAct' )
-  return;
-  let o = args[ 0 ];
+  return op.originalBody.apply( op.originalFileProvider, op.args );
+  let o2 = op.args[ 0 ];
+
   _.assert( args.length === 1 );
+  _.assert( arguments.length === 1 );
 
-  xxx
-
-  return args;
+  debugger;
+  logger.log( op.routine.name, 'callDelete', _.select( o2, op.writes ).join( ', ' ) );
+  return op.originalBody.apply( op.originalFileProvider, op.args );
 }
 
 //
 
-function callLog( args, op )
+function callLog( op )
 {
   if( !op.writes.length && !op.reads.length )
-  return args;
-  let o = args[ 0 ];
-  _.assert( args.length === 1 );
+  return op.args;
+  let o2 = op.args[ 0 ];
+
+  _.assert( op.args.length === 1 );
+  _.assert( arguments.length === 1 );
+
   if( op.reads.length )
-  console.log( op.routine.name, 'read', _.select( o, op.reads ).join( ', ' ) );
+  logger.log( op.routine.name, 'read', _.select( o2, op.reads ).join( ', ' ) );
   if( op.writes.length )
-  console.log( op.routine.name, 'write', _.select( o, op.writes ).join( ', ' ) );
-  return args;
+  logger.log( op.routine.name, 'write', _.select( o2, op.writes ).join( ', ' ) );
+  return op.args;
 }
 
 //
@@ -188,8 +193,8 @@ let Proto =
   init,
   form,
 
-  callDelete,
   callBeginDelete,
+  callDelete,
   callLog,
 
   begin,
