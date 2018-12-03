@@ -65,7 +65,9 @@ function callBeginDelete( op )
   let o2 = op.args[ 0 ];
   _.assert( op.args.length === 1 );
   _.assert( arguments.length === 1 );
+
   logger.log( op.routine.name, 'callBeginDelete', _.select( o2, op.writes ).join( ', ' ) );
+
   return op.args;
 }
 
@@ -101,6 +103,10 @@ function callLog( op )
   logger.log( op.routine.name, 'read', _.select( o2, op.reads ).join( ', ' ) );
   if( op.writes.length )
   logger.log( op.routine.name, 'write', _.select( o2, op.writes ).join( ', ' ) );
+
+  if( o2.filePath === '/src' )
+  debugger;
+
   return op.args;
 }
 

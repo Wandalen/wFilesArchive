@@ -52,10 +52,12 @@ function trivial( test )
 
   image.filesDelete( '/dst' );
 
+  debugger;
   image.filesReflect
   ({
     reflectMap : { '/src' : '/dst' },
   });
+  debugger;
 
   archive.end();
 
