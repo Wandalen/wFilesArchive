@@ -48,11 +48,11 @@ function form()
 
   self.fileProvider.onCallBegin = self.callLog;
 
-  // if( self.delayedDeleting )
-  // {
-  //   self.fileProvider.onCallBegin = self.callBeginDelete;
-  //   self.fileProvider.onCall = self.callDelete;
-  // }
+  if( self.delayedDeleting )
+  {
+    self.fileProvider.onCallBegin = _.routineJoin( self, self.callBeginDelete );
+    self.fileProvider.onCall = _.routineJoin( self, self.callDelete );
+  }
 
 }
 
@@ -60,32 +60,44 @@ function form()
 
 function callBeginDelete( op )
 {
+  let self = this;
+
+  self.callLog( op );
+
   if( op.routineName !== 'fileDeleteAct' )
-  return op.args;
+  return;
+
   let o2 = op.args[ 0 ];
   _.assert( op.args.length === 1 );
   _.assert( arguments.length === 1 );
 
   logger.log( op.routine.name, 'callBeginDelete', _.select( o2, op.writes ).join( ', ' ) );
 
-  return op.args;
 }
 
 //
 
 function callDelete( op )
 {
-  debugger;
+  // debugger;
   if( op.routineName !== 'fileDeleteAct' )
-  return op.originalBody.apply( op.originalFileProvider, op.args );
+  {
+    op.result = op.originalBody.apply( op.originalFileProvider, op.args );
+    return;
+  }
+
+  debugger;
+
   let o2 = op.args[ 0 ];
 
-  _.assert( args.length === 1 );
+  _.assert( op.args.length === 1 );
   _.assert( arguments.length === 1 );
 
   debugger;
   logger.log( op.routine.name, 'callDelete', _.select( o2, op.writes ).join( ', ' ) );
-  return op.originalBody.apply( op.originalFileProvider, op.args );
+
+  op.result = op.originalBody.apply( op.originalFileProvider, op.args );
+
 }
 
 //
@@ -107,7 +119,6 @@ function callLog( op )
   if( o2.filePath === '/src' )
   debugger;
 
-  return op.args;
 }
 
 //
