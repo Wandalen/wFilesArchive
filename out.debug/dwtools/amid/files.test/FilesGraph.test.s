@@ -2,7 +2,6 @@
 
 'use strict';
 
-var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
 
@@ -28,27 +27,29 @@ var Parent = wTester;
 function trivial( test )
 {
 
+  test.case = 'rewrite terminal by dir';
+
   var extract = _.FileProvider.Extract
   ({
     filesTree :
     {
       src :
       {
-        f1 : '1',
-        d : { f2 : '2', f3 : '3' },
+        f1 : 'src/f1',
+        d : { f2 : 'src/d/f2', f3 : 'src/d/f3' },
       },
       dst :
       {
-        f1 : 'dst',
-        d : 'dst',
+        f1 : 'dst/f1',
+        d : 'dst/d',
       }
     },
   });
 
-  var image = _.FileFilter.Image({ original : extract });
+  var image = _.FileFilter.Image({ originalFileProvider : extract });
   let archive = new _.FilesGraphArchive({ fileProvider : image });
 
-  archive.begin();
+  archive.timelapseBegin();
 
   image.filesDelete( '/dst' );
 
@@ -56,10 +57,12 @@ function trivial( test )
   image.filesReflect
   ({
     reflectMap : { '/src' : '/dst' },
+    dstRewriting : 0,
+    dstRewritingByDistinct : 0,
   });
   debugger;
 
-  archive.end();
+  archive.timelapseEnd();
 
   var expected = [ '/', '/dst', '/dst/f1', '/dst/d', '/dst/d/f2', '/dst/d/f3', '/src', '/src/f1', '/src/d', '/src/d/f2', '/src/d/f3' ];
   var files = extract.filesFindRecursive({ filePath : '/', outputFormat : 'absolute' })

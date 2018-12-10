@@ -73,7 +73,8 @@ function filesUpdate()
 
   archive.mask = _.RegexpObject( archive.mask );
 
-  let files = fileProvider.filesFind
+  let files = [];
+  fileProvider.filesFind
   ({
     filePath : filePath,
     filter :
@@ -117,73 +118,78 @@ function filesUpdate()
 
   /* */
 
-  function onFile( record,op )
+  function onFile( fileRecord, op )
   {
     let d = null;
-    let isDir = record.stat.isDirectory();
+    let isDir = fileRecord.stat.isDir();
 
     if( isDir )
     if( archive.fileMapAutoLoading )
     {
-      let loaded = archive._storageFilesRead( record.absolute );
-      let storagageFilePath = archive.storageFileFromDirPath( record.absolute );
+      let loaded = archive._storageFilesRead( fileRecord.absolute );
+      let storagageFilePath = archive.storageFileFromDirPath( fileRecord.absolute );
       let storage = loaded[ storagageFilePath ].storage;
-      if( storage && record.isStem )
+      if( storage && fileRecord.isStem )
       archive.storageLoaded({ storageFilePath : storagageFilePath, storage : storage });
     }
 
     if( archive.verbosity >= 7 )
-    logger.log( ' . investigating ' + record.absolute );
+    logger.log( ' . investigating ' + fileRecord.absolute );
 
-    if( fileMapOld[ record.absolute ] )
+    if( fileMapOld[ fileRecord.absolute ] )
     {
-      d = _.mapExtend( null,fileMapOld[ record.absolute ] );
-      delete fileMapOld[ record.absolute ];
+      d = _.mapExtend( null,fileMapOld[ fileRecord.absolute ] );
+      files.push( d );
+      delete fileMapOld[ fileRecord.absolute ];
       let same = true;
-      same = same && d.mtime === record.stat.mtime.getTime();
-      same = same && d.birthtime === record.stat.birthtime.getTime();
-      same = same && ( isDir || d.size === record.stat.size );
+      same = same && d.mtime === fileRecord.stat.mtime.getTime();
+      same = same && d.birthtime === fileRecord.stat.birthtime.getTime();
+      same = same && ( isDir || d.size === fileRecord.stat.size );
       if( same && archive.comparingRelyOnHardLinks && !isDir )
       {
         if( d.nlink === 1 )
         debugger;
-        same = d.nlink === record.stat.nlink;
+        same = d.nlink === fileRecord.stat.nlink;
       }
 
       if( same )
       {
         fileMapNew[ d.absolutePath ] = d;
-        return d;
+        return fileRecord;
+        // return d;
       }
       else
       {
         if( archive.verbosity >= 5 )
-        logger.log( ' . change ' + record.absolute );
-        archive.fileModifiedMap[ record.absolute ] = d;
+        logger.log( ' . change ' + fileRecord.absolute );
+        archive.fileModifiedMap[ fileRecord.absolute ] = d;
         d = _.mapExtend( null,d );
       }
     }
     else
     {
       d = Object.create( null );
-      archive.fileAddedMap[ record.absolute ] = d;
+      archive.fileAddedMap[ fileRecord.absolute ] = d;
+      files.push( d );
     }
 
-    d.mtime = record.stat.mtime.getTime();
-    d.ctime = record.stat.ctime.getTime();
-    d.birthtime = record.stat.birthtime.getTime();
-    d.absolutePath = record.absolute;
+    d.mtime = fileRecord.stat.mtime.getTime();
+    d.ctime = fileRecord.stat.ctime.getTime();
+    d.birthtime = fileRecord.stat.birthtime.getTime();
+    d.absolutePath = fileRecord.absolute;
     if( !isDir )
     {
-      d.size = record.stat.size;
-      if( archive.maxSize === null || record.stat.size <= archive.maxSize )
-      d.hash = fileProvider.fileHash({ filePath : record.absolute, throwing : 0, sync : 1 });
-      d.hash2 = _.statHash2Get( record.stat );
-      d.nlink = record.stat.nlink;
+      d.size = fileRecord.stat.size;
+      if( archive.maxSize === null || fileRecord.stat.size <= archive.maxSize )
+      d.hash = fileProvider.fileHash({ filePath : fileRecord.absolute, throwing : 0, sync : 1 });
+      d.hash2 = _.statHash2Get( fileRecord.stat );
+      d.nlink = fileRecord.stat.nlink;
     }
 
     fileMapNew[ d.absolutePath ] = d;
-    return d;
+    // return d;
+
+    return fileRecord;
   }
 
 }

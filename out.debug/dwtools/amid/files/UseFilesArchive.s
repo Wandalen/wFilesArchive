@@ -11,8 +11,9 @@ if( typeof module !== 'undefined' )
   _.include( 'wFiles' );
   _.include( 'wStateStorage' );
 
+  require( './l1/ArchiveRecord.s' );
+
   require( './l8_filter/Archive.s' );
-  // require( './l8_filter/Image.s' );
 
   require( './l9/Archive.s' );
   require( './l9/GraphOld.s' );

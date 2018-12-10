@@ -46,59 +46,220 @@ function form()
   _.assert( self.fileProvider.onCallBegin === null );
   _.assert( self.fileProvider.onCallEnd === null );
 
-  self.fileProvider.onCallBegin = self.callLog;
+  self.files.filePath = self.files.filePath || Object.create( null );
 
-  if( self.delayedDeleting )
-  {
-    self.fileProvider.onCallBegin = _.routineJoin( self, self.callBeginDelete );
-    self.fileProvider.onCall = _.routineJoin( self, self.callDelete );
-  }
+  // self.fileProvider.onCallBegin = self.callLog;
+
+  if( self.timelapseUsing )
+  self.fileProvider.onCall = _.routineJoin( self, self.timelapseCall );
 
 }
 
 //
 
-function callBeginDelete( op )
+function originalCall( op )
+{
+  let o2 = op.args[ 0 ];
+  if( op.reads.length )
+  logger.log( 'original', op.routine.name, 'read', _.select( o2, op.reads ).join( ', ' ) );
+  if( op.writes.length )
+  logger.log( 'original', op.routine.name, 'write', _.select( o2, op.writes ).join( ', ' ) );
+  op.result = op.originalBody.apply( op.image, op.args );
+}
+
+//
+
+function timelapseCall( op )
 {
   let self = this;
-
-  self.callLog( op );
-
-  if( op.routineName !== 'fileDeleteAct' )
-  return;
-
+  let path = op.originalFileProvider.path;
   let o2 = op.args[ 0 ];
-  _.assert( op.args.length === 1 );
-  _.assert( arguments.length === 1 );
 
-  logger.log( op.routine.name, 'callBeginDelete', _.select( o2, op.writes ).join( ', ' ) );
+  _.assert( op.args.length === 1 );
+
+  if( !self.timelapseMode )
+  return self.originalCall( op );
+
+  if( !op.writesPaths )
+  op.writesPaths = _.arrayFlatten( _.mapVals( _.mapSelect( o2, op.writes ) ) );
+  if( !op.readsPaths )
+  op.readsPaths = _.arrayFlatten( _.mapVals( _.mapSelect( o2, op.reads ) ) );
+
+  let writingRecords = _.mapVals( _.mapSelect( self.files.filePath, op.writesPaths ) ).filter( ( el ) => el !== undefined );
+  // if( _.entityLength( writingRecords ) )
+  // debugger;
+  if( op.routineName === 'fileCopyAct' )
+  debugger;
+  if( op.routineName === 'fileWriteAct' )
+  debugger;
+
+  if( op.routineName === 'fileDeleteAct' )
+  return self.timelapseCallDelete( op );
+  else if( op.routineName === 'statReadAct' )
+  return self.timelapseCallStatReadAct( op );
+  else if( op.routineName === 'fileExistsAct' )
+  return self.timelapseCallFileExistsAct( op );
+  else if( op.routineName === 'dirMakeAct' )
+  return self.timelapseCallFileDirMakeAct( op );
+  else if( op.routineName === 'fileCopyAct' || op.routineName === 'fileRenameAct' || op.routineName === 'hardLinkAct' )
+  return self.timelapseCallLinking( op );
+
+  if( writingRecords.length )
+  throw _.err( 'No timlapse hook for wirting method', op.routineName );
+
+  return self.originalCall( op );
+}
+
+//
+
+function timelapseHook_functor( onDelayed )
+{
+
+  return function hook( op )
+  {
+    let self = this;
+    let path = op.originalFileProvider.path;
+    let o2 = op.args[ 0 ];
+
+    if( o2.filePath === undefined )
+    return self.originalCall( op );
+
+    _.assert( op.args.length === 1 );
+    _.assert( arguments.length === 1 );
+    _.assert( path.isAbsolute( o2.filePath ) );
+
+    // if( !op.writesPaths )
+    // op.writesPaths = _.arrayFlatten( null, _.select( o2, op.writes ) );
+    // if( !op.readsPaths )
+    // op.readsPaths = _.arrayFlatten( null, _.select( o2, op.reads ) );
+
+    let arecord = self.files.filePath[ o2.filePath ];
+    if( arecord && arecord.deleting === 1 )
+    {
+
+      if( op.writesPaths.length )
+      logger.log( 'after delay', op.routine.name, 'write', op.writesPaths.join( ', ' ) );
+      if( op.readsPaths.length )
+      logger.log( 'after delay', op.routine.name, 'read', op.readsPaths.join( ', ' ) );
+
+      onDelayed.call( self, op, arecord );
+
+      return;
+    }
+
+    return self.originalCall( op );
+  }
 
 }
 
 //
 
-function callDelete( op )
+function timelapseCallDelete( op )
 {
-  // debugger;
-  if( op.routineName !== 'fileDeleteAct' )
-  {
-    op.result = op.originalBody.apply( op.originalFileProvider, op.args );
-    return;
-  }
-
-  debugger;
-
+  let self = this;
+  let path = op.originalFileProvider.path;
   let o2 = op.args[ 0 ];
 
+  _.assert( op.routineName === 'fileDeleteAct' );
   _.assert( op.args.length === 1 );
   _.assert( arguments.length === 1 );
 
-  debugger;
-  logger.log( op.routine.name, 'callDelete', _.select( o2, op.writes ).join( ', ' ) );
+  let stat = op.originalFileProvider.statRead({ sync : 1, filePath : o2.filePath });
+  if( !stat.isTerminal() && !stat.isDir() )
+  return self.originalCall( op );
 
-  op.result = op.originalBody.apply( op.originalFileProvider, op.args );
+  logger.log( 'delaying', op.routine.name, _.select( o2, op.writes ).join( ', ' ) );
+
+  _.assert( path.isAbsolute( o2.filePath ) );
+
+  if( self.files.filePath[ o2.filePath ] === undefined )
+  self.files.filePath[ o2.filePath ] = new _.ArchiveRecord({ absolute : o2.filePath });
+  let arecord = self.files.filePath[ o2.filePath ];
+
+  arecord.fileProvider = op.image;
+  arecord.stat = stat;
+  arecord.deleting = 1;
+  arecord.deletingOptions = o2;
 
 }
+
+//
+
+let timelapseCallStatReadAct = timelapseHook_functor( function( op )
+{
+  let self = this;
+  let o2 = op.args[ 0 ];
+
+  if( o2.throwing )
+  throw _.err( 'File', o2.filePath, 'was deleted' );
+  op.result = null;
+
+});
+
+//
+
+let timelapseCallFileExistsAct = timelapseHook_functor( function( op )
+{
+  let self = this;
+  let o2 = op.args[ 0 ];
+
+  op.result = false;
+});
+
+//
+
+let timelapseCallFileDirMakeAct = timelapseHook_functor( function( op, arecord )
+{
+  let self = this;
+  let o2 = op.args[ 0 ];
+
+  if( !arecord.stat.isDir() )
+  {
+    // _.assert( 0, 'not tested' );
+    // debugger;
+    arecord.deletingOptions.sync = 1;
+    op.originalFileProvider.fileDeleteAct( arecord.deletingOptions );
+  }
+
+  // debugger;
+  arecord.finit();
+  _.assert( self.files.filePath[ arecord.absolute ] === arecord );
+  delete self.files.filePath[ arecord.absolute ];
+
+  return true;
+});
+
+//
+
+let timelapseCallLinking = timelapseHook_functor( function( op, arecord )
+{
+  let self = this;
+  let o2 = op.args[ 0 ];
+
+  _.assert( _.strIs( o2.dstPath ) ); debugger;
+
+
+
+  // // let filePaths = _.arrayFlatten( null, _.select( o2, op.writes ) );
+  // // for( let p = 0 ; p < filePaths.length ; p++ )
+  // // debugger;
+  // for( let p = 0 ; p < op.writesPaths.length ; p++ )
+  // {
+  //   let filePath = op.writesPaths[ p ];
+  //   // _.assert( path.isAbsolute( filePath ) );
+  //   if( arecord && arecord.deleting === 1 )
+  //   {
+  //     logger.log( 'launch', op.routine.name, 'deleteAct', arecord.deletingOptions.filePath );
+  //     // debugger; xxx
+  //     // let r = op.originalFileProvider.fileDeleteAct( arecord.deletingOptions );
+  //     // _.assert( !_.consequenceIs( op.result ) );
+  //     // arecord.deleting = 2;
+  //     // arecord.deletingOptions = null;
+  //   }
+  // }
+
+  return self.originalCall( op );
+});
 
 //
 
@@ -116,36 +277,44 @@ function callLog( op )
   if( op.writes.length )
   logger.log( op.routine.name, 'write', _.select( o2, op.writes ).join( ', ' ) );
 
-  if( o2.filePath === '/src' )
-  debugger;
+  // if( op.routine.name === 'fileRenameAct' )
+  // debugger;
+  // if( o2.filePath === '/src/f1' )
+  // debugger;
 
 }
 
 //
 
-function begin( o )
+function timelapseBegin( o )
 {
-  o = _.routineOptions( begin, arguments );
+  let self = this;
 
-  logger.log( 'begin' );
+  o = _.routineOptions( timelapseBegin, arguments );
 
+  self.timelapseMode = 1;
+
+  logger.log( 'Timelaps begin' );
 }
 
-begin.defaults =
+timelapseBegin.defaults =
 {
 }
 
 //
 
-function end( o )
+function timelapseEnd( o )
 {
-  o = _.routineOptions( end, arguments );
+  let self = this;
 
-  logger.log( 'end' );
+  o = _.routineOptions( timelapseEnd, arguments );
 
+  self.timelapseMode = 0;
+
+  logger.log( 'Timelaps end' );
 }
 
-end.defaults =
+timelapseEnd.defaults =
 {
 }
 
@@ -171,7 +340,8 @@ del.defaults =
 
 let Composes =
 {
-  delayedDeleting : 1,
+  timelapseUsing : 1,
+  timelapseMode : 0,
 }
 
 let Aggregates =
@@ -210,12 +380,21 @@ let Proto =
   init,
   form,
 
-  callBeginDelete,
-  callDelete,
+  originalCall,
+
+  // callBeginDelete,
+  timelapseCall,
+  timelapseHook_functor,
+  timelapseCallDelete,
+  timelapseCallStatReadAct,
+  timelapseCallFileExistsAct,
+  timelapseCallFileDirMakeAct,
+  timelapseCallLinking,
+
   callLog,
 
-  begin,
-  end,
+  timelapseBegin,
+  timelapseEnd,
   del,
 
   //
