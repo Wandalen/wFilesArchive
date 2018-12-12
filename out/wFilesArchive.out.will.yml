@@ -57,15 +57,10 @@ path:
       - ./dwtools/abase
       - ./dwtools/amid
       - ./dwtools/amid/files
-      - ./dwtools/amid/files/UseFilesArchive.s
-      - ./dwtools/amid/files/-l9
-      - ./dwtools/amid/files/-l9/-FilesGraph.s
-      - ./dwtools/amid/files/-l9/FilesArchive.s
-      - ./dwtools/amid/files/-l9/FilesGraph2.s
-      - ./dwtools/amid/files/-l9/FilesGraphOld.s
-      - ./dwtools/amid/files/l1
-      - ./dwtools/amid/files/l1/ArchiveRecord.s
-      - ./dwtools/amid/files/l1/ArchiveRecordFactory.s
+      - ./dwtools/amid/files/IncludeArchive.s
+      - ./dwtools/amid/files/l2
+      - ./dwtools/amid/files/l2/ArchiveRecord.s
+      - ./dwtools/amid/files/l2/ArchiveRecordFactory.s
       - ./dwtools/amid/files/l8_filter
       - ./dwtools/amid/files/l8_filter/Archive.s
       - ./dwtools/amid/files/l9
@@ -87,13 +82,9 @@ path:
   exportedTerminals.0:
     path:
       - ./dwtools/Tools.s
-      - ./dwtools/amid/files/UseFilesArchive.s
-      - ./dwtools/amid/files/-l9/-FilesGraph.s
-      - ./dwtools/amid/files/-l9/FilesArchive.s
-      - ./dwtools/amid/files/-l9/FilesGraph2.s
-      - ./dwtools/amid/files/-l9/FilesGraphOld.s
-      - ./dwtools/amid/files/l1/ArchiveRecord.s
-      - ./dwtools/amid/files/l1/ArchiveRecordFactory.s
+      - ./dwtools/amid/files/IncludeArchive.s
+      - ./dwtools/amid/files/l2/ArchiveRecord.s
+      - ./dwtools/amid/files/l2/ArchiveRecordFactory.s
       - ./dwtools/amid/files/l8_filter/Archive.s
       - ./dwtools/amid/files/l9/Archive.s
       - ./dwtools/amid/files/l9/GraphArchive.s
@@ -183,13 +174,9 @@ reflector:
     recursive: 0
     filePath:
       ./dwtools/Tools.s: true
-      ./dwtools/amid/files/UseFilesArchive.s: true
-      ./dwtools/amid/files/-l9/-FilesGraph.s: true
-      ./dwtools/amid/files/-l9/FilesArchive.s: true
-      ./dwtools/amid/files/-l9/FilesGraph2.s: true
-      ./dwtools/amid/files/-l9/FilesGraphOld.s: true
-      ./dwtools/amid/files/l1/ArchiveRecord.s: true
-      ./dwtools/amid/files/l1/ArchiveRecordFactory.s: true
+      ./dwtools/amid/files/IncludeArchive.s: true
+      ./dwtools/amid/files/l2/ArchiveRecord.s: true
+      ./dwtools/amid/files/l2/ArchiveRecordFactory.s: true
       ./dwtools/amid/files/l8_filter/Archive.s: true
       ./dwtools/amid/files/l9/Archive.s: true
       ./dwtools/amid/files/l9/GraphArchive.s: true
@@ -320,13 +307,9 @@ exported:
     exportedTerminalsPath:
       path:
         - ./dwtools/Tools.s
-        - ./dwtools/amid/files/UseFilesArchive.s
-        - ./dwtools/amid/files/-l9/-FilesGraph.s
-        - ./dwtools/amid/files/-l9/FilesArchive.s
-        - ./dwtools/amid/files/-l9/FilesGraph2.s
-        - ./dwtools/amid/files/-l9/FilesGraphOld.s
-        - ./dwtools/amid/files/l1/ArchiveRecord.s
-        - ./dwtools/amid/files/l1/ArchiveRecordFactory.s
+        - ./dwtools/amid/files/IncludeArchive.s
+        - ./dwtools/amid/files/l2/ArchiveRecord.s
+        - ./dwtools/amid/files/l2/ArchiveRecordFactory.s
         - ./dwtools/amid/files/l8_filter/Archive.s
         - ./dwtools/amid/files/l9/Archive.s
         - ./dwtools/amid/files/l9/GraphArchive.s
