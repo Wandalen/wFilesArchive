@@ -35,13 +35,15 @@ function trivial( test )
     {
       src :
       {
-        f1 : 'src/f1',
-        d : { f2 : 'src/d/f2', f3 : 'src/d/f3' },
+        same : 'same',
+        diff : 'src/diff',
+        srcDir : { f2 : 'src/srcDir/f2', f3 : 'src/srcDir/f3' },
       },
       dst :
       {
-        f1 : 'dst/f1',
-        d : 'dst/d',
+        same : 'same',
+        diff : 'dst/diff',
+        srcDir : 'dst/srcDir',
       }
     },
   });
