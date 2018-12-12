@@ -65,6 +65,7 @@ path:
       - ./dwtools/amid/files/-l9/FilesGraphOld.s
       - ./dwtools/amid/files/l1
       - ./dwtools/amid/files/l1/ArchiveRecord.s
+      - ./dwtools/amid/files/l1/ArchiveRecordFactory.s
       - ./dwtools/amid/files/l8_filter
       - ./dwtools/amid/files/l8_filter/Archive.s
       - ./dwtools/amid/files/l9
@@ -92,6 +93,7 @@ path:
       - ./dwtools/amid/files/-l9/FilesGraph2.s
       - ./dwtools/amid/files/-l9/FilesGraphOld.s
       - ./dwtools/amid/files/l1/ArchiveRecord.s
+      - ./dwtools/amid/files/l1/ArchiveRecordFactory.s
       - ./dwtools/amid/files/l8_filter/Archive.s
       - ./dwtools/amid/files/l9/Archive.s
       - ./dwtools/amid/files/l9/GraphArchive.s
@@ -187,6 +189,7 @@ reflector:
       ./dwtools/amid/files/-l9/FilesGraph2.s: true
       ./dwtools/amid/files/-l9/FilesGraphOld.s: true
       ./dwtools/amid/files/l1/ArchiveRecord.s: true
+      ./dwtools/amid/files/l1/ArchiveRecordFactory.s: true
       ./dwtools/amid/files/l8_filter/Archive.s: true
       ./dwtools/amid/files/l9/Archive.s: true
       ./dwtools/amid/files/l9/GraphArchive.s: true
@@ -323,6 +326,7 @@ exported:
         - ./dwtools/amid/files/-l9/FilesGraph2.s
         - ./dwtools/amid/files/-l9/FilesGraphOld.s
         - ./dwtools/amid/files/l1/ArchiveRecord.s
+        - ./dwtools/amid/files/l1/ArchiveRecordFactory.s
         - ./dwtools/amid/files/l8_filter/Archive.s
         - ./dwtools/amid/files/l9/Archive.s
         - ./dwtools/amid/files/l9/GraphArchive.s
