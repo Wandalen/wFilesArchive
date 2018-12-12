@@ -1,4 +1,4 @@
-(function _UseFilesArchive_s_() {
+(function _IncludeArchive_s_() {
 
 'use strict';
 
@@ -11,8 +11,8 @@ if( typeof module !== 'undefined' )
   _.include( 'wFiles' );
   _.include( 'wStateStorage' );
 
-  require( './l1/ArchiveRecord.s' );
-  require( './l1/ArchiveRecordFactory.s' );
+  require( './l2/ArchiveRecord.s' );
+  require( './l2/ArchiveRecordFactory.s' );
 
   require( './l8_filter/Archive.s' );
 

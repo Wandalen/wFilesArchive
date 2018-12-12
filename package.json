@@ -15,7 +15,7 @@
       "email": "volodymyr.migdal@gmail.com"
     }
   ],
-  "main": "proto/dwtools/amid/files/UseFilesArchive.s",
+  "main": "proto/dwtools/amid/files/IncludeArchive.s",
   "files": [
     "proto/dwtools/amid/files",
     "proto/dwtools/Tools.s",

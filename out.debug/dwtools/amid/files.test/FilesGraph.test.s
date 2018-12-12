@@ -27,7 +27,34 @@ var Parent = wTester;
 function trivial( test )
 {
 
-  test.case = 'rewrite terminal by dir';
+  test.case = 'universal';
+
+  var expectedExtract = _.FileProvider.Extract
+  ({
+    filesTree :
+    {
+      src :
+      {
+        same : 'same',
+        diff : 'src/diff',
+        srcDirDstTerm : { f2 : 'src/srcDirDstTerm/f2', f3 : 'src/srcDirDstTerm/f3' },
+        srcTermDstDir : 'src/srcTermDstDir',
+        srcTerm : 'srcTerm',
+        srcDir : {},
+      },
+      dst :
+      {
+        same : 'same',
+        diff : 'src/diff',
+        srcDirDstTerm : { f2 : 'src/srcDirDstTerm/f2', f3 : 'src/srcDirDstTerm/f3' },
+        srcTermDstDir : 'src/srcTermDstDir',
+        dstTerm : 'dstTerm',
+        dstDir : {},
+        srcTerm : 'srcTerm',
+        srcDir : {},
+      }
+    },
+  });
 
   var extract = _.FileProvider.Extract
   ({
@@ -37,13 +64,19 @@ function trivial( test )
       {
         same : 'same',
         diff : 'src/diff',
-        srcDir : { f2 : 'src/srcDir/f2', f3 : 'src/srcDir/f3' },
+        srcDirDstTerm : { f2 : 'src/srcDirDstTerm/f2', f3 : 'src/srcDirDstTerm/f3' },
+        srcTermDstDir : 'src/srcTermDstDir',
+        srcTerm : 'srcTerm',
+        srcDir : {},
       },
       dst :
       {
         same : 'same',
         diff : 'dst/diff',
-        srcDir : 'dst/srcDir',
+        srcDirDstTerm : 'dst/srcDirDstTerm',
+        srcTermDstDir : { f2 : 'src/srcDirDstTerm/f2', f3 : 'src/srcDirDstTerm/f3' },
+        dstTerm : 'dstTerm',
+        dstDir : {},
       }
     },
   });
@@ -66,10 +99,11 @@ function trivial( test )
 
   archive.timelapseEnd();
 
-  var expected = [ '/', '/dst', '/dst/f1', '/dst/d', '/dst/d/f2', '/dst/d/f3', '/src', '/src/f1', '/src/d', '/src/d/f2', '/src/d/f3' ];
+  var expectedFiles = [ '/', '/dst', '/dst/f1', '/dst/d', '/dst/d/f2', '/dst/d/f3', '/src', '/src/f1', '/src/d', '/src/d/f2', '/src/d/f3' ];
   var files = extract.filesFindRecursive({ filePath : '/', outputFormat : 'absolute' })
 
-  test.identical( files, expected );
+  test.identical( files, expectedFiles );
+  test.identical( extract.filesTree, expectedExtract.filesTree );
 
 }
 
