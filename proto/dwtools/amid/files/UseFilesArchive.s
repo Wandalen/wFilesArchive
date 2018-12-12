@@ -12,6 +12,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wStateStorage' );
 
   require( './l1/ArchiveRecord.s' );
+  require( './l1/ArchiveRecordFactory.s' );
 
   require( './l8_filter/Archive.s' );
 

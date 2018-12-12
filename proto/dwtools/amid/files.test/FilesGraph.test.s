@@ -47,7 +47,7 @@ function trivial( test )
   });
 
   var image = _.FileFilter.Image({ originalFileProvider : extract });
-  let archive = new _.FilesGraphArchive({ fileProvider : image });
+  let archive = new _.FilesGraphArchive({ imageFileProvider : image });
 
   archive.timelapseBegin();
 

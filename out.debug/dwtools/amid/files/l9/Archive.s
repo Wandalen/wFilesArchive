@@ -57,7 +57,7 @@ function filesUpdate()
   archive.fileAddedMap = Object.create( null );
   archive.fileRemovedMap = null;
   archive.fileModifiedMap = Object.create( null );
-  archive.fileHashMap = null;
+  archive.hashReadMap = null;
 
   _.assert( _.strDefined( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
 
@@ -181,7 +181,7 @@ function filesUpdate()
     {
       d.size = fileRecord.stat.size;
       if( archive.maxSize === null || fileRecord.stat.size <= archive.maxSize )
-      d.hash = fileProvider.fileHash({ filePath : fileRecord.absolute, throwing : 0, sync : 1 });
+      d.hash = fileProvider.hashRead({ filePath : fileRecord.absolute, throwing : 0, sync : 1 });
       d.hash2 = _.statHash2Get( fileRecord.stat );
       d.nlink = fileRecord.stat.nlink;
     }
@@ -200,25 +200,25 @@ function filesHashMapForm()
 {
   let archive = this;
 
-  _.assert( !archive.fileHashMap );
+  _.assert( !archive.hashReadMap );
 
-  archive.fileHashMap = Object.create( null );
+  archive.hashReadMap = Object.create( null );
 
   for( let f in archive.fileMap )
   {
     let file = archive.fileMap[ f ];
     if( file.hash )
-    if( archive.fileHashMap[ file.hash ] )
-    archive.fileHashMap[ file.hash ].push( file.absolutePath );
+    if( archive.hashReadMap[ file.hash ] )
+    archive.hashReadMap[ file.hash ].push( file.absolutePath );
     else
-    archive.fileHashMap[ file.hash ] = [ file.absolutePath ];
+    archive.hashReadMap[ file.hash ] = [ file.absolutePath ];
   }
 
   // debugger;
-  // for( let h in archive.fileHashMap )
-  // logger.log( archive.fileHashMap[ h ].length, _.toStr( archive.fileHashMap[ h ],{ levels : 3, wrap : 0 } ) );
+  // for( let h in archive.hashReadMap )
+  // logger.log( archive.hashReadMap[ h ].length, _.toStr( archive.hashReadMap[ h ],{ levels : 3, wrap : 0 } ) );
 
-  return archive.fileHashMap;
+  return archive.hashReadMap;
 }
 
 //
@@ -227,13 +227,13 @@ function filesLinkSame( o )
 {
   let archive = this;
   let provider = archive.fileProvider;
-  let fileHashMap = archive.filesHashMapForm();
+  let hashReadMap = archive.filesHashMapForm();
   o = _.routineOptions( filesLinkSame,arguments );
 
   debugger;
-  for( let f in fileHashMap )
+  for( let f in hashReadMap )
   {
-    let files = fileHashMap[ f ];
+    let files = hashReadMap[ f ];
 
     if( files.length < 2 )
     continue;
@@ -287,7 +287,7 @@ function restoreLinksEnd()
   let archive = this;
   let provider = archive.fileProvider;
   let fileMap1 = _.mapExtend( null, archive.fileMap );
-  let fileHashMap = archive.filesHashMapForm();
+  let hashReadMap = archive.filesHashMapForm();
   let restored = 0;
 
   archive.filesUpdate();
@@ -303,7 +303,7 @@ function restoreLinksEnd()
   for( let f in fileModifiedMap )
   {
     let modified = fileModifiedMap[ f ];
-    let filesWithHash = fileHashMap[ modified.hash ];
+    let filesWithHash = hashReadMap[ modified.hash ];
 
     if( linkedMap[ f ] )
     continue;
@@ -524,7 +524,7 @@ let Composes =
   fileRemovedMap : _.define.own( {} ),
   fileModifiedMap : _.define.own( {} ),
 
-  fileHashMap : null,
+  hashReadMap : null,
 
   fileMapAutosaving : 0,
   fileMapAutoLoading : 1,

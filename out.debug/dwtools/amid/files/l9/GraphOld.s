@@ -611,7 +611,7 @@ function _nodeFromRecord( node,record )
   }
   else
   {
-    node.hash = record.hashGet();
+    node.hash = record.hashRead();
     node.hash2 = _.statHash2Get( record.stat );
     node.size = record.stat.size;
     node.mtime = record.stat.mtime.getTime();
@@ -891,7 +891,7 @@ let Forbids =
   fileRemovedMap : 'fileRemovedMap',
   fileModifiedMap : 'fileModifiedMap',
 
-  fileHashMap : 'fileHashMap',
+  hashReadMap : 'hashReadMap',
 
   fileMapAutosaving : 'fileMapAutosaving',
   fileMapAutoLoading : 'fileMapAutoLoading',
