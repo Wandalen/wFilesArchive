@@ -1149,8 +1149,8 @@ function inodeExperiment( test )
   test.case = 'restored files should not be linked';
   test.identical( provider.filesAreHardLinked.apply( provider, pathsSameIno ), false )
   test.case = 'restored files should not have same hash';
-  hash1 = provider.fileHash( pathsSameIno[ 0 ] );
-  hash2 = provider.fileHash( pathsSameIno[ 1 ] );
+  hash1 = provider.hashRead( pathsSameIno[ 0 ] );
+  hash2 = provider.hashRead( pathsSameIno[ 1 ] );
   test.notIdentical( hash1, hash2 );
   test.case = 'restored files should not be same';
   test.is( !provider.filesAreSame.apply( provider, pathsSameIno ) );

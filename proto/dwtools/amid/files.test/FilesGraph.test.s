@@ -2,7 +2,6 @@
 
 'use strict';
 
-var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
 
@@ -28,27 +27,64 @@ var Parent = wTester;
 function trivial( test )
 {
 
+  test.case = 'universal';
+
+  var expectedExtract = _.FileProvider.Extract
+  ({
+    filesTree :
+    {
+      src :
+      {
+        same : 'same',
+        diff : 'src/diff',
+        srcDirDstTerm : { f2 : 'src/srcDirDstTerm/f2', f3 : 'src/srcDirDstTerm/f3' },
+        srcTermDstDir : 'src/srcTermDstDir',
+        srcTerm : 'srcTerm',
+        srcDir : {},
+      },
+      dst :
+      {
+        same : 'same',
+        diff : 'src/diff',
+        srcDirDstTerm : { f2 : 'src/srcDirDstTerm/f2', f3 : 'src/srcDirDstTerm/f3' },
+        srcTermDstDir : 'src/srcTermDstDir',
+        dstTerm : 'dstTerm',
+        dstDir : {},
+        srcTerm : 'srcTerm',
+        srcDir : {},
+      }
+    },
+  });
+
   var extract = _.FileProvider.Extract
   ({
     filesTree :
     {
       src :
       {
-        f1 : '1',
-        d : { f2 : '2', f3 : '3' },
+        same : 'same',
+        diff : 'src/diff',
+        srcDirDstTerm : { f2 : 'src/srcDirDstTerm/f2', f3 : 'src/srcDirDstTerm/f3' },
+        srcTermDstDir : 'src/srcTermDstDir',
+        srcTerm : 'srcTerm',
+        srcDir : {},
       },
       dst :
       {
-        f1 : 'dst',
-        d : 'dst',
+        same : 'same',
+        diff : 'dst/diff',
+        srcDirDstTerm : 'dst/srcDirDstTerm',
+        srcTermDstDir : { f2 : 'src/srcDirDstTerm/f2', f3 : 'src/srcDirDstTerm/f3' },
+        dstTerm : 'dstTerm',
+        dstDir : {},
       }
     },
   });
 
-  var image = _.FileFilter.Image({ original : extract });
-  let archive = new _.FilesGraphArchive({ fileProvider : image });
+  var image = _.FileFilter.Image({ originalFileProvider : extract });
+  let archive = new _.FilesGraphArchive({ imageFileProvider : image });
 
-  archive.begin();
+  archive.timelapseBegin();
 
   image.filesDelete( '/dst' );
 
@@ -56,15 +92,18 @@ function trivial( test )
   image.filesReflect
   ({
     reflectMap : { '/src' : '/dst' },
+    dstRewriting : 0,
+    dstRewritingByDistinct : 0,
   });
   debugger;
 
-  archive.end();
+  archive.timelapseEnd();
 
-  var expected = [ '/', '/dst', '/dst/f1', '/dst/d', '/dst/d/f2', '/dst/d/f3', '/src', '/src/f1', '/src/d', '/src/d/f2', '/src/d/f3' ];
+  var expectedFiles = [ '/', '/dst', '/dst/f1', '/dst/d', '/dst/d/f2', '/dst/d/f3', '/src', '/src/f1', '/src/d', '/src/d/f2', '/src/d/f3' ];
   var files = extract.filesFindRecursive({ filePath : '/', outputFormat : 'absolute' })
 
-  test.identical( files, expected );
+  test.identical( files, expectedFiles );
+  test.identical( extract.filesTree, expectedExtract.filesTree );
 
 }
 

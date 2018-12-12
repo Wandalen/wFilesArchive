@@ -8,7 +8,7 @@ if( typeof module !== 'undefined' )
   let _global = _global_;
   let _ = _global_.wTools;
 
-  require( '../UseFilesArchive.s' );
+  require( '../IncludeArchive.s' );
 
 }
 
