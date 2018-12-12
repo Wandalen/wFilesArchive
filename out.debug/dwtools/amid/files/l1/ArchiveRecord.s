@@ -7,7 +7,7 @@ let File;
 if( typeof module !== 'undefined' )
 {
 
-  require( '../UseFilesArchive.s' );
+  require( '../IncludeArchive.s' );
 
 }
 
