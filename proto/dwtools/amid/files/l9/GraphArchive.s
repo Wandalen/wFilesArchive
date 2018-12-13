@@ -314,8 +314,6 @@ let timelapseFileCopyAct = timelapseLinkingHook_functor( function fileCopyAct( o
 
   if( !srcStat.isTerminal() || !dstStat.isTerminal() )
   {
-    // debugger;
-    // _.assert( 0, 'not tested' );
     return end();
   }
 
@@ -334,8 +332,6 @@ let timelapseFileCopyAct = timelapseLinkingHook_functor( function fileCopyAct( o
 
   if( !identical )
   {
-    // debugger;
-    // _.assert( 0, 'not tested' );
     return end();
   }
   else
