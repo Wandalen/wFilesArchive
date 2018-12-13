@@ -100,8 +100,8 @@ function timelapseCall( op )
   // debugger;
   // if( op.routineName === 'fileCopyAct' )
   // debugger;
-  if( op.routineName === 'fileWriteAct' )
-  debugger;
+  // if( op.routineName === 'fileWriteAct' )
+  // debugger;
 
   if( op.routineName === 'fileDeleteAct' )
   return self.timelapseCallDelete( op );
@@ -112,9 +112,9 @@ function timelapseCall( op )
   else if( op.routineName === 'dirMakeAct' )
   return self.timelapseCallDirMakeAct( op );
   else if( op.routineName === 'fileCopyAct' )
-  return self.timelapseCopyAct( op );
+  return self.timelapseFileCopyAct( op );
   // else if( op.routineName === 'fileCopyAct' || op.routineName === 'fileRenameAct' || op.routineName === 'hardLinkAct' )
-  // return self.timelapseCopyAct( op );
+  // return self.timelapseFileCopyAct( op );
 
   if( writingRecords.length )
   throw _.err( 'No timlapse hook for wirting method', op.routineName );
@@ -174,18 +174,10 @@ function timelapseLinkingHook_functor( onDelayed )
     let path = op.originalFileProvider.path;
     let o2 = op.args[ 0 ];
 
-    // if( o2.srcPath === undefined )
-    // return self.originalCall( op );
-
     _.assert( op.args.length === 1 );
     _.assert( arguments.length === 1 );
     _.assert( path.isAbsolute( o2.srcPath ) );
     _.assert( path.isAbsolute( o2.dstPath ) );
-
-    // if( !op.writesPaths )
-    // op.writesPaths = _.arrayFlatten( null, _.select( o2, op.writes ) );
-    // if( !op.readsPaths )
-    // op.readsPaths = _.arrayFlatten( null, _.select( o2, op.reads ) );
 
     let srcRecord = self.factory.records.filePath[ o2.srcPath ];
     let dstRecord = self.factory.records.filePath[ o2.dstPath ];
@@ -238,8 +230,8 @@ function timelapseCallDelete( op )
   _.assert( arecord.factory === self.factory );
   // _.assert( arecord.fileProvider === op.image );
 
-  if( arecord.absolute === '/dst/diff' )
-  debugger;
+  // if( arecord.absolute === '/dst/diff' )
+  // debugger;
 
 }
 
@@ -278,7 +270,8 @@ let timelapseCallDirMakeAct = timelapseSingleHook_functor( function( op, arecord
 
   if( !arecord.stat.isDir() )
   {
-    arecord.fileDeleteReal();
+    arecord.timelapsedSubFilesDelete();
+    arecord.timelapsedDelete();
     // arecord.deletingOptions.sync = 1;
     // op.originalFileProvider.fileDeleteAct( arecord.deletingOptions );
   }
@@ -292,7 +285,7 @@ let timelapseCallDirMakeAct = timelapseSingleHook_functor( function( op, arecord
 
 //
 
-let timelapseCopyAct = timelapseLinkingHook_functor( function( op, dstRecord, srcRecord )
+let timelapseFileCopyAct = timelapseLinkingHook_functor( function fileCopyAct( op, dstRecord, srcRecord )
 {
   let self = this;
   let o2 = op.args[ 0 ];
@@ -316,20 +309,22 @@ let timelapseCopyAct = timelapseLinkingHook_functor( function( op, dstRecord, sr
 
   // return self.originalCall( op );
 
+  let dstStat = dstRecord.stat;
   let srcStat = op.originalFileProvider.statRead({ filePath : o2.srcPath, sync : 1 });
 
-  if( !srcStat.isTerminal() || !dstRecord.stat.isTerminal() )
+  if( !srcStat.isTerminal() || !dstStat.isTerminal() )
   {
-    debugger;
-    _.assert( 0, 'not tested' );
+    // debugger;
+    // _.assert( 0, 'not tested' );
     return end();
   }
 
   let identical = true;
-  if( identical && dstRecord.stat.size !== srcStat.size )
+  if( identical && dstStat.size !== srcStat.size )
   identical = false;
 
   if( identical )
+  if( !_.statsAreLinked( srcStat, dstStat ) )
   {
     let dstHash = dstRecord.hashRead();
     let srcHash = op.originalFileProvider.hashRead({ sync : 1, filePath : o2.srcPath });
@@ -337,16 +332,18 @@ let timelapseCopyAct = timelapseLinkingHook_functor( function( op, dstRecord, sr
     identical = false;
   }
 
-  dstRecord.finit();
-
   if( !identical )
   {
-    debugger;
+    // debugger;
     // _.assert( 0, 'not tested' );
     return end();
   }
+  else
+  {
+    dstRecord.finit();
+  }
 
-  return true;
+  op.result = true;
 
   /* - */
 
@@ -354,7 +351,8 @@ let timelapseCopyAct = timelapseLinkingHook_functor( function( op, dstRecord, sr
   {
     if( dstRecord )
     {
-      dstRecord.fileDeleteReal();
+      dstRecord.timelapsedSubFilesDelete();
+      dstRecord.timelapsedDelete();
       dstRecord.finit();
     }
     return self.originalCall( op );
@@ -393,6 +391,9 @@ function timelapseBegin( o )
 
   o = _.routineOptions( timelapseBegin, arguments );
 
+  _.assert( self.timelapseMode === 0 || self.timelapseMode === 1 );
+  _.assert( self.timelapseMode === 1 || _.mapKeys( self.factory.records.filePath ).length === 0 );
+
   self.timelapseMode = 1;
 
   logger.log( 'Timelaps begin' );
@@ -411,6 +412,8 @@ function timelapseEnd( o )
   o = _.routineOptions( timelapseEnd, arguments );
 
   self.timelapseMode = 0;
+
+  self.factory.recordsTimelapsedDelete();
 
   logger.log( 'Timelaps end' );
 }
@@ -493,7 +496,7 @@ let Proto =
   timelapseCallStatReadAct,
   timelapseCallFileExistsAct,
   timelapseCallDirMakeAct,
-  timelapseCopyAct,
+  timelapseFileCopyAct,
 
   callLog,
 

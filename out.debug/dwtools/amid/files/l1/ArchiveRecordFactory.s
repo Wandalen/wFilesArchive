@@ -69,6 +69,23 @@ function recordsSelect( filePath )
   return result;
 }
 
+//
+
+function recordsTimelapsedDelete()
+{
+  let self = this;
+  let filePath = _.mapKeys( self.records.filePath )
+
+  for( let f = filePath.length-1 ; f >= 0 ; f-- )
+  {
+    let record = self.records.filePath[ filePath[ f ] ];
+    _.assert( record.deleting === 1 );
+    record.timelapsedDelete();
+    record.finit();
+  }
+
+}
+
 // --
 //
 // --
@@ -116,6 +133,8 @@ let Extend =
 
   record,
   recordsSelect,
+
+  recordsTimelapsedDelete,
 
   //
 

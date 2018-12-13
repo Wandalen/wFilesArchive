@@ -27,7 +27,9 @@ var Parent = wTester;
 function trivial( test )
 {
 
-  test.case = 'universal';
+  /* - */
+
+  test.case = 'universal, linking : fileCopy';
 
   var expectedExtract = _.FileProvider.Extract
   ({
@@ -48,8 +50,8 @@ function trivial( test )
         diff : 'src/diff',
         srcDirDstTerm : { f2 : 'src/srcDirDstTerm/f2', f3 : 'src/srcDirDstTerm/f3' },
         srcTermDstDir : 'src/srcTermDstDir',
-        dstTerm : 'dstTerm',
-        dstDir : {},
+        // dstTerm : 'dstTerm',
+        // dstDir : {},
         srcTerm : 'srcTerm',
         srcDir : {},
       }
@@ -89,21 +91,29 @@ function trivial( test )
   image.filesDelete( '/dst' );
 
   debugger;
-  image.filesReflect
+  let records = image.filesReflect
   ({
     reflectMap : { '/src' : '/dst' },
     dstRewriting : 0,
     dstRewritingByDistinct : 0,
+    linking : 'fileCopy',
   });
   debugger;
 
   archive.timelapseEnd();
 
-  var expectedFiles = [ '/', '/dst', '/dst/f1', '/dst/d', '/dst/d/f2', '/dst/d/f3', '/src', '/src/f1', '/src/d', '/src/d/f2', '/src/d/f3' ];
-  var files = extract.filesFindRecursive({ filePath : '/', outputFormat : 'absolute' })
+  var expAbsolutes = [ '/dst', '/dst/diff', '/dst/same', '/dst/srcTerm', '/dst/srcTermDstDir', '/dst/srcDir', '/dst/srcDirDstTerm', '/dst/srcDirDstTerm/f2', '/dst/srcDirDstTerm/f3' ];
+  var expActions = [ 'dirMake', 'fileCopy', 'fileCopy', 'fileCopy', 'fileCopy', 'dirMake', 'dirMake', 'fileCopy', 'fileCopy' ];
+  var expPreserve = [ false, false, false, false, false, false, false, false, false ];
 
-  test.identical( files, expectedFiles );
+  var gotAbsolutes = _.select( records, '*/dst/absolute' );
+  var gotActions = _.select( records, '*/action' );
+  var gotPreserve = _.select( records, '*/preserve' );
+
   test.identical( extract.filesTree, expectedExtract.filesTree );
+  test.identical( gotAbsolutes, expAbsolutes );
+  test.identical( gotActions, expActions );
+  test.identical( gotPreserve, expPreserve );
 
 }
 
