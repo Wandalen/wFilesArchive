@@ -112,9 +112,11 @@ function timelapseCall( op )
   else if( op.routineName === 'dirMakeAct' )
   return self.timelapseCallDirMakeAct( op );
   else if( op.routineName === 'fileCopyAct' )
-  return self.timelapseFileCopyAct( op );
+  return self.timelapseCallFileCopyAct( op );
+  else if( op.routineName === 'hardLinkAct' )
+  return self.timelapseCallHardLinkAct( op );
   // else if( op.routineName === 'fileCopyAct' || op.routineName === 'fileRenameAct' || op.routineName === 'hardLinkAct' )
-  // return self.timelapseFileCopyAct( op );
+  // return self.timelapseCallFileCopyAct( op );
 
   if( writingRecords.length )
   throw _.err( 'No timlapse hook for wirting method', op.routineName );
@@ -285,7 +287,7 @@ let timelapseCallDirMakeAct = timelapseSingleHook_functor( function( op, arecord
 
 //
 
-let timelapseFileCopyAct = timelapseLinkingHook_functor( function fileCopyAct( op, dstRecord, srcRecord )
+let timelapseCallFileCopyAct = timelapseLinkingHook_functor( function fileCopyAct( op, dstRecord, srcRecord )
 {
   let self = this;
   let o2 = op.args[ 0 ];
@@ -322,7 +324,7 @@ let timelapseFileCopyAct = timelapseLinkingHook_functor( function fileCopyAct( o
   identical = false;
 
   if( identical )
-  if( !_.statsAreLinked( srcStat, dstStat ) )
+  if( !_.statsAreHardLinked( srcStat, dstStat ) )
   {
     let dstHash = dstRecord.hashRead();
     let srcHash = op.originalFileProvider.hashRead({ sync : 1, filePath : o2.srcPath });
@@ -340,6 +342,56 @@ let timelapseFileCopyAct = timelapseLinkingHook_functor( function fileCopyAct( o
   }
 
   op.result = true;
+
+  /* - */
+
+  function end()
+  {
+    if( dstRecord )
+    {
+      dstRecord.timelapsedSubFilesDelete();
+      dstRecord.timelapsedDelete();
+      dstRecord.finit();
+    }
+    return self.originalCall( op );
+  }
+
+});
+
+//
+
+let timelapseCallHardLinkAct = timelapseLinkingHook_functor( function fileCopyAct( op, dstRecord, srcRecord )
+{
+  let self = this;
+  let o2 = op.args[ 0 ];
+
+  _.assert( _.strIs( o2.srcPath ) );
+  _.assert( _.strIs( o2.dstPath ) );
+  _.assert( _.boolLike( o2.breakingSrcHardLink ) );
+  _.assert( _.boolLike( o2.breakingDstHardLink ) );
+
+  if( !dstRecord )
+  {
+    debugger;
+    _.assert( 0, 'not tested' );
+    return end();
+  }
+
+  if( o2.breakingSrcHardLink || !o2.breakingDstHardLink )
+  {
+    debugger;
+    _.assert( 0, 'not tested' );
+    return end();
+  }
+
+  if( op.originalFileProvider.filesAreHardLinked( o2.srcPath, o2.dstPath ) )
+  {
+    dstRecord.finit();
+  }
+  else
+  {
+    end();
+  }
 
   /* - */
 
@@ -492,7 +544,8 @@ let Proto =
   timelapseCallStatReadAct,
   timelapseCallFileExistsAct,
   timelapseCallDirMakeAct,
-  timelapseFileCopyAct,
+  timelapseCallFileCopyAct,
+  timelapseCallHardLinkAct,
 
   callLog,
 

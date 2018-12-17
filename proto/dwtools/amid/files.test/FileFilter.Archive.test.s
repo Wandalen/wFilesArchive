@@ -38,9 +38,9 @@ function onSuiteEnd()
   if( Config.platform === 'nodejs' )
   {
     _.assert( _.strEnds( this.testRootDirectory, 'Archive' ) )
-    _.fileProvider.fieldSet( 'safe', 0 );
+    _.fileProvider.fieldPush( 'safe', 0 );
     _.fileProvider.filesDelete( this.testRootDirectory );
-    _.fileProvider.fieldReset( 'safe', 0 );
+    _.fileProvider.fieldPop( 'safe', 0 );
   }
 }
 
@@ -76,7 +76,7 @@ function flatMapFromTree( tree, currentPath, paths )
 function archive( test )
 {
   var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
-  _.fileProvider.fieldSet( 'safe', 0 );
+  _.fileProvider.fieldPush( 'safe', 0 );
 
   test.case = 'multilevel files tree';
 
@@ -142,7 +142,7 @@ function archive( test )
   test.identical( archive, provider.archive.fileMap );
 
 
-  _.fileProvider.fieldReset( 'safe', 0 );
+  _.fileProvider.fieldPop( 'safe', 0 );
 }
 
 //
@@ -150,7 +150,7 @@ function archive( test )
 function restoreLinks( test )
 {
   var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
-  _.fileProvider.fieldSet( 'safe', 0 );
+  _.fileProvider.fieldPush( 'safe', 0 );
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = testRoutineDir;
@@ -489,7 +489,7 @@ function restoreLinks( test )
   /* checking if link was recovered by comparing content of a files */
   test.identical( provider.filesAreHardLinked( paths ), null );
 
-  _.fileProvider.fieldReset( 'safe', 0 );
+  _.fileProvider.fieldPop( 'safe', 0 );
 
 }
 
@@ -501,7 +501,7 @@ function restoreLinksComplex( test )
 {
 
   var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
-  _.fileProvider.fieldSet( 'safe', 0 );
+  _.fileProvider.fieldPush( 'safe', 0 );
 
   var provider = _.FileFilter.Archive({ original : new _.FileProvider.Default() });
   provider.verbosity = 0;
@@ -793,7 +793,7 @@ function restoreLinksComplex( test )
   }
 
 
-  _.fileProvider.fieldReset( 'safe', 0 );
+  _.fileProvider.fieldPop( 'safe', 0 );
 }
 
 restoreLinksComplex.timeOut = 120000;
@@ -804,7 +804,7 @@ function filesLinkSame( test )
 {
   var context = this;
   var dir = _.path.join( context.testRootDirectory, test.name );
-  _.fileProvider.fieldSet( 'safe', 0 );
+  _.fileProvider.fieldPush( 'safe', 0 );
   var provider;
 
   function begin()
@@ -878,7 +878,7 @@ function filesLinkSame( test )
   provider.finit();
   provider.archive.finit();
 
-  _.fileProvider.fieldReset( 'safe', 0 );
+  _.fileProvider.fieldPop( 'safe', 0 );
 }
 
 //
@@ -887,7 +887,7 @@ function severalPaths( test )
 {
   var context = this;
   var dir = _.path.join( context.testRootDirectory, test.name );
-  _.fileProvider.fieldSet( 'safe', 0 );
+  _.fileProvider.fieldPush( 'safe', 0 );
   var provider;
 
   function begin()
@@ -956,7 +956,7 @@ function severalPaths( test )
   provider.finit();
   provider.archive.finit();
 
-  _.fileProvider.fieldReset( 'safe', 0 );
+  _.fileProvider.fieldPop( 'safe', 0 );
 }
 
 //
@@ -964,7 +964,7 @@ function severalPaths( test )
 function storageOperations( test )
 {
   let context = this;
-  _.fileProvider.fieldSet( 'safe', 0 );
+  _.fileProvider.fieldPush( 'safe', 0 );
   let dir = _.path.join( context.testRootDirectory, test.name );
 
   _.fileProvider.filesDelete( dir );
@@ -1079,7 +1079,7 @@ function storageOperations( test )
   provider.finit();
   provider.archive.finit();
 
-  _.fileProvider.fieldReset( 'safe', 0 );
+  _.fileProvider.fieldPop( 'safe', 0 );
 }
 
 //
@@ -1087,7 +1087,7 @@ function storageOperations( test )
 function inodeExperiment( test )
 {
   let context = this;
-  _.fileProvider.fieldSet( 'safe', 0 );
+  _.fileProvider.fieldPush( 'safe', 0 );
 
   if( Config.platform !== 'nodejs' )
   if( process.platform !== 'win32' )
@@ -1158,7 +1158,7 @@ function inodeExperiment( test )
   provider.finit();
   provider.archive.finit();
 
-  _.fileProvider.fieldReset( 'safe', 0 );
+  _.fileProvider.fieldPop( 'safe', 0 );
 
   /* */
 
