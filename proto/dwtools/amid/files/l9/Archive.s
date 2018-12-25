@@ -74,7 +74,7 @@ function filesUpdate()
   archive.mask = _.RegexpObject( archive.mask );
 
   let files = [];
-  fileProvider.filesFind
+  let found = fileProvider.filesFind
   ({
     filePath : filePath,
     filter :
@@ -86,6 +86,7 @@ function filesUpdate()
     includingTerminals : 1,
     includingDirs : 1,
     includingTransient : 0,
+    resolvingSoftLink : 1,
     recursive : '2',
   });
 
