@@ -39,9 +39,8 @@
     "wstatestorage": ""
   },
   "devDependencies": {
-    "wTesting": "",
     "wait-sync": "",
-    "wfilesarchive": "."
+    "wTesting": ""
   },
   "keywords": [
     "wTools",
