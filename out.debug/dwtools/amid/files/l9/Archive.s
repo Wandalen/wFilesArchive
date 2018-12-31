@@ -87,7 +87,7 @@ function filesUpdate()
     includingDirs : 1,
     includingTransient : 0,
     resolvingSoftLink : 1,
-    recursive : '2',
+    recursive : 2,
   });
 
   archive.fileRemovedMap = fileMapOld;
