@@ -309,8 +309,6 @@ let timelapseCallFileCopyAct = timelapseLinkingHook_functor( function fileCopyAc
     return end();
   }
 
-  // return self.originalCall( op );
-
   let dstStat = dstRecord.stat;
   let srcStat = op.originalFileProvider.statRead({ filePath : o2.srcPath, sync : 1 });
 
@@ -326,10 +324,15 @@ let timelapseCallFileCopyAct = timelapseLinkingHook_functor( function fileCopyAc
   if( identical )
   if( !_.statsAreHardLinked( srcStat, dstStat ) )
   {
-    let dstHash = dstRecord.hashRead();
-    let srcHash = op.originalFileProvider.hashRead({ sync : 1, filePath : o2.srcPath });
-    if( !srcHash || srcHash !== dstHash )
+    if( _.statsHaveDifferentContent( srcStat, dstStat ) )
     identical = false;
+    if( identical )
+    {
+      let dstHash = dstRecord.hashRead();
+      let srcHash = op.originalFileProvider.hashRead({ sync : 1, filePath : o2.srcPath });
+      if( !srcHash || srcHash !== dstHash )
+      identical = false;
+    }
   }
 
   if( !identical )

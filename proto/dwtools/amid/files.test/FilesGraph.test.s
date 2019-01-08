@@ -146,6 +146,7 @@ function trivial( test )
 
   var extract = _.FileProvider.Extract
   ({
+    usingExtraStat : 1,
     filesTree :
     {
       src :
