@@ -35,6 +35,9 @@ function init( o )
   self.copy( o );
   Object.preventExtensions( self );
 
+  _.assert( self.records === null );
+  self.records = new _.FileRecordFilter({ defaultFileProvider : self.imageFileProvider });
+
   self.records.filePath = self.records.filePath || Object.create( null );
 }
 
@@ -100,7 +103,8 @@ let Aggregates =
 
 let Associates =
 {
-  records : _.define.ownInstanceOf( _.FileRecordFilter ),
+  // records : _.define.ownInstanceOf( _.FileRecordFilter ),
+  records : null,
   originalFileProvider : null,
   imageFileProvider : null,
 }
