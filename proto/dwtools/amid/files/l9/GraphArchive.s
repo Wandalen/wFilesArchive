@@ -45,6 +45,9 @@ function form()
   _.assert( self.imageFileProvider instanceof _.FileProvider.Abstract );
   _.assert( self.imageFileProvider.onCallBegin === null );
   _.assert( self.imageFileProvider.onCallEnd === null );
+  _.assert( self.imageFileProvider.archive === null || self.imageFileProvider.archive === self );
+
+  self.imageFileProvider.archive = self;
 
   self.factory = new _.ArchiveRecordFactory
   ({
@@ -53,7 +56,6 @@ function form()
   });
 
   // self.records.filePath = self.records.filePath || Object.create( null );
-
   // self.imageFileProvider.onCallBegin = self.callLog;
 
   if( self.timelapseUsing )
@@ -66,11 +68,10 @@ function form()
 function originalCall( op )
 {
   let o2 = op.args[ 0 ];
-  if( op.reads.length )
-  logger.log( 'original', op.routine.name, 'read', _.select( o2, op.reads ).join( ', ' ) );
-  if( op.writes.length )
-  logger.log( 'original', op.routine.name, 'write', _.select( o2, op.writes ).join( ', ' ) );
-  // op.result = op.originalBody.apply( op.image, op.args );
+  // if( op.reads.length )
+  // logger.log( 'original', op.routine.name, 'read', _.select( o2, op.reads ).join( ', ' ) );
+  // if( op.writes.length )
+  // logger.log( 'original', op.routine.name, 'write', _.select( o2, op.writes ).join( ', ' ) );
   op.originalCall();
 }
 
@@ -135,26 +136,18 @@ function timelapseSingleHook_functor( onDelayed )
     let path = op.originalFileProvider.path;
     let o2 = op.args[ 0 ];
 
-    // if( o2.filePath === undefined )
-    // return self.originalCall( op );
-
     _.assert( op.args.length === 1 );
     _.assert( arguments.length === 1 );
     _.assert( path.isAbsolute( o2.filePath ) );
-
-    // if( !op.writesPaths )
-    // op.writesPaths = _.arrayFlatten( null, _.select( o2, op.writes ) );
-    // if( !op.readsPaths )
-    // op.readsPaths = _.arrayFlatten( null, _.select( o2, op.reads ) );
 
     let arecord = self.factory.records.filePath[ o2.filePath ];
     if( arecord && arecord.deleting === 1 )
     {
 
-      if( op.writesPaths.length )
-      logger.log( 'after delay', op.routine.name, 'write', op.writesPaths.join( ', ' ) );
-      if( op.readsPaths.length )
-      logger.log( 'after delay', op.routine.name, 'read', op.readsPaths.join( ', ' ) );
+      // if( op.writesPaths.length )
+      // logger.log( 'after delay', op.routine.name, 'write', op.writesPaths.join( ', ' ) );
+      // if( op.readsPaths.length )
+      // logger.log( 'after delay', op.routine.name, 'read', op.readsPaths.join( ', ' ) );
 
       onDelayed.call( self, op, arecord );
       return;
@@ -184,10 +177,10 @@ function timelapseLinkingHook_functor( onDelayed )
     let srcRecord = self.factory.records.filePath[ o2.srcPath ];
     let dstRecord = self.factory.records.filePath[ o2.dstPath ];
 
-    if( op.writesPaths.length )
-    logger.log( 'after delay', op.routine.name, 'write', op.writesPaths.join( ', ' ) );
-    if( op.readsPaths.length )
-    logger.log( 'after delay', op.routine.name, 'read', op.readsPaths.join( ', ' ) );
+    // if( op.writesPaths.length )
+    // logger.log( 'after delay', op.routine.name, 'write', op.writesPaths.join( ', ' ) );
+    // if( op.readsPaths.length )
+    // logger.log( 'after delay', op.routine.name, 'read', op.readsPaths.join( ', ' ) );
 
     if( ( srcRecord && srcRecord.deleting ) || ( dstRecord && dstRecord.deleting ) )
     return onDelayed.call( self, op, dstRecord, srcRecord );
@@ -213,16 +206,11 @@ function timelapseCallDelete( op )
   if( !stat.isTerminal() && !stat.isDir() )
   return self.originalCall( op );
 
-  logger.log( 'delaying', op.routine.name, _.select( o2, op.writes ).join( ', ' ) );
+  // logger.log( 'delaying', op.routine.name, _.select( o2, op.writes ).join( ', ' ) );
 
   let arecord = self.factory.record( o2.filePath );
 
   _.assert( path.isAbsolute( o2.filePath ) );
-
-  // if( self.records.filePath[ o2.filePath ] === undefined )
-  // self.records.filePath[ o2.filePath ] = new _.ArchiveRecord({ absolute : o2.filePath });
-  // let arecord = self.records.filePath[ o2.filePath ];
-  // arecord.fileProvider = op.image;
 
   arecord.stat = stat;
   arecord.deleting = 1;
@@ -230,10 +218,6 @@ function timelapseCallDelete( op )
 
   _.assert( arecord === self.factory.records.filePath[ o2.filePath ] );
   _.assert( arecord.factory === self.factory );
-  // _.assert( arecord.fileProvider === op.image );
-
-  // if( arecord.absolute === '/dst/diff' )
-  // debugger;
 
 }
 
@@ -363,7 +347,7 @@ let timelapseCallFileCopyAct = timelapseLinkingHook_functor( function fileCopyAc
 
 //
 
-let timelapseCallHardLinkAct = timelapseLinkingHook_functor( function fileCopyAct( op, dstRecord, srcRecord )
+let timelapseCallHardLinkAct = timelapseLinkingHook_functor( function hardLinkAct( op, dstRecord, srcRecord )
 {
   let self = this;
   let o2 = op.args[ 0 ];
@@ -387,6 +371,7 @@ let timelapseCallHardLinkAct = timelapseLinkingHook_functor( function fileCopyAc
     return end();
   }
 
+  debugger;
   if( op.originalFileProvider.filesAreHardLinked( o2.srcPath, o2.dstPath ) )
   {
     dstRecord.finit();
@@ -439,6 +424,7 @@ function callLog( op )
 function timelapseBegin( o )
 {
   let self = this;
+  let logger = self.logger;
 
   o = _.routineOptions( timelapseBegin, arguments );
 
@@ -447,7 +433,7 @@ function timelapseBegin( o )
 
   self.timelapseMode = 1;
 
-  logger.log( 'Timelaps begin' );
+  // logger.log( 'Timelapse begin' );
 }
 
 timelapseBegin.defaults =
@@ -459,6 +445,7 @@ timelapseBegin.defaults =
 function timelapseEnd( o )
 {
   let self = this;
+  let logger = self.logger;
 
   o = _.routineOptions( timelapseEnd, arguments );
 
@@ -466,7 +453,7 @@ function timelapseEnd( o )
 
   self.factory.recordsTimelapsedDelete();
 
-  logger.log( 'Timelaps end' );
+  // logger.log( 'Timelapse end' );
 }
 
 timelapseEnd.defaults =
@@ -507,7 +494,6 @@ let Associates =
 {
   factory : null,
   imageFileProvider : null,
-  // records : _.define.ownInstanceOf( _.FileRecordFilter ),
 }
 
 let Restricts =
