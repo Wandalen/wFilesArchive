@@ -231,7 +231,6 @@ function filesLinkSame( o )
   let hashReadMap = archive.filesHashMapForm();
   o = _.routineOptions( filesLinkSame,arguments );
 
-  debugger;
   for( let f in hashReadMap )
   {
     let files = hashReadMap[ f ];
