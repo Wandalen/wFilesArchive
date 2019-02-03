@@ -103,7 +103,7 @@ let Aggregates =
 
 let Associates =
 {
-  // records : _.define.ownInstanceOf( _.FileRecordFilter ),
+  // records : _.define.instanceOf( _.FileRecordFilter ),
   records : null,
   originalFileProvider : null,
   imageFileProvider : null,
