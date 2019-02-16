@@ -4,7 +4,7 @@ about :
 
   name : "wFilesArchive"
   description : "Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload."
-  version : "0.3.135"
+  version : "0.3.136"
   enabled : 1
   interpreters :
   - nodejs >= 6.0.0
