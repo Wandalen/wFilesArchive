@@ -2,15 +2,6 @@
 
 'use strict';
 
-let File;
-
-if( typeof module !== 'undefined' )
-{
-
-  require( '../IncludeArchive.s' );
-
-}
-
 //
 
 let _global = _global_;
@@ -29,41 +20,114 @@ Self.shortName = 'ArchiveRecord';
 
 function finit()
 {
-  let self = this;
-  self.deleting = 0;
-  self.deletingOptions = null;
-  self.stat = null;
-  _.Copyable.prototype.finit.apply( self, arguments );
+  let record = this;
+  let factory = record.factory;
+
+  _.assert( factory.records.filePath[ record.absolute ] === record );
+  delete factory.records.filePath[ record.absolute ];
+
+  // debugger;
+
+  record.deleting = 0;
+  record.deletingOptions = null;
+  record.stat = null;
+
+  _.Copyable.prototype.finit.apply( record, arguments );
 }
 
 //
 
 function init( o )
 {
-  let self = this;
+  let record = this;
 
-  _.instanceInit( self );
+  _.instanceInit( record );
 
   if( o )
   {
-    self.copy( o );
+    record.copy( o );
     if( o.absolute )
-    self.absolute = o.absolute;
+    record.absolute = o.absolute;
   }
 
-  Object.preventExtensions( self );
+  Object.preventExtensions( record );
 
-  _.assert( _.strIs( self.absolute ) );
+  _.assert( _.strIs( record.absolute ) );
+  _.assert( record.factory instanceof _.ArchiveRecordFactory );
+
+  let factory = record.factory;
+  let path = factory.originalFileProvider.path;
+
+  _.assert( path.isAbsolute( record.absolute ) );
+  _.assert( factory.records.filePath[ record.absolute ] === undefined );
+
+  factory.records.filePath[ record.absolute ] = record;
+
 }
 
 //
 
-function hashGet()
+function hashRead()
 {
-  let self = this;
+  let record = this;
 
-  self.hash = self.fileProvider.hashRead( self.absolute );
+  _.assert( arguments.length === 0 );
 
+  if( !record.hash )
+  record.hash = record.factory.originalFileProvider.hashRead( record.absolute );
+
+  return record.hash;
+}
+
+//
+
+function timelapsedDelete()
+{
+  let record = this;
+  let factory = record.factory;
+
+  logger.log( 'timelapsedDelete', record.absolute ); debugger;
+
+  _.assert( _.mapIs( record.deletingOptions ) );
+  _.assert( arguments.length === 0 );
+
+  record.deletingOptions.sync = 1;
+
+  let result = factory.originalFileProvider.fileDeleteAct( record.deletingOptions );
+
+  record.deletingOptions = null;
+  record.deleting = 0;
+
+  return result;
+}
+
+//
+
+function timelapsedSubFilesDelete()
+{
+  let record = this;
+  let factory = record.factory;
+  let path = factory.originalFileProvider.path;
+  let result = 0;
+
+  _.assert( _.mapIs( record.deletingOptions ) );
+  _.assert( arguments.length === 0 );
+
+  for( let f in factory.records.filePath )
+  {
+    let record2 = factory.records.filePath[ f ];
+
+    if( record2.deleting && record2 !== record )
+    if( path.begins( record2.absolute, record.absolute ) )
+    {
+      record2.timelapsedDelete();
+      record2.finit();
+      result += 1;
+    }
+
+  }
+
+  return result;
 }
 
 // --
@@ -84,7 +148,7 @@ let Associates =
 {
   deletingOptions : null,
   stat : null,
-  fileProvider : null,
+  factory : null,
 }
 
 let Restricts =
@@ -103,6 +167,7 @@ let Statics =
 
 let Forbids =
 {
+  fileProvider : 'fileProvider',
 }
 
 // --
@@ -115,7 +180,9 @@ let Extend =
   finit,
   init,
 
-  hashGet,
+  hashRead,
+  timelapsedDelete,
+  timelapsedSubFilesDelete,
 
   //
 
