@@ -1,6 +1,6 @@
 ( function _AtchiveRecordFactory_s_() {
 
-'use strict';
+'use strict'; /*aaa*/
 
 //
 
