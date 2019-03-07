@@ -37,7 +37,7 @@ function onSuiteEnd()
 {
   if( Config.platform === 'nodejs' )
   {
-    _.assert( _.strEnds( this.testRootDirectory, 'Archive' ) )
+    _.assert( _.strHas( this.testRootDirectory, 'Archive' ) )
     _.fileProvider.fieldPush( 'safe', 0 );
     _.fileProvider.filesDelete( this.testRootDirectory );
     _.fileProvider.fieldPop( 'safe', 0 );
@@ -1026,6 +1026,12 @@ function storageOperations( test )
   provider.archive.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.fileMapAutoLoading = 1;
+ 
+  //simulate file change before filesUpdate
+  let time = new Date( 98, 1 );
+  provider.fileTimeSet( _.path.join( dir, 'dir1/a' ), time,time );
+  provider.fileTimeSet( _.path.join( dir, 'dir2/a' ), time,time );
+  provider.fileTimeSet( _.path.join( dir, 'dir3/x' ), time,time );
 
   provider.archive.filesUpdate();
 
@@ -1042,12 +1048,16 @@ function storageOperations( test )
 
     test.case = 'archive on disk and fileMap have same files';
     test.is( _.arraySetContainAll( filePaths, _.mapOwnKeys( filesMap ) ) );
-
+    
+    // filesMap is not upToDate if at least one file from map was changed
     test.case = 'archive on disk is not updated';
-    let upToDate = _.all( _.mapOwnKeys( filesMap ), ( filePath ) =>
-    {
-      return _.entityIdentical( filesMap[ filePath ], provider.archive.fileMap[ filePath ] );
-    });
+    let upToDate = true;
+    for( let filePath in filesMap )
+    if( !_.entityIdentical( filesMap[ filePath ], provider.archive.fileMap[ filePath ] ) )
+    { 
+      upToDate = false;
+      break;
+    }
     test.is( !upToDate );
   });
 
