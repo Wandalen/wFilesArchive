@@ -85,6 +85,7 @@ reflector:
     src:
       filePath:
         .: .
+      prefixPath: proto
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -97,7 +98,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /\.debug($|\.|\/)/i
           - !<tag:yaml.org,2002:js/regexp> /\.test($|\.|\/)/i
           - !<tag:yaml.org,2002:js/regexp> /\.experiment($|\.|\/)/i
-      prefixPath: proto
     dst:
       prefixPath: out/release
     criterion:
@@ -108,6 +108,7 @@ reflector:
     src:
       filePath:
         .: .
+      prefixPath: proto
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -118,7 +119,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /\.DS_Store$/
           - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
           - !<tag:yaml.org,2002:js/regexp> /\.release($|\.|\/)/i
-      prefixPath: proto
     dst:
       prefixPath: out/debug
     criterion:
@@ -144,7 +144,7 @@ reflector:
   exported.proto.export:
     src:
       filePath:
-        .: true
+        .: null
       prefixPath: proto
     criterion:
       default: 1
@@ -158,26 +158,26 @@ reflector:
     recursive: 0
     src:
       filePath:
-        .: true
-        dwtools: true
-        dwtools/Tools.s: true
-        dwtools/abase: true
-        dwtools/amid: true
-        dwtools/amid/files: true
-        dwtools/amid/files/IncludeArchive.s: true
-        dwtools/amid/files/l2: true
-        dwtools/amid/files/l2/ArchiveRecord.s: true
-        dwtools/amid/files/l2/ArchiveRecordFactory.s: true
-        dwtools/amid/files/l8_filter: true
-        dwtools/amid/files/l8_filter/Archive.s: true
-        dwtools/amid/files/l9: true
-        dwtools/amid/files/l9/Archive.s: true
-        dwtools/amid/files/l9/GraphArchive.s: true
-        dwtools/amid/files/l9/GraphOld.s: true
-        dwtools/amid/files.test: true
-        dwtools/amid/files.test/FileFilter.Archive.test.s: true
-        dwtools/amid/files.test/FilesGraph.test.s: true
-        dwtools/atop: true
+        .: null
+        dwtools: null
+        dwtools/Tools.s: null
+        dwtools/abase: null
+        dwtools/amid: null
+        dwtools/amid/files: null
+        dwtools/amid/files/IncludeArchive.s: null
+        dwtools/amid/files/l2: null
+        dwtools/amid/files/l2/ArchiveRecord.s: null
+        dwtools/amid/files/l2/ArchiveRecordFactory.s: null
+        dwtools/amid/files/l8_filter: null
+        dwtools/amid/files/l8_filter/Archive.s: null
+        dwtools/amid/files/l9: null
+        dwtools/amid/files/l9/Archive.s: null
+        dwtools/amid/files/l9/GraphArchive.s: null
+        dwtools/amid/files/l9/GraphOld.s: null
+        dwtools/amid/files.test: null
+        dwtools/amid/files.test/FileFilter.Archive.test.s: null
+        dwtools/amid/files.test/FilesGraph.test.s: null
+        dwtools/atop: null
       basePath: .
       prefixPath: proto
     criterion:
