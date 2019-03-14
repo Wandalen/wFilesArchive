@@ -299,6 +299,7 @@ var Self =
 
   name : 'Tools/mid/files/Graph',
   silencing : 1,
+  enabled : 0,
 
   context :
   {
