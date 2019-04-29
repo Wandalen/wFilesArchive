@@ -1,6 +1,6 @@
 ( function _GraphArchive_s_() {
 
-'use strict'; 
+'use strict';
 
 //
 

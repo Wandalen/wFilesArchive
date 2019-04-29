@@ -1,6 +1,6 @@
 ( function _FilesGraph_test_s_( ) {
 
-'use strict'; /* aaa */ 
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
@@ -93,6 +93,7 @@ function trivial( test )
 
   image.filesDelete( '/dst' );
 
+  debugger;
   var records = image.filesReflect
   ({
     reflectMap : { '/src' : '/dst' },
@@ -115,6 +116,8 @@ function trivial( test )
   test.identical( gotAbsolutes, expAbsolutes );
   test.identical( gotActions, expActions );
   test.identical( gotPreserve, expPreserve );
+
+  debugger; return; xxx
 
   /* - */
 
@@ -299,7 +302,7 @@ var Self =
 
   name : 'Tools/mid/files/Graph',
   silencing : 1,
-  enabled : 0,
+  enabled : 1,
 
   context :
   {

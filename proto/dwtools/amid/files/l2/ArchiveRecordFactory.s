@@ -1,6 +1,6 @@
 ( function _AtchiveRecordFactory_s_() {
 
-'use strict'; 
+'use strict';
 
 //
 
@@ -78,6 +78,8 @@ function recordsTimelapsedDelete()
 {
   let self = this;
   let filePath = _.mapKeys( self.records.filePath )
+
+  debugger;
 
   for( let f = filePath.length-1 ; f >= 0 ; f-- )
   {

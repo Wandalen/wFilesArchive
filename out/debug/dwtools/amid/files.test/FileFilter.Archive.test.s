@@ -1,6 +1,6 @@
 ( function _FileFilter_Archive_test_s_( ) {
 
-'use strict'; /* aaa */ 
+'use strict';  
 
 if( typeof module !== 'undefined' )
 {
