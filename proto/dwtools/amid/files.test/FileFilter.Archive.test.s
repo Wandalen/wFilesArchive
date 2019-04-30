@@ -1269,7 +1269,7 @@ function tester( test )
 var Self =
 {
 
-  name : 'Tools/mid/files/fileFilter/Archive',
+  name : 'Tools/mid/files//*fileFilter*/src/Archive',
   silencing : 1,
   // verbosity : 4,
   // importanceOfNegative : 5,
