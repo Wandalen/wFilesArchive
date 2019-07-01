@@ -1,6 +1,6 @@
 ( function _FilesArchive_s_() {
 
-'use strict'; 
+'use strict';
 
 /**
  * Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.
@@ -77,7 +77,7 @@ function filesUpdate()
   let files = [];
   let found = fileProvider.filesFind
   ({
-    filePath : filePath,
+    filePath,
     filter :
     {
       maskAll : archive.mask,
@@ -132,7 +132,7 @@ function filesUpdate()
       let storagageFilePath = archive.storageFileFromDirPath( fileRecord.absolute );
       let storage = loaded[ storagageFilePath ].storage;
       if( storage && fileRecord.isStem )
-      archive.storageLoaded({ storageFilePath : storagageFilePath, storage : storage });
+      archive.storageLoaded({ storageFilePath : storagageFilePath, storage });
     }
 
     if( archive.verbosity >= 7 )
@@ -215,10 +215,6 @@ function filesHashMapForm()
     else
     archive.hashReadMap[ file.hash ] = [ file.absolutePath ];
   }
-
-  // debugger;
-  // for( let h in archive.hashReadMap )
-  // logger.log( archive.hashReadMap[ h ].length, _.toStr( archive.hashReadMap[ h ],{ levels : 3, wrap : 0 } ) );
 
   return archive.hashReadMap;
 }
@@ -367,7 +363,7 @@ function restoreLinksEnd()
         debugger;
         _.assert( dstFile.size === srcFile.size );
         restored += 1;
-        provider.hardLink({ dstPath : dstPath, srcPath : srcPath, verbosity : archive.verbosity });
+        provider.hardLink({ dstPath, srcPath, verbosity : archive.verbosity });
         linkedMap[ dstPath ] = filesWithHash[ last ];
       }
     }
@@ -393,27 +389,13 @@ function _loggerGet()
 // storage
 // --
 
-// function storageDirPathGet( storageDirPath )
-// {
-//   let self = this;
-//   let fileProvider = self.fileProvider;
-//
-//   _.assert( arguments.length === 0 || arguments.length === 1 );
-//   _.assert( !!storageDirPath );
-//   _.assert( _.all( storageDirPath, ( path ) => fileProvider.path.isAbsolute( path ) ) );
-//
-//   return storageDirPath;
-// }
-
-//
-
 function storageFilePathToSaveGet( storageDirPath )
 {
   let self = this;
   let fileProvider = self.fileProvider;
   let storageFilePath = null;
 
-  _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( arguments.length === 0 || arguments.length === 1 ); debugger;
 
   storageFilePath = _.select( self.storagesLoaded, '*/filePath' );
 
@@ -518,13 +500,11 @@ let Composes =
   replacingByNewest : 1,
   maxSize : null,
 
-  fileByHashMap : _.define.own( {} ),
-
+  // fileByHashMap : _.define.own( {} ),
   fileMap : _.define.own( {} ),
   fileAddedMap : _.define.own( {} ),
   fileRemovedMap : _.define.own( {} ),
   fileModifiedMap : _.define.own( {} ),
-
   hashReadMap : null,
 
   fileMapAutosaving : 0,
@@ -533,7 +513,6 @@ let Composes =
   mask : _.define.own( mask ), /* !!! not shallow clone required */
 
   storageFileName : '.warchive',
-
   storageSaveAsJs : true
 
 }
@@ -564,7 +543,6 @@ let Forbids =
 let Accessors =
 {
   logger : { readOnly : 1 },
-  // storage : 'storage',
 }
 
 // --
@@ -574,35 +552,32 @@ let Accessors =
 let Proto =
 {
 
-  init : init,
+  init,
 
-  filesUpdate : filesUpdate,
-  filesHashMapForm : filesHashMapForm,
-  filesLinkSame : filesLinkSame,
+  filesUpdate,
+  filesHashMapForm,
+  filesLinkSame,
 
-  restoreLinksBegin : restoreLinksBegin,
-  restoreLinksEnd : restoreLinksEnd,
+  restoreLinksBegin,
+  restoreLinksEnd,
 
-  _loggerGet : _loggerGet,
+  _loggerGet,
 
   // storage
 
-  // storageDirPathGet : storageDirPathGet,
-  storageFilePathToSaveGet : storageFilePathToSaveGet,
-  storageToSave : storageToSave,
-  storageLoaded : storageLoaded,
-  // _storageSet : _.accessor.setter.alias({ original : 'fileMap', alias : 'storage' }),
-  // _storageGet : _.accessor.getter.alias({ original : 'fileMap', alias : 'storage' }),
+  storageFilePathToSaveGet,
+  storageToSave,
+  storageLoaded,
 
   //
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
-  Forbids : Forbids,
-  Accessors : Accessors,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
+  Forbids,
+  Accessors,
 
 }
 

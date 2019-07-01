@@ -1,6 +1,6 @@
 ( function _FileFilter_Archive_test_s_( ) {
 
-'use strict';  
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
@@ -104,7 +104,7 @@ function archive( test )
   _.fileProvider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
   _.FileProvider.Extract.readToProvider
   ({
-    filesTree : filesTree,
+    filesTree,
     dstPath : testRoutineDir,
     dstProvider : _.fileProvider,
   });
@@ -157,7 +157,7 @@ function restoreLinks( test )
   provider.archive.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 1;
-  
+
   let hardLinked = true;
 
   if( provider.original instanceof _.FileProvider.HardDrive )
@@ -613,7 +613,7 @@ function restoreLinksComplex( test )
     test.identical( provider.archive.fileMapAutosaving, 0 );
     test.identical( provider.archive.storageFileName, '.warchive' );
     // test.identical( provider.archive.dependencyMap, {} );
-    test.identical( provider.archive.fileByHashMap, {} );
+    // test.identical( provider.archive.fileByHashMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
     test.identical( provider.archive.fileRemovedMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
@@ -691,7 +691,7 @@ function restoreLinksComplex( test )
     test.identical( provider.archive.fileMapAutosaving, 0 );
     test.identical( provider.archive.storageFileName, '.warchive' );
     // test.identical( provider.archive.dependencyMap, {} );
-    test.identical( provider.archive.fileByHashMap, {} );
+    // test.identical( provider.archive.fileByHashMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
     test.identical( provider.archive.fileRemovedMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
@@ -769,7 +769,7 @@ function restoreLinksComplex( test )
     test.identical( provider.archive.fileMapAutosaving, 0 );
     test.identical( provider.archive.storageFileName, '.warchive' );
     // test.identical( provider.archive.dependencyMap, {} );
-    test.identical( provider.archive.fileByHashMap, {} );
+    // test.identical( provider.archive.fileByHashMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
     test.identical( provider.archive.fileRemovedMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
@@ -842,7 +842,7 @@ function filesLinkSame( test )
 
     _.FileProvider.Extract.readToProvider
     ({
-      filesTree : filesTree,
+      filesTree,
       dstProvider : provider,
       dstPath : dir,
     });
@@ -944,7 +944,7 @@ function severalPaths( test )
 
     _.FileProvider.Extract.readToProvider
     ({
-      filesTree : filesTree,
+      filesTree,
       dstProvider : provider,
       dstPath : dir,
     });
@@ -1024,7 +1024,7 @@ function storageOperations( test )
 
   _.FileProvider.Extract.readToProvider
   ({
-    filesTree : filesTree,
+    filesTree,
     dstProvider : provider,
     dstPath : dir,
   });
@@ -1053,7 +1053,7 @@ function storageOperations( test )
   provider.archive.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.fileMapAutoLoading = 1;
- 
+
   //simulate file change before filesUpdate
   let time = new Date( 98, 1 );
   provider.fileTimeSet( _.path.join( dir, 'dir1/a' ), time,time );
@@ -1075,13 +1075,13 @@ function storageOperations( test )
 
     test.case = 'archive on disk and fileMap have same files';
     test.is( _.arraySetContainAll( filePaths, _.mapOwnKeys( filesMap ) ) );
-    
+
     // filesMap is not upToDate if at least one file from map was changed
     test.case = 'archive on disk is not updated';
     let upToDate = true;
     for( let filePath in filesMap )
     if( !_.entityIdentical( filesMap[ filePath ], provider.archive.fileMap[ filePath ] ) )
-    { 
+    {
       upToDate = false;
       break;
     }
@@ -1242,7 +1242,7 @@ function tester( test )
 
   var tests =
   {
-    restoreLinksComplex : restoreLinksComplex
+    restoreLinksComplex
   }
 
   for( var t in tests )
@@ -1275,8 +1275,8 @@ var Self =
   // importanceOfNegative : 5,
   // routine : 'restoreLinks',
 
-  onSuiteBegin : onSuiteBegin,
-  onSuiteEnd : onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
 
   context :
   {
@@ -1287,15 +1287,15 @@ var Self =
   tests :
   {
 
-    archive : archive,
-    restoreLinks : restoreLinks,
-    restoreLinksComplex : restoreLinksComplex,
-    filesLinkSame : filesLinkSame,
-    severalPaths : severalPaths,
-    storageOperations : storageOperations,
-    inodeExperiment : inodeExperiment,
+    archive,
+    restoreLinks,
+    restoreLinksComplex,
+    filesLinkSame,
+    severalPaths,
+    storageOperations,
+    inodeExperiment,
 
-    // tester : tester,
+    // tester,
 
   },
 
