@@ -9,7 +9,7 @@ let _ = _global_.wTools;
 let Parent = null;
 let Self = function wArchiveRecord( o )
 {
-  return _.instanceConstructor( Self, this, arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 Self.shortName = 'ArchiveRecord';
@@ -41,7 +41,7 @@ function init( o )
 {
   let record = this;
 
-  _.instanceInit( record );
+  _.workpiece.initFields( record );
 
   if( o )
   {

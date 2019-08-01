@@ -19,7 +19,7 @@ let Parent = null;
 let Self = function wFilesGraphOld( o )
 {
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects single argument' );
-  return _.instanceConstructor( Self, this, arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 Self.shortName = 'FilesGraphOld';
@@ -32,7 +32,7 @@ function init( o )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  _.instanceInit( self );
+  _.workpiece.initFields( self );
   Object.preventExtensions( self )
 
   if( o )

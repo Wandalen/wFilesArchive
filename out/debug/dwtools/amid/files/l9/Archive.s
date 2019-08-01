@@ -18,7 +18,7 @@ let _ = _global_.wTools;
 let Parent = null;
 let Self = function wFilesArchive( o )
 {
-  return _.instanceConstructor( Self, this, arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 Self.shortName = 'FilesArchive';
@@ -31,7 +31,7 @@ function init( o )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  _.instanceInit( archive );
+  _.workpiece.initFields( archive );
   Object.preventExtensions( archive )
 
   if( o )
