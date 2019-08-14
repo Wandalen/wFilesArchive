@@ -72,6 +72,7 @@ function filesUpdate()
 
   /* */
 
+  debugger;
   archive.mask = _.RegexpObject( archive.mask );
 
   let files = [];
@@ -481,7 +482,7 @@ let mask =
     /\.DS_Store$/,
     /\.tmp($|\/|\.)/,
     /\.big($|\/|\.)/,
-    /(^|\/)\.(?!$|\/)/,
+    // /(^|\/)\.(?!$|\/)/,
     /(^|\/)\-(?!$|\/)/,
   ],
 };
