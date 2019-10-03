@@ -248,14 +248,39 @@ function filesLinkSame( o )
         byName[ name ] = [ path ];
       });
       for( let name in byName )
-      provider.hardLink({ dstPath : byName[ name ], verbosity : archive.verbosity });
+      {
+        files = filterFiles( byName[ name ] );
+        if( files.length < 2 )
+        continue;
+        provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
+      }
     }
     else
     {
       // console.log( 'archive.verbosity',archive.verbosity );
+      files = filterFiles( files );
+      if( files.length < 2 )
+      continue;
       provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
     }
+  }
 
+  /*  */
+
+  function filterFiles( files )
+  {
+    let fileA;
+    let result = files.filter( ( fileB ) =>
+    {
+      if( !archive.fileMap[ fileB ].size )
+      return false;
+      fileB = provider.fileRead({ filePath : fileB, encoding : 'original.type' });
+      if( fileA === undefined )
+      fileA = provider.fileRead({ filePath : files[ 0 ], encoding : 'original.type' });
+      return _.entityIdentical( fileA, fileB );
+    })
+
+    return result;
   }
 
   return archive;
