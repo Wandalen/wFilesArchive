@@ -60,7 +60,7 @@ function filesUpdate()
   archive.fileModifiedMap = Object.create( null );
   archive.hashReadMap = null;
 
-  _.assert( _.strDefined( archive.basePath ) || _.strsAreNotEmpty( archive.basePath ) );
+  _.assert( _.strDefined( archive.basePath ) || _.strsDefined( archive.basePath ) );
 
   let filePath = _.strJoin([ archive.basePath, '/**' ]);
   if( archive.verbosity >= 3 )
@@ -72,7 +72,6 @@ function filesUpdate()
 
   /* */
 
-  debugger;
   archive.mask = _.RegexpObject( archive.mask );
 
   let files = [];
@@ -83,13 +82,13 @@ function filesUpdate()
     {
       maskAll : archive.mask,
       maskTransientAll : archive.mask,
+      recursive : 2,
     },
     onUp : onFile,
-    includingTerminals : 1,
-    includingDirs : 1,
-    includingTransient : 0,
+    withTerminals : 1,
+    withDirs : 1,
+    withStem/*maybe withTransient*/ : 0,
     resolvingSoftLink : 1,
-    recursive : 2,
   });
 
   archive.fileRemovedMap = fileMapOld;
@@ -396,7 +395,7 @@ function storageFilePathToSaveGet( storageDirPath )
   let fileProvider = self.fileProvider;
   let storageFilePath = null;
 
-  _.assert( arguments.length === 0 || arguments.length === 1 ); debugger;
+  _.assert( arguments.length === 0 || arguments.length === 1 );
 
   storageFilePath = _.select( self.storagesLoaded, '*/filePath' );
 

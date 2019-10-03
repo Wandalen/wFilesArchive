@@ -36,7 +36,7 @@ function init( o )
   Object.preventExtensions( self );
 
   _.assert( self.records === null );
-  self.records = new _.FileRecordFilter({ defaultFileProvider : self.imageFileProvider });
+  self.records = new _.FileRecordFilter({ defaultProvider : self.imageFileProvider });
 
   self.records.filePath = self.records.filePath || Object.create( null );
 }
@@ -78,8 +78,6 @@ function recordsTimelapsedDelete()
 {
   let self = this;
   let filePath = _.mapKeys( self.records.filePath )
-
-  debugger;
 
   for( let f = filePath.length-1 ; f >= 0 ; f-- )
   {

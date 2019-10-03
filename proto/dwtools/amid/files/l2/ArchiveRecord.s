@@ -86,7 +86,7 @@ function timelapsedDelete()
   let record = this;
   let factory = record.factory;
 
-  logger.log( 'timelapsedDelete', record.absolute ); debugger;
+  // logger.log( 'timelapsedDelete', record.absolute );
 
   _.assert( _.mapIs( record.deletingOptions ) );
   _.assert( arguments.length === 0 );

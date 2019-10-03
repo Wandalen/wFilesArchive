@@ -23,8 +23,8 @@ var Parent = wTester;
 
 function onSuiteBegin()
 {
-  if( Config.platform === 'nodejs' )
-  this.testRootDirectory = _.path.dirTempOpen( _.path.join( __dirname, '../..'  ), 'Archive' );
+  if( Config.interpreter === 'njs' )
+  this.testRootDirectory = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Archive' );
   else
   this.testRootDirectory = _.path.current();
 
@@ -35,7 +35,7 @@ function onSuiteBegin()
 
 function onSuiteEnd()
 {
-  if( Config.platform === 'nodejs' )
+  if( Config.interpreter === 'njs' )
   {
     _.assert( _.strHas( this.testRootDirectory, 'Archive' ) )
     _.fileProvider.fieldPush( 'safe', 0 );
@@ -102,10 +102,20 @@ function archive( test )
   }
 
   _.fileProvider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
-  _.FileProvider.Extract.readToProvider
+  // _.FileProvider.Extract.readToProvider
+  // ({
+  //   filesTree,
+  //   dstPath : testRoutineDir,
+  //   dstProvider : _.fileProvider,
+  // });
+
+  _.FileProvider.Extract
   ({
     filesTree,
-    dstPath : testRoutineDir,
+  })
+  .filesReflectTo
+  ({
+    dst : testRoutineDir,
     dstProvider : _.fileProvider,
   });
 
@@ -840,11 +850,21 @@ function filesLinkSame( test )
     provider.archive.basePath = dir;
     provider.archive.fileMapAutosaving = 0;
 
-    _.FileProvider.Extract.readToProvider
+    // _.FileProvider.Extract.readToProvider
+    // ({
+    //   filesTree,
+    //   dstProvider : provider,
+    //   dstPath : dir,
+    // });
+
+    _.FileProvider.Extract
     ({
       filesTree,
+    })
+    .filesReflectTo
+    ({
+      dst : dir,
       dstProvider : provider,
-      dstPath : dir,
     });
 
     test.is( !!provider.statResolvedRead( _.path.join( dir,'a' ) ) );
@@ -942,11 +962,21 @@ function severalPaths( test )
     provider.archive.basePath = [ _.path.join( dir,'dir1' ), _.path.join( dir,'dir2' ), _.path.join( dir,'dir3' ) ];
     provider.archive.fileMapAutosaving = 0;
 
-    _.FileProvider.Extract.readToProvider
+    // _.FileProvider.Extract.readToProvider
+    // ({
+    //   filesTree,
+    //   dstProvider : provider,
+    //   dstPath : dir,
+    // });
+
+    _.FileProvider.Extract
     ({
       filesTree,
+    })
+    .filesReflectTo
+    ({
+      dst : dir,
       dstProvider : provider,
-      dstPath : dir,
     });
 
     test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir1/a' ) ) );
@@ -1022,11 +1052,21 @@ function storageOperations( test )
   provider.archive.fileMapAutosaving = 1;
   provider.archive.fileMapAutoLoading = 0;
 
-  _.FileProvider.Extract.readToProvider
+  // _.FileProvider.Extract.readToProvider
+  // ({
+  //   filesTree,
+  //   dstProvider : provider,
+  //   dstPath : dir,
+  // });
+
+  _.FileProvider.Extract
   ({
     filesTree,
+  })
+  .filesReflectTo
+  ({
+    dst : dir,
     dstProvider : provider,
-    dstPath : dir,
   });
 
   provider.archive.filesUpdate();
@@ -1126,7 +1166,7 @@ function inodeExperiment( test )
   let context = this;
   _.fileProvider.fieldPush( 'safe', 0 );
 
-  if( Config.platform !== 'nodejs' )
+  if( Config.interpreter !== 'njs' )
   if( process.platform !== 'win32' )
   {
     test.identical( 1,1 );
@@ -1269,10 +1309,10 @@ function tester( test )
 var Self =
 {
 
-  name : 'Tools/mid/files/src/Archive',
+  name : 'Tools.mid.files.src.Archive',
   silencing : 1,
   // verbosity : 4,
-  // importanceOfNegative : 5,
+  // negativity : 5,
   // routine : 'restoreLinks',
 
   onSuiteBegin,

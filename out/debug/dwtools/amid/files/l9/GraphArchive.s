@@ -228,9 +228,6 @@ let timelapseCallStatReadAct = timelapseSingleHook_functor( function( op )
   let self = this;
   let o2 = op.args[ 0 ];
 
-  // if( o2.filePath === '/dst' )
-  // debugger;
-
   if( o2.throwing )
   throw _.err( 'File', o2.filePath, 'was deleted' );
   op.result = null;
@@ -260,9 +257,15 @@ let timelapseCallDirMakeAct = timelapseSingleHook_functor( function( op, arecord
     arecord.timelapsedDelete();
     // arecord.deletingOptions.sync = 1;
     // op.originalFileProvider.fileDeleteAct( arecord.deletingOptions );
+    let r = self.originalCall( op );
+    arecord.finit();
+    return r;
+  }
+  else
+  {
+    arecord.finit();
   }
 
-  arecord.finit();
   // _.assert( self.records.filePath[ arecord.absolute ] === arecord );
   // delete self.records.filePath[ arecord.absolute ];
 

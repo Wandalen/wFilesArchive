@@ -33,6 +33,7 @@ function trivial( test )
 
   var expectedExtract = _.FileProvider.Extract
   ({
+    usingExtraStat : 1,
     filesTree :
     {
       src :
@@ -60,6 +61,7 @@ function trivial( test )
 
   var extract = _.FileProvider.Extract
   ({
+    usingExtraStat : 1,
     filesTree :
     {
       src :
@@ -83,6 +85,8 @@ function trivial( test )
     },
   });
 
+  // extract.statsAdopt();
+
   var image = _.FileFilter.Image({ originalFileProvider : extract });
   var archive = new _.FilesGraphArchive({ imageFileProvider : image });
 
@@ -93,7 +97,6 @@ function trivial( test )
 
   image.filesDelete( '/dst' );
 
-  debugger;
   var records = image.filesReflect
   ({
     reflectMap : { '/src' : '/dst' },
@@ -117,14 +120,13 @@ function trivial( test )
   test.identical( gotActions, expActions );
   test.identical( gotPreserve, expPreserve );
 
-  debugger; return; xxx
-
   /* - */
 
   test.case = 'universal, linking : fileCopy, dstRewriting : 1';
 
   var expectedExtract = _.FileProvider.Extract
   ({
+    usingExtraStat : 1,
     filesTree :
     {
       src :
@@ -205,12 +207,15 @@ function trivial( test )
   test.identical( gotActions, expActions );
   test.identical( gotPreserve, expPreserve );
 
+  debugger; return; xxx
+
   /* - */
 
   test.case = 'universal, linking : hardLink, dstRewriting : 1';
 
   var expectedExtract = _.FileProvider.Extract
   ({
+    usingExtraStat : 1,
     filesTree :
     {
       src :
@@ -236,6 +241,7 @@ function trivial( test )
 
   var extract = _.FileProvider.Extract
   ({
+    usingExtraStat : 1,
     filesTree :
     {
       src :
@@ -300,7 +306,7 @@ function trivial( test )
 var Self =
 {
 
-  name : 'Tools/mid/files/Graph',
+  name : 'Tools.mid.files.Graph',
   silencing : 1,
   enabled : 1,
 
