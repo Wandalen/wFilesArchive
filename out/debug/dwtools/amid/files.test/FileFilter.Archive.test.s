@@ -922,6 +922,105 @@ function filesLinkSame( test )
 
 //
 
+function filesLinkSameEmptyFiles( test )
+{
+  var context = this;
+  var dir = _.path.join( context.testRootDirectory, test.name );
+  _.fileProvider.fieldPush( 'safe', 0 );
+  var provider;
+
+  function begin()
+  {
+
+    test.case = 'prepare';
+
+    _.fileProvider.filesDelete( context.testRootDirectory );
+
+    var filesTree =
+    {
+      a : '',
+      b : '',
+      c : 'c',
+      d : 'd',
+      e : 'same',
+      f : 'same',
+      dir : { 'f' : 'same' }
+    }
+
+    provider = _.FileFilter.Archive();
+    provider.archive.basePath = dir;
+    provider.archive.fileMapAutosaving = 0;
+
+
+    _.FileProvider.Extract
+    ({
+      filesTree,
+    })
+    .filesReflectTo
+    ({
+      dst : dir,
+      dstProvider : provider,
+    });
+  }
+
+  begin();
+
+  test.case = 'consideringFileName : 0';
+
+  provider.archive.filesUpdate();
+  provider.archive.filesLinkSame({ consideringFileName : 0 });
+
+  test.is( provider.fileExists( _.path.join( dir,'a' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'b' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'c' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'d' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'e' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'f' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'dir/f' ) ) );
+
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'a', 'b' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'a', 'c' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'a', 'd' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'a', 'e' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'c', 'd' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'e', 'f' ] ) ), true );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'e', 'f', 'dir/f' ] ) ), true );
+
+  provider.finit();
+  provider.archive.finit();
+
+  begin();
+
+  test.case = 'consideringFileName : 1';
+
+  provider.archive.filesUpdate();
+  provider.archive.filesLinkSame({ consideringFileName : 1 });
+
+  test.is( provider.fileExists( _.path.join( dir,'a' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'b' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'c' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'d' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'e' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'f' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'dir/f' ) ) );
+
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'a', 'b' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'a', 'c' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'a', 'd' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'a', 'e' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'c', 'd' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'e', 'f' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'e', 'dir/f' ] ) ), false );
+  test.identical( provider.filesAreHardLinked(_.path.s.join( dir, [ 'f', 'dir/f' ] ) ), true );
+
+  provider.finit();
+  provider.archive.finit();
+
+  _.fileProvider.fieldPop( 'safe', 0 );
+}
+
+//
+
 function severalPaths( test )
 {
   var context = this;
@@ -1231,7 +1330,7 @@ function inodeExperiment( test )
   hash2 = provider.hashRead( pathsSameIno[ 1 ] );
   test.notIdentical( hash1, hash2 );
   test.case = 'restored files should not be same';
-  test.is( !provider.filesAreSame.apply( provider, pathsSameIno ) );
+  test.is( !provider.filesCanBeSame.apply( provider, pathsSameIno ) );
 
   provider.finit();
   provider.archive.finit();
@@ -1331,6 +1430,7 @@ var Self =
     restoreLinks,
     restoreLinksComplex,
     filesLinkSame,
+    filesLinkSameEmptyFiles,
     severalPaths,
     storageOperations,
     inodeExperiment,
