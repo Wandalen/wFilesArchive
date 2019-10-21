@@ -24,11 +24,11 @@
   }, 
   "dependencies" : 
   {
-    "wTools" : "", 
-    "wFiles" : "", 
-    "wverbal" : "", 
-    "wstatestorage" : ""
+    "wTools" : "beta", 
+    "wFiles" : "beta", 
+    "wverbal" : "beta", 
+    "wstatestorage" : "beta"
   }, 
-  "devDependencies" : { "wait-sync" : "", "wTesting" : "" }, 
+  "devDependencies" : { "wait-sync" : "beta", "wTesting" : "beta" }, 
   "keywords" : [ "wTools", "wFiles", "wFilesArchive", "File Archive", "file", "read file", "write file" ]
 }
