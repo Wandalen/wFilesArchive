@@ -87,22 +87,22 @@ function filesUpdate()
     onUp : onFile,
     withTerminals : 1,
     withDirs : 1,
-    withStem/*maybe withTransient*/ : 0,
+    withStem : 1,
     resolvingSoftLink : 1,
+    maskPreset : 0,
   });
 
   archive.fileRemovedMap = fileMapOld;
   archive.fileMap = fileMapNew;
 
-  // debugger;
   if( archive.fileMapAutosaving ) /* xxx */
   archive.storageSave();
 
   if( archive.verbosity >= 8 )
   {
-    logger.log( 'fileAddedMap',archive.fileAddedMap );
-    logger.log( 'fileRemovedMap',archive.fileRemovedMap );
-    logger.log( 'fileModifiedMap',archive.fileModifiedMap );
+    logger.log( 'fileAddedMap', archive.fileAddedMap );
+    logger.log( 'fileRemovedMap', archive.fileRemovedMap );
+    logger.log( 'fileModifiedMap', archive.fileModifiedMap );
   }
   else if( archive.verbosity >= 6 )
   {
@@ -113,7 +113,7 @@ function filesUpdate()
 
   if( archive.verbosity >= 4 )
   {
-    logger.log( ' . filesUpdate', filePath, 'found', _.entityLength( fileMapNew ),'file(s)', _.timeSpent( 'in ',time ) );
+    logger.log( ' . filesUpdate', filePath, 'found', _.entityLength( fileMapNew ), 'file(s)', _.timeSpent( 'in ', time ) );
   }
 
   return archive;
@@ -140,7 +140,7 @@ function filesUpdate()
 
     if( fileMapOld[ fileRecord.absolute ] )
     {
-      d = _.mapExtend( null,fileMapOld[ fileRecord.absolute ] );
+      d = _.mapExtend( null, fileMapOld[ fileRecord.absolute ] );
       files.push( d );
       delete fileMapOld[ fileRecord.absolute ];
       let same = true;
@@ -158,14 +158,13 @@ function filesUpdate()
       {
         fileMapNew[ d.absolutePath ] = d;
         return fileRecord;
-        // return d;
       }
       else
       {
         if( archive.verbosity >= 5 )
         logger.log( ' . change ' + fileRecord.absolute );
         archive.fileModifiedMap[ fileRecord.absolute ] = d;
-        d = _.mapExtend( null,d );
+        d = _.mapExtend( null, d );
       }
     }
     else
@@ -189,7 +188,6 @@ function filesUpdate()
     }
 
     fileMapNew[ d.absolutePath ] = d;
-    // return d;
 
     return fileRecord;
   }
@@ -226,7 +224,7 @@ function filesLinkSame( o )
   let archive = this;
   let provider = archive.fileProvider;
   let hashReadMap = archive.filesHashMapForm();
-  o = _.routineOptions( filesLinkSame,arguments );
+  o = _.routineOptions( filesLinkSame, arguments );
 
   for( let f in hashReadMap )
   {
@@ -239,7 +237,7 @@ function filesLinkSame( o )
     {
       let byName = {};
       debugger;
-      _.entityFilter( files,function( path )
+      _.entityFilter( files, function( path )
       {
         let name = _.path.fullName( path );
         if( byName[ name ] )
@@ -257,13 +255,14 @@ function filesLinkSame( o )
     }
     else
     {
-      // console.log( 'archive.verbosity',archive.verbosity );
       files = filterFiles( files );
       if( files.length < 2 )
       continue;
       provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
     }
   }
+
+  return archive;
 
   /*  */
 
@@ -283,7 +282,6 @@ function filesLinkSame( o )
     return result;
   }
 
-  return archive;
 }
 
 filesLinkSame.defaults =
@@ -314,9 +312,9 @@ function restoreLinksEnd()
 
   archive.filesUpdate();
 
-  _.assert( !!archive.fileMap,'restoreLinksBegin should be called before calling restoreLinksEnd' );
+  _.assert( !!archive.fileMap, 'restoreLinksBegin should be called before calling restoreLinksEnd' );
 
-  let fileMap2 = _.mapExtend( null,archive.fileMap );
+  let fileMap2 = _.mapExtend( null, archive.fileMap );
   let fileModifiedMap = archive.fileModifiedMap;
   let linkedMap = Object.create( null );
 
@@ -338,33 +336,33 @@ function restoreLinksEnd()
 
     /* remove removed files and use old file descriptors */
 
-    filesWithHash = _.entityFilter( filesWithHash,( e ) => fileMap2[ e ] ? fileMap2[ e ] : undefined );
+    filesWithHash = _.entityFilter( filesWithHash, ( e ) => fileMap2[ e ] ? fileMap2[ e ] : undefined );
 
     /* find newest file */
 
     if( archive.replacingByNewest )
-    filesWithHash.sort( ( e1,e2 ) => e2.mtime-e1.mtime );
+    filesWithHash.sort( ( e1, e2 ) => e2.mtime-e1.mtime );
     else
-    filesWithHash.sort( ( e1,e2 ) => e1.mtime-e2.mtime );
+    filesWithHash.sort( ( e1, e2 ) => e1.mtime-e2.mtime );
 
     let newest = filesWithHash[ 0 ];
-    let mostLinked = _.entityMax( filesWithHash,( e ) => e.nlink ).element;
+    let mostLinked = _.entityMax( filesWithHash, ( e ) => e.nlink ).element;
 
     if( mostLinked.absolutePath !== newest.absolutePath )
     {
       let read = provider.fileRead({ filePath : newest.absolutePath, encoding : 'original.type' });
-      provider.fileWrite( mostLinked.absolutePath,read );
+      provider.fileWrite( mostLinked.absolutePath, read );
     }
 
     /* use old file descriptors */
 
-    filesWithHash = _.entityFilter( filesWithHash,( e ) => fileMap1[ e.absolutePath ] );
+    filesWithHash = _.entityFilter( filesWithHash, ( e ) => fileMap1[ e.absolutePath ] );
     mostLinked = fileMap1[ mostLinked.absolutePath ];
 
     /* verbosity */
 
     if( archive.verbosity >= 4 )
-    logger.log( 'modified',_.toStr( _.select( filesWithHash,'*/absolutePath' ),{ levels : 2 } ) );
+    logger.log( 'modified', _.toStr( _.select( filesWithHash, '*/absolutePath' ), { levels : 2 } ) );
 
     /*  */
 
@@ -380,12 +378,11 @@ function restoreLinksEnd()
       continue;
       let dstFile = filesWithHash[ last ];
       /* if this files where linked before changes, relink them */
-      _.assert( !!srcFile.hash2 ); debugger;
+      _.assert( !!srcFile.hash2 );
       _.assert( !!srcFile.size >= 0 );
       _.assert( !!dstFile.size >= 0 );
       if( srcFile.hash2 && srcFile.hash2 === dstFile.hash2 && srcFile.size > 0 )
       {
-        debugger;
         _.assert( dstFile.size === srcFile.size );
         restored += 1;
         provider.hardLink({ dstPath, srcPath, verbosity : archive.verbosity });
@@ -396,7 +393,7 @@ function restoreLinksEnd()
   }
 
   if( archive.verbosity >= 1 )
-  logger.log( '+ Restored',restored,'links' );
+  logger.log( '+ Restored', restored, 'links' );
 }
 
 //
@@ -525,7 +522,6 @@ let Composes =
   replacingByNewest : 1,
   maxSize : null,
 
-  // fileByHashMap : _.define.own( {} ),
   fileMap : _.define.own( {} ),
   fileAddedMap : _.define.own( {} ),
   fileRemovedMap : _.define.own( {} ),
@@ -625,10 +621,6 @@ _global_[ Self.name ] = _[ Self.shortName ] = Self;
 // --
 // export
 // --
-
-// if( typeof module !== 'undefined' )
-// if( _global_.WTOOLS_PRIVATE )
-// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
