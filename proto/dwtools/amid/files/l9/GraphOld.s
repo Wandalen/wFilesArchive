@@ -126,7 +126,7 @@ function _eachHeadBody( it,op )
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   // _.assert( !!self.nodesMap[ it.path ] );
 
-  if( _.arrayHas( op.visited,it.path ) )
+  if( _.longHas( op.visited,it.path ) )
   return;
 
   op.visited.push( it.path )

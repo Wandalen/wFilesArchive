@@ -3,18 +3,19 @@ root:
   - wFilesArchive.out
 consistency:
   wFilesArchive.out.will.yml: &ref_0
-    hash: 03291d661155df6202ad62cfd6b938d3
-    size: 42529
+    hash: 2b0d049dd0f8c1e62f2477c0b251b13c
+    size: 42558
   ../.ex.will.yml: &ref_1
     hash: bfd45a61771a63e0712cd8eea97e57b0
     size: 2095
   ../.im.will.yml: &ref_2
-    hash: f1d9196bc535c54fc0f395297863ae9b
-    size: 5198
+    hash: 7d112fc1da982ccf911799d3118f53ef
+    size: 5272
 module:
   wFilesArchive.out:
     about:
       name: wFilesArchive
+      org: noorg
       description: >-
         Experimental. Several classes to reflect changes of files on dependent
         files and keep links of hard linked files. FilesArchive provides means
@@ -72,9 +73,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wFilesArchive.git'
       origins:
@@ -84,15 +82,15 @@ module:
       bugtracker:
         path: 'https://../github.com/Wandalen/wFilesArchive/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: .
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - ../package-lock.json
+          - ../package.json
+          - ../node_modules
       proto:
         path: ../proto
       export:
@@ -157,11 +155,13 @@ module:
         path: '{path::out.*=}/source/Index.s'
       exported.dir.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path: ../proto
       exported.files.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path:
@@ -408,6 +408,7 @@ module:
           prefixPath: ../proto
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
       exported.files.proto.export:
@@ -420,6 +421,7 @@ module:
         recursive: 0
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
     step:
@@ -777,6 +779,7 @@ module:
         opts:
           reflector: 'reflector::exported.proto.export*'
         criterion:
+          generated: 1
           content: proto
           export: 1
         inherit:
@@ -785,6 +788,7 @@ module:
         opts:
           reflector: 'reflector::exported.files.proto.export*'
         criterion:
+          generated: 1
           content: proto
           export: 1
         inherit:
@@ -883,6 +887,7 @@ module:
   ../:
     about:
       name: wFilesArchive
+      org: noorg
       description: >-
         Experimental. Several classes to reflect changes of files on dependent
         files and keep links of hard linked files. FilesArchive provides means
@@ -940,9 +945,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wFilesArchive.git'
       origins:
@@ -952,21 +954,21 @@ module:
       bugtracker:
         path: 'https://github.com/Wandalen/wFilesArchive/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: out
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - package-lock.json
+          - package.json
+          - node_modules
       proto:
-        path: ./proto
+        path: proto
       export:
         path: '{path::proto}/**'
       doc:
-        path: ./doc
+        path: doc
       out.raw.debug:
         criterion:
           debug: debug
@@ -1602,6 +1604,6 @@ module:
         hash: bfd45a61771a63e0712cd8eea97e57b0
         size: 2095
       ../.im.will.yml:
-        hash: f1d9196bc535c54fc0f395297863ae9b
-        size: 5198
+        hash: 7d112fc1da982ccf911799d3118f53ef
+        size: 5272
       wFilesArchive.out.will.yml: *ref_0
