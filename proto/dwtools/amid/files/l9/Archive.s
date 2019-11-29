@@ -52,7 +52,7 @@ function filesUpdate()
 {
   let archive = this;
   let fileProvider = archive.fileProvider;
-  let time = _.timeNow();
+  let time = _.time.now();
 
   let fileMapOld = archive.fileMap;
   archive.fileAddedMap = Object.create( null );
@@ -113,7 +113,7 @@ function filesUpdate()
 
   if( archive.verbosity >= 4 )
   {
-    logger.log( ' . filesUpdate', filePath, 'found', _.entityLength( fileMapNew ), 'file(s)', _.timeSpent( 'in ', time ) );
+    logger.log( ' . filesUpdate', filePath, 'found', _.entityLength( fileMapNew ), 'file(s)', _.time.spent( 'in ', time ) );
   }
 
   return archive;
