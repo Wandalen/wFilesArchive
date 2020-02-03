@@ -300,7 +300,7 @@ function unprocessedDelete()
   let self = this;
   let fileProvider = self.fileProvider;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   if( !self.unporcessedDstUnmapping )
   return;
@@ -329,7 +329,7 @@ function unprocessedReport()
   let self = this;
   let fileProvider = self.fileProvider;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   let unprocessedMapKeys = _.mapKeys( self.unprocessedMap );
   if( unprocessedMapKeys.length )

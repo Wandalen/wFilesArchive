@@ -41,7 +41,7 @@ function form()
 {
   let self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( self.imageFileProvider instanceof _.FileProvider.Abstract );
   _.assert( self.imageFileProvider.onCallBegin === null );
   _.assert( self.imageFileProvider.onCallEnd === null );

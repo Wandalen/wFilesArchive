@@ -71,7 +71,7 @@ function hashRead()
 {
   let record = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   if( !record.hash )
   record.hash = record.factory.originalFileProvider.hashRead( record.absolute );
@@ -89,7 +89,7 @@ function timelapsedDelete()
   // logger.log( 'timelapsedDelete', record.absolute );
 
   _.assert( _.mapIs( record.deletingOptions ) );
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   record.deletingOptions.sync = 1;
 
@@ -111,7 +111,7 @@ function timelapsedSubFilesDelete()
   let result = 0;
 
   _.assert( _.mapIs( record.deletingOptions ) );
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   for( let f in factory.records.filePath )
   {
