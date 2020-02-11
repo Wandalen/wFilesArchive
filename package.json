@@ -1,6 +1,6 @@
 {
   "name" : "wfilesarchive", 
-  "version" : "0.3.209", 
+  "version" : "0.3.210", 
   "engine" : "node >= 8.0.0", 
   "description" : "Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.", 
   "license" : "MIT", 
@@ -24,11 +24,11 @@
   }, 
   "dependencies" : 
   {
-    "wTools" : "beta", 
-    "wFiles" : "beta", 
-    "wverbal" : "beta", 
-    "wstatestorage" : "beta"
+    "wTools" : "alpha", 
+    "wFiles" : "alpha", 
+    "wverbal" : "alpha", 
+    "wstatestorage" : "alpha"
   }, 
-  "devDependencies" : { "wait-sync" : "1.0.1", "wTesting" : "beta" }, 
+  "devDependencies" : { "wait-sync" : "1.0.1", "wTesting" : "alpha" }, 
   "keywords" : [ "wTools", "wFiles", "wFilesArchive", "File Archive", "file", "read file", "write file" ]
 }
