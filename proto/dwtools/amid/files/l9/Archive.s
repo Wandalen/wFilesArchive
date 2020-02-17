@@ -393,7 +393,7 @@ function restoreLinksEnd()
   }
 
   if( archive.verbosity >= 1 )
-  logger.log( '+ Restored', restored, 'links' );
+  logger.log( ' + Restored', restored, 'links' );
 }
 
 //
