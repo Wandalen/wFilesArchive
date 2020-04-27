@@ -1,34 +1,34 @@
 {
-  "name" : "wfilesarchive", 
-  "version" : "0.3.255", 
-  "engine" : "node >= 8.0.0", 
-  "description" : "Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.", 
-  "license" : "MIT", 
-  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
-  "contributors" : 
+  "name" : "wfilesarchive",
+  "version" : "0.3.256",
+  "engine" : "node >= 8.0.0",
+  "description" : "Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.",
+  "license" : "MIT",
+  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>",
+  "contributors" :
   [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so" }, 
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so" },
     { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
-  ], 
-  "main" : "proto/dwtools/amid/files/IncludeArchive.s", 
-  "files" : [ "proto/dwtools/amid/files", "proto/dwtools/Tools.s", "out" ], 
-  "scripts" : { "test" : "wtest .run proto/**", "docgen" : "wdocgen proto" }, 
-  "repository" : 
+  ],
+  "main" : "proto/dwtools/amid/files/IncludeArchive.s",
+  "files" : [ "proto/dwtools/amid/files", "proto/dwtools/Tools.s", "out" ],
+  "scripts" : { "test" : "wtest .run proto/**", "docgen" : "wdocgen proto" },
+  "repository" :
   {
-    "type" : "git", 
+    "type" : "git",
     "url" : "https://github.com/Wandalen/wFilesArchive.git"
-  }, 
-  "bugs" : 
+  },
+  "bugs" :
   {
     "url" : "https://github.com/Wandalen/wFilesArchive/issues"
-  }, 
-  "dependencies" : 
+  },
+  "dependencies" :
   {
-    "wTools" : "", 
-    "wFiles" : "", 
-    "wverbal" : "", 
+    "wTools" : "",
+    "wFiles" : "",
+    "wverbal" : "",
     "wstatestorage" : ""
-  }, 
-  "devDependencies" : { "wait-sync" : "", "wTesting" : "" }, 
+  },
+  "devDependencies" : { "wait-sync" : "", "wTesting" : "" },
   "keywords" : [ "wTools", "wFiles", "wFilesArchive", "File Archive", "file", "read file", "write file" ]
 }
