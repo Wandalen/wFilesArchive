@@ -90,6 +90,8 @@ function filesUpdate()
     withStem : 1,
     resolvingSoftLink : 1,
     maskPreset : 0,
+    allowingMissed : archive.allowingMissed,
+    allowingCycled : archive.allowingCycled,
   });
 
   archive.fileRemovedMap = fileMapOld;
@@ -123,6 +125,10 @@ function filesUpdate()
   function onFile( fileRecord, op )
   {
     let d = null;
+
+    if( !fileRecord.stat )
+    return fileRecord;
+
     let isDir = fileRecord.stat.isDir();
 
     if( isDir )
@@ -393,7 +399,7 @@ function restoreLinksEnd()
   }
 
   if( archive.verbosity >= 1 )
-  logger.log( ' + Restored', restored, 'links' );
+  logger.log( ' + Restored', restored, 'hardlinks' );
 }
 
 //
@@ -520,6 +526,8 @@ let Composes =
 
   comparingRelyOnHardLinks : 0,
   replacingByNewest : 1,
+  allowingMissed : 0, /* qqq : cover the option. make a broken link for that */
+  allowingCycled : 0, /* qqq : cover the option. make a cycled link for that */
   maxSize : null,
 
   fileMap : _.define.own( {} ),
