@@ -334,6 +334,12 @@ function restoreLinksEnd()
     if( linkedMap[ f ] )
     continue;
 
+    if( !hashReadMap[ modified.hash ] ) /* yyy qqq : cover please */
+    {
+      debugger;
+      continue;
+    }
+
     if( !modified.hash )
     continue;
 
