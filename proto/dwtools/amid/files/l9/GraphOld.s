@@ -16,7 +16,8 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = null;
-let Self = function wFilesGraphOld( o )
+let Self = wFilesGraphOld;
+function wFilesGraphOld( o )
 {
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects single argument' );
   return _.workpiece.construct( Self, this, arguments );

@@ -7,7 +7,8 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = null;
-let Self = function wArchiveRecord( o )
+let Self = wArchiveRecord;
+function wArchiveRecord( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }

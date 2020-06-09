@@ -20,7 +20,8 @@ let Abstract = _.FileProvider.Abstract;
 let Partial = _.FileProvider.Partial;
 let Default = _.FileProvider.Default;
 let Parent = Abstract;
-let Self = function wFileFilterArchive( o )
+let Self = wFileFilterArchive;
+function wFileFilterArchive( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }

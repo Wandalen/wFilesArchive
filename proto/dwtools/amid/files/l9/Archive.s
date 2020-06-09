@@ -16,7 +16,8 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = null;
-let Self = function wFilesArchive( o )
+let Self = wFilesArchive;
+function wFilesArchive( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
