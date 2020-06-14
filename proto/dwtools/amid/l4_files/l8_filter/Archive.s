@@ -1,18 +1,6 @@
 ( function _Archive_s_() {
 
-'use strict'; 
-
-if( typeof module !== 'undefined' )
-{
-
-  let _global = _global_;
-  let _ = _global_.wTools;
-
-  require( '../IncludeArchive.s' );
-
-}
-
-//
+'use strict';
 
 let _global = _global_;
 let _ = _global_.wTools;
@@ -29,7 +17,7 @@ function wFileFilterArchive( o )
 Self.shortName = 'Archive';
 
 // --
-//
+// implementtation
 // --
 
 function init( o )
@@ -115,10 +103,6 @@ _.FileFilter[ Self.shortName ] = Self;
 // --
 // export
 // --
-
-// if( typeof module !== 'undefined' )
-// if( _global_.WTOOLS_PRIVATE )
-// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;

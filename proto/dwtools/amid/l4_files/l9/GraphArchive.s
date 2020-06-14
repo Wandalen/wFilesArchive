@@ -521,7 +521,7 @@ let Accessors =
 // declare
 // --
 
-let Proto =
+let Extension =
 {
 
   init,
@@ -564,7 +564,7 @@ _.classDeclare
 ({
   cls : Self,
   parent : Parent,
-  extend : Proto,
+  extend : Extension,
 });
 
 //

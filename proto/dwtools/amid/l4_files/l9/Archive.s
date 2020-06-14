@@ -2,15 +2,6 @@
 
 'use strict';
 
-/**
- * Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.
-  @module Tools/mid/FilesArchive
-*/
-
-/**
- * @file files/FilesArchive.s.
- */
-
 //
 
 let _global = _global_;
@@ -585,7 +576,7 @@ let Accessors =
 // declare
 // --
 
-let Proto =
+let Extension =
 {
 
   init,
@@ -623,7 +614,7 @@ _.classDeclare
 ({
   cls : Self,
   parent : Parent,
-  extend : Proto,
+  extend : Extension,
 });
 
 //
