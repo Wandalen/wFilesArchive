@@ -6,8 +6,8 @@ consistency:
     hash: f2ac3748061252f529bf868451995fb1
     size: 2096
   ../.im.will.yml: &ref_1
-    hash: 7d112fc1da982ccf911799d3118f53ef
-    size: 5272
+    hash: 34e63254c3186df6ccc561ae96b8b232
+    size: 5276
 module:
   wFilesArchive.out:
     about:
@@ -121,7 +121,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/amid/files/IncludeArchive.s
+        path: ../proto/dwtools/amid/l4_files/entry/Archive.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -131,13 +131,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/files/IncludeArchive.s'
+        path: '{path::out.*=1}/source/dwtools/amid/l4_files/entry/Archive.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/files/IncludeArchive.s'
+        path: '{path::out.*=1}/source/dwtools/amid/l4_files/entry/Archive.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -167,20 +167,37 @@ module:
           - ../proto/dwtools/Tools.s
           - ../proto/dwtools/abase
           - ../proto/dwtools/amid
-          - ../proto/dwtools/amid/files
-          - ../proto/dwtools/amid/files/IncludeArchive.s
-          - ../proto/dwtools/amid/files/l2
-          - ../proto/dwtools/amid/files/l2/ArchiveRecord.s
-          - ../proto/dwtools/amid/files/l2/ArchiveRecordFactory.s
-          - ../proto/dwtools/amid/files/l8_filter
-          - ../proto/dwtools/amid/files/l8_filter/Archive.s
-          - ../proto/dwtools/amid/files/l9
-          - ../proto/dwtools/amid/files/l9/Archive.s
-          - ../proto/dwtools/amid/files/l9/GraphArchive.s
-          - ../proto/dwtools/amid/files/l9/GraphOld.s
-          - ../proto/dwtools/amid/files.test
-          - ../proto/dwtools/amid/files.test/FileFilter.Archive.test.s
-          - ../proto/dwtools/amid/files.test/FilesGraph.test.s
+          - ../proto/dwtools/amid/-files
+          - ../proto/dwtools/amid/-files/IncludeArchive.s
+          - ../proto/dwtools/amid/-files/l2
+          - ../proto/dwtools/amid/-files/l2/ArchiveRecord.s
+          - ../proto/dwtools/amid/-files/l2/ArchiveRecordFactory.s
+          - ../proto/dwtools/amid/-files/l8_filter
+          - ../proto/dwtools/amid/-files/l8_filter/Archive.s
+          - ../proto/dwtools/amid/-files/l9
+          - ../proto/dwtools/amid/-files/l9/Archive.s
+          - ../proto/dwtools/amid/-files/l9/GraphArchive.s
+          - ../proto/dwtools/amid/-files/l9/GraphOld.s
+          - ../proto/dwtools/amid/-files.test
+          - ../proto/dwtools/amid/-files.test/FileFilter.Archive.test.s
+          - ../proto/dwtools/amid/-files.test/FilesGraph.test.s
+          - ../proto/dwtools/amid/l4_files
+          - ../proto/dwtools/amid/l4_files/entry
+          - ../proto/dwtools/amid/l4_files/entry/Archive.s
+          - ../proto/dwtools/amid/l4_files/include
+          - ../proto/dwtools/amid/l4_files/include/Archive.s
+          - ../proto/dwtools/amid/l4_files/l4
+          - ../proto/dwtools/amid/l4_files/l4/ArchiveRecord.s
+          - ../proto/dwtools/amid/l4_files/l4/ArchiveRecordFactory.s
+          - ../proto/dwtools/amid/l4_files/l8_filter
+          - ../proto/dwtools/amid/l4_files/l8_filter/Archive.s
+          - ../proto/dwtools/amid/l4_files/l9
+          - ../proto/dwtools/amid/l4_files/l9/-GraphOld.s
+          - ../proto/dwtools/amid/l4_files/l9/Archive.s
+          - ../proto/dwtools/amid/l4_files/l9/GraphArchive.s
+          - ../proto/dwtools/amid/l4_files.test
+          - ../proto/dwtools/amid/l4_files.test/FileFilter.Archive.test.s
+          - ../proto/dwtools/amid/l4_files.test/FilesGraph.test.s
           - ../proto/dwtools/atop
           - ../proto/dwtools/tmp.tmp
           - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28
@@ -952,7 +969,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/amid/files/IncludeArchive.s
+        path: proto/dwtools/amid/l4_files/entry/Archive.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -962,13 +979,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/files/IncludeArchive.s'
+        path: '{path::out.*=1}/source/dwtools/amid/l4_files/entry/Archive.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/files/IncludeArchive.s'
+        path: '{path::out.*=1}/source/dwtools/amid/l4_files/entry/Archive.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -1551,5 +1568,5 @@ module:
         hash: f2ac3748061252f529bf868451995fb1
         size: 2096
       ../.im.will.yml:
-        hash: 7d112fc1da982ccf911799d3118f53ef
-        size: 5272
+        hash: 34e63254c3186df6ccc561ae96b8b232
+        size: 5276
