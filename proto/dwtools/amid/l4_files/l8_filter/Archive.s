@@ -1,4 +1,5 @@
-( function _Archive_s_() {
+( function _Archive_s_()
+{
 
 'use strict';
 
@@ -71,16 +72,16 @@ let Restricts =
 let Extend =
 {
 
-  init : init,
+  init,
 
   // fileCopyAct : fileCopyAct,
 
   //
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
 
 }
 
@@ -107,4 +108,4 @@ _.FileFilter[ Self.shortName ] = Self;
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
-})();
+} )();

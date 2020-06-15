@@ -1,4 +1,5 @@
-( function _FilesArchive_s_() {
+( function _FilesArchive_s_()
+{
 
 'use strict';
 
@@ -242,7 +243,7 @@ function filesLinkSame( o )
         byName[ name ].push( path );
         else
         byName[ name ] = [ path ];
-      });
+      } );
       for( let name in byName )
       {
         files = filterFiles( byName[ name ] );
@@ -275,7 +276,7 @@ function filesLinkSame( o )
       if( fileA === undefined )
       fileA = provider.fileRead({ filePath : files[ 0 ], encoding : 'original.type' });
       return _.entityIdentical( fileA, fileB );
-    })
+    } )
 
     return result;
   }
@@ -631,4 +632,4 @@ _global_[ Self.name ] = _[ Self.shortName ] = Self;
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
-})();
+} )();

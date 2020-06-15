@@ -1,4 +1,5 @@
-(function _Archive_s_() {
+( function _Archive_s_()
+{
 
 'use strict';
 
@@ -22,4 +23,4 @@ if( typeof module !== 'undefined' )
   module[ 'exports' ] = _;
 }
 
-})();
+} )();

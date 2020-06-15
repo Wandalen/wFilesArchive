@@ -1,23 +1,24 @@
-( function _FilesGraph_test_s_( ) {
+( function _FilesGraph_test_s_()
+{
 
 'use strict';
 
 if( typeof module !== 'undefined' )
 {
 
-  var _ = require( '../../../dwtools/Tools.s' );
+  let _ = require( '../../../dwtools/Tools.s' );
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
   _.include( 'wFilesArchive' );
 
-  var waitSync = require( 'wait-sync' );
+  let waitSync = require( 'wait-sync' );
 
 }
 
 //
 
-var _ = _global_.wTools;
+let _ = _global_.wTools;
 var Parent = wTester;
 
 // --
@@ -220,20 +221,20 @@ function trivial( test )
     {
       src :
       {
-        same : [{ hardLinks : [ '/dst/same', '/src/same' ], data : 'same' }],
-        diff : [{ hardLinks : [ '/dst/diff', '/src/diff' ], data : 'src/diff' }],
-        srcDirDstTerm : { f2 : [{ hardLinks : [ '/dst/srcDirDstTerm/f2', '/src/srcDirDstTerm/f2' ], data : 'src/srcDirDstTerm/f2' }], f3 : [{ hardLinks : [ '/dst/srcDirDstTerm/f3', '/src/srcDirDstTerm/f3' ], data : 'src/srcDirDstTerm/f3' }] },
-        srcTermDstDir : [{ hardLinks : [ '/dst/srcTermDstDir', '/src/srcTermDstDir' ], data : 'src/srcTermDstDir' }],
-        srcTerm : [{ hardLinks : [ '/dst/srcTerm', '/src/srcTerm' ], data : 'srcTerm' }],
+        same : [ { hardLinks : [ '/dst/same', '/src/same' ], data : 'same' } ],
+        diff : [ { hardLinks : [ '/dst/diff', '/src/diff' ], data : 'src/diff' } ],
+        srcDirDstTerm : { f2 : [ { hardLinks : [ '/dst/srcDirDstTerm/f2', '/src/srcDirDstTerm/f2' ], data : 'src/srcDirDstTerm/f2' } ], f3 : [ { hardLinks : [ '/dst/srcDirDstTerm/f3', '/src/srcDirDstTerm/f3' ], data : 'src/srcDirDstTerm/f3' } ] },
+        srcTermDstDir : [ { hardLinks : [ '/dst/srcTermDstDir', '/src/srcTermDstDir' ], data : 'src/srcTermDstDir' } ],
+        srcTerm : [ { hardLinks : [ '/dst/srcTerm', '/src/srcTerm' ], data : 'srcTerm' } ],
         srcDir : {},
       },
       dst :
       {
-        same : [{ hardLinks : [ '/dst/same', '/src/same' ], data : 'same' }],
-        diff : [{ hardLinks : [ '/dst/diff', '/src/diff' ], data : 'src/diff' }],
-        srcDirDstTerm : { f2 : [{ hardLinks : [ '/dst/srcDirDstTerm/f2', '/src/srcDirDstTerm/f2' ], data : 'src/srcDirDstTerm/f2' }], f3 : [{ hardLinks : [ '/dst/srcDirDstTerm/f3', '/src/srcDirDstTerm/f3' ], data : 'src/srcDirDstTerm/f3' }] },
-        srcTermDstDir : [{ hardLinks : [ '/dst/srcTermDstDir', '/src/srcTermDstDir' ], data : 'src/srcTermDstDir' }],
-        srcTerm : [{ hardLinks : [ '/dst/srcTerm', '/src/srcTerm' ], data : 'srcTerm' }],
+        same : [ { hardLinks : [ '/dst/same', '/src/same' ], data : 'same' } ],
+        diff : [ { hardLinks : [ '/dst/diff', '/src/diff' ], data : 'src/diff' } ],
+        srcDirDstTerm : { f2 : [ { hardLinks : [ '/dst/srcDirDstTerm/f2', '/src/srcDirDstTerm/f2' ], data : 'src/srcDirDstTerm/f2' } ], f3 : [ { hardLinks : [ '/dst/srcDirDstTerm/f3', '/src/srcDirDstTerm/f3' ], data : 'src/srcDirDstTerm/f3' } ] },
+        srcTermDstDir : [ { hardLinks : [ '/dst/srcTermDstDir', '/src/srcTermDstDir' ], data : 'src/srcTermDstDir' } ],
+        srcTerm : [ { hardLinks : [ '/dst/srcTerm', '/src/srcTerm' ], data : 'srcTerm' } ],
         srcDir : {},
       }
     },
@@ -327,4 +328,4 @@ Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 
-})();
+} )();

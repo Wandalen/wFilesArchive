@@ -15,7 +15,7 @@ let pathsSameIno;
 for( let i = 0; i < 1000; i++ )
 {
   let path = _.path.join( dirname, '' + i );
-  _.fileProvider.fileWrite( path,path );
+  _.fileProvider.fileWrite( path, path );
   let stat = _.fileProvider.fileStat( path );
   if( inodes[ stat.ino ] )
   {
@@ -45,7 +45,7 @@ logger.log( hash1, hash2 );
 logger.log( 'Same:', hash1 === hash2 );
 
 logger.log( 'Linking two files with same inode.' )
-provider.linkHard({ dstPath : pathsSameIno });
+provider.linkHard( { dstPath : pathsSameIno } );
 logger.log( 'Linked: ', provider.filesAreHardLinked.apply( provider, pathsSameIno ) );
 
 provider.archive.restoreLinksEnd();
