@@ -1,55 +1,34 @@
 {
-  "name": "wfilesarchive",
-  "version": "0.3.274",
-  "engine": "node >= 10.0.0",
-  "description": "Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.",
-  "license": "MIT",
-  "author": "Kostiantyn Wandalen <wanalen@01.school>",
-  "contributors": [
-    {
-      "name": "Kostiantyn Wandalen",
-      "email": "wanalen@01.school"
-    },
-    {
-      "name": "Volodymyr M.",
-      "email": "volodymyr.migdal@gmail.com"
-    }
+  "name" : "wfilesarchive",
+  "version" : "0.3.274",
+  "engine" : "node >= 10.0.0",
+  "description" : "Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.",
+  "license" : "MIT",
+  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
+  "contributors" :
+  [
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" },
+    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
   ],
-  "main": "proto/dwtools/amid/l4_files/entry/Archive.s",
-  "files": [
-    "proto/dwtools/amid/l4_files",
-    "proto/dwtools/Tools.s",
-    "out"
-  ],
-  "scripts": {
-    "test": "wtest .run 'proto/**' rapidity:-3",
-    "docgen": "wdocgen proto"
+  "main" : "proto/dwtools/amid/l4_files/entry/Archive.s",
+  "files" : [ "proto/dwtools/amid/l4_files", "proto/dwtools/Tools.s", "out" ],
+  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
+  "repository" :
+  {
+    "type" : "git",
+    "url" : "https://github.com/Wandalen/wFilesArchive.git"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Wandalen/wFilesArchive.git"
+  "bugs" :
+  {
+    "url" : "https://github.com/Wandalen/wFilesArchive/issues"
   },
-  "bugs": {
-    "url": "https://github.com/Wandalen/wFilesArchive/issues"
+  "dependencies" :
+  {
+    "wTools" : "alpha",
+    "wFiles" : "alpha",
+    "wverbal" : "alpha",
+    "wstatestorage" : "alpha"
   },
-  "dependencies": {
-    "wTools": "alpha",
-    "wFiles": "alpha",
-    "wverbal": "alpha",
-    "wstatestorage": "alpha"
-  },
-  "devDependencies": {
-    "wait-sync": "1.0.1",
-    "wTesting": "alpha",
-    "eslint": "=7.1.0"
-  },
-  "keywords": [
-    "wTools",
-    "wFiles",
-    "wFilesArchive",
-    "File Archive",
-    "file",
-    "read file",
-    "write file"
-  ]
+  "devDependencies" : { "wait-sync" : "1.0.1", "wTesting" : "alpha", "eslint": "=7.1.0" },
+  "keywords" : [ "wTools", "wFiles", "wFilesArchive", "File Archive", "file", "read file", "write file" ]
 }
