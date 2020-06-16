@@ -16,7 +16,7 @@ for( let i = 0; i < 1000; i++ )
 {
   let path = _.path.join( dirname, '' + i );
   _.fileProvider.fileWrite( path, path );
-  let stat = _.fileProvider.fileStat( path );
+  let stat = _.fileProvider.statRead( path );
   if( inodes[ stat.ino ] )
   {
     pathsSameIno = inodes[ stat.ino ] = [ inodes[ stat.ino ], path ];

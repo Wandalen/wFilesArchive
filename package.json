@@ -29,6 +29,6 @@
     "wverbal" : "alpha",
     "wstatestorage" : "alpha"
   },
-  "devDependencies" : { "wait-sync" : "1.0.1", "wTesting" : "alpha", "eslint": "=7.1.0" },
+  "devDependencies" : { "wait-sync" : "1.0.1", "wTesting" : "alpha", "eslint" : "7.1.0" },
   "keywords" : [ "wTools", "wFiles", "wFilesArchive", "File Archive", "file", "read file", "write file" ]
 }
