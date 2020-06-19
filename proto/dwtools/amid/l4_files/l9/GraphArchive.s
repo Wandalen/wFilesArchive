@@ -310,9 +310,9 @@ let timelapseCallFileCopyAct = timelapseLinkingHook_functor( function fileCopyAc
   identical = false;
 
   if( identical )
-  if( !_.statsAreHardLinked( srcStat, dstStat ) )
+  if( !_.files.stat.areHardLinked( srcStat, dstStat ) )
   {
-    if( _.statsHaveDifferentContent( srcStat, dstStat ) )
+    if( _.files.stat.different( srcStat, dstStat ) )
     identical = false;
     if( identical )
     {

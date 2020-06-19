@@ -89,7 +89,7 @@ function filesUpdate()
   archive.fileRemovedMap = fileMapOld;
   archive.fileMap = fileMapNew;
 
-  if( archive.fileMapAutosaving ) /* xxx */
+  if( archive.fileMapAutosaving )
   archive.storageSave();
 
   if( archive.verbosity >= 8 )
@@ -181,7 +181,7 @@ function filesUpdate()
       d.size = fileRecord.stat.size;
       if( archive.maxSize === null || fileRecord.stat.size <= archive.maxSize )
       d.hash = fileProvider.hashRead({ filePath : fileRecord.absolute, throwing : 0, sync : 1 });
-      d.hash2 = _.statHash2Get( fileRecord.stat );
+      d.hashOfStat = _.files.stat.hashStatFrom( fileRecord.stat );
       d.nlink = fileRecord.stat.nlink;
     }
 
@@ -382,10 +382,10 @@ function restoreLinksEnd()
       continue;
       let dstFile = filesWithHash[ last ];
       /* if this files where linked before changes, relink them */
-      _.assert( !!srcFile.hash2 );
+      _.assert( !!srcFile.hashOfStat );
       _.assert( !!srcFile.size >= 0 );
       _.assert( !!dstFile.size >= 0 );
-      if( srcFile.hash2 && srcFile.hash2 === dstFile.hash2 && srcFile.size > 0 )
+      if( srcFile.hashOfStat && srcFile.hashOfStat === dstFile.hashOfStat && srcFile.size > 0 )
       {
         _.assert( dstFile.size === srcFile.size );
         restored += 1;
@@ -507,7 +507,6 @@ let mask =
     /\.DS_Store$/,
     /\.tmp($|\/|\.)/,
     /\.big($|\/|\.)/,
-    // /(^|\/)\.(?!$|\/)/,
     /(^|\/)\-(?!$|\/)/,
   ],
 };
@@ -537,7 +536,7 @@ let Composes =
   fileMapAutosaving : 0,
   fileMapAutoLoading : 1,
 
-  mask : _.define.own( mask ), /* !!! not shallow clone required */
+  mask : _.define.own( mask ), /* zzz : not shallow clone required */
 
   storageFileName : '.warchive',
   storageSaveAsJs : true

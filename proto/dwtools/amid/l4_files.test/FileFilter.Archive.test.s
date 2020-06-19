@@ -1313,8 +1313,8 @@ function inodeExperiment( test )
   test.notIdentical( hash1, hash2 );
 
   test.case = 'files with same ino should not have same hash2'
-  hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hash2;
-  hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash2;
+  hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hashOfStat;
+  hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hashOfStat;
   test.notIdentical( hash1, hash2 )
 
   provider.hardLink({ dstPath : pathsSameIno });
