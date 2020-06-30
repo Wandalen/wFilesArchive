@@ -376,7 +376,7 @@ let timelapseCallHardLinkAct = timelapseLinkingHook_functor( function hardLinkAc
   }
 
   debugger;
-  if( op.originalFileProvider.filesAreHardLinked( o2.srcPath, o2.dstPath ) )
+  if( op.originalFileProvider.areHardLinked( o2.srcPath, o2.dstPath ) )
   {
     dstRecord.finit();
   }
