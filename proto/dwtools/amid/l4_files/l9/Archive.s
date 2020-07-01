@@ -45,6 +45,7 @@ function filesUpdate()
 {
   let archive = this;
   let fileProvider = archive.fileProvider;
+  let path = fileProvider.path;
   let time = _.time.now();
 
   let fileMapOld = archive.fileMap;
@@ -54,6 +55,8 @@ function filesUpdate()
   archive.hashReadMap = null;
 
   _.assert( _.strDefined( archive.basePath ) || _.strsDefined( archive.basePath ) );
+  _.assert( o.basePath.length >= 1 );
+  _.assert( _.all( _.fileProvider.statsResolvedRead( path.fromGlob( o.basePath ) ) ) );
 
   let filePath = _.strJoin([ archive.basePath, '/**' ]);
   if( archive.verbosity >= 3 )
