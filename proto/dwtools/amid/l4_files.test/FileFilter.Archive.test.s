@@ -48,6 +48,9 @@ function onSuiteEnd()
 
 function flatMapFromTree( tree, currentPath, paths )
 {
+
+  currentPath = _.scalarFrom( currentPath );
+
   if( paths === undefined )
   {
     paths = Object.create( null );
@@ -102,12 +105,6 @@ function archive( test )
   }
 
   _.fileProvider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
-  // _.FileProvider.Extract.readToProvider
-  // ({
-  //   filesTree,
-  //   dstPath : testRoutineDir,
-  //   dstProvider : _.fileProvider,
-  // });
 
   _.FileProvider.Extract
   ({
@@ -150,7 +147,6 @@ function archive( test )
   var archive = provider.fileReadJs( archivePath );
   logger.log( _.entityDiff(  archive, provider.archive.fileMap ) )
   test.identical( archive, provider.archive.fileMap );
-
 
   _.fileProvider.fieldPop( 'safe', 0 );
 }
