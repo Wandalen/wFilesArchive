@@ -33,8 +33,9 @@ function init( o )
     archive.copy( o );
   }
 
-  if( archive.fileProvider && archive.fileProvider.safe >= 2 )
-  archive.fileProvider.safe = 1;
+  // yyy
+  // if( archive.fileProvider && archive.fileProvider.safe >= 2 )
+  // archive.fileProvider.safe = 1;
 
 }
 
@@ -222,6 +223,7 @@ function filesLinkSame( o )
   let archive = this;
   let provider = archive.fileProvider;
   let hashReadMap = archive.filesHashMapForm();
+
   o = _.routineOptions( filesLinkSame, arguments );
 
   for( let f in hashReadMap )
@@ -517,6 +519,7 @@ let mask =
 
 let Composes =
 {
+
   verbosity : 0,
 
   basePath : null,
@@ -621,7 +624,8 @@ _.classDeclare
 _.Copyable.mixin( Self );
 _.StateStorage.mixin( Self );
 _.Verbal.mixin( Self );
-_global_[ Self.name ] = _[ Self.shortName ] = Self;
+_[ Self.shortName ] = Self;
+// _global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 // --
 // export
