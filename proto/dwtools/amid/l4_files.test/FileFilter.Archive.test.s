@@ -170,7 +170,7 @@ function restoreLinks( test )
   if( !provider.original.UsingBigIntForStat )
   hardLinked = _.maybe;
 
-  //
+  /* */
 
   test.case = 'three files linked, first link will be broken';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -194,7 +194,7 @@ function restoreLinks( test )
   test.identical( provider.areHardLinked( paths ), hardLinked );
   test.identical( provider.fileRead( paths[0] ), 'abc' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 0 link will be broken, content 0 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -214,7 +214,7 @@ function restoreLinks( test )
   test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[0] ), 'abc' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 1 link will be broken, content 1 changed';
   provider.filesDelete( testRoutineDir );
@@ -239,7 +239,7 @@ function restoreLinks( test )
   test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[ 0 ] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 0 link will be broken, content 2 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -264,7 +264,7 @@ function restoreLinks( test )
   test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[0] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 2 link will be broken, content 0 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -289,7 +289,7 @@ function restoreLinks( test )
   test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[0] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 2 link will be broken, content 1 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -314,7 +314,7 @@ function restoreLinks( test )
   test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[0] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 2 link will be broken, content 2 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -339,7 +339,7 @@ function restoreLinks( test )
   test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[0] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, all links will be broken';
   provider.filesDelete( testRoutineDir );
@@ -369,7 +369,7 @@ function restoreLinks( test )
   test.identical( provider.fileRead( paths[ 1 ] ), '2' );
   test.identical( provider.fileRead( paths[ 2 ] ), '2' );
 
-  //
+  /* */
 
   test.case = 'three files linked, size of first is changed after breaking the link, write 1 last'
   var paths = [ 'a', 'b', 'c' ];
@@ -394,7 +394,7 @@ function restoreLinks( test )
   test.identical( provider.fileRead( paths[ 1 ] ), 'abcd1' );
   test.identical( provider.fileRead( paths[ 2 ] ), 'abcd1' );
 
-  //
+  /* */
 
   test.case = 'three files linked, size of first is changed after breaking the link, write 0 last'
   var paths = [ 'a', 'b', 'c' ];
@@ -419,7 +419,7 @@ function restoreLinks( test )
   test.identical( provider.fileRead( paths[ 1 ] ), 'abcd0' );
   test.identical( provider.fileRead( paths[ 2 ] ), 'abcd0' );
 
-  //
+  /* */
 
   test.case = 'three files linked, fourth is linked with the third file';
   provider.filesDelete( testRoutineDir );
@@ -481,7 +481,7 @@ function restoreLinks( test )
   /* checking if link was recovered by comparing content of a files */
   test.identical( provider.areHardLinked( paths ), hardLinked );
 
-  //
+  /* */
 
   test.case = 'three files linked, changing content of a file, but saving size';
   var paths = [ 'a', 'b', 'c' ];
@@ -532,7 +532,7 @@ function restoreLinksComplex( test )
 
   run();
 
-  //
+  /* */
 
   function begin()
   {
@@ -560,7 +560,7 @@ function restoreLinksComplex( test )
     return files;
   }
 
-  //
+  /* */
 
   function run()
   {
