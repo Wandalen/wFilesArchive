@@ -1147,13 +1147,6 @@ function storageOperations( test )
   provider.archive.fileMapAutosaving = 1;
   provider.archive.fileMapAutoLoading = 0;
 
-  // _.FileProvider.Extract.readToProvider
-  // ({
-  //   filesTree,
-  //   dstProvider : provider,
-  //   dstPath : dir,
-  // });
-
   _.FileProvider.Extract
   ({
     filesTree,
@@ -1166,15 +1159,14 @@ function storageOperations( test )
 
   provider.archive.filesUpdate();
 
-
-  test.identical( provider.archive.storagesLoaded, [] );
+  test.identical( provider.archive.storagesLoaded, [] ); debugger;
 
   var archivePaths = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ], provider.archive.storageFileName );
   var records = provider.recordFactory().records( archivePaths );
   records.forEach( ( r ) =>
   {
     let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
-    test.case = 'archive saved on disk and fileMap are same';
+    test.description = 'archive saved on disk and fileMap are same';
     test.contains( provider.archive.fileMap, filesMap );
   });
 

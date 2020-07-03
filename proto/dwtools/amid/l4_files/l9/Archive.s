@@ -467,12 +467,15 @@ function storageFilePathToSaveGet( storageDirPath )
 
   storageFilePath = _.select( self.storagesLoaded, '*/filePath' );
 
+  // if( !storageFilePath.length )
+  // storageFilePath = path.s.join( path.common( path.s.fromGlob( self.basePath ) ), self.storageFileName );
+
   if( !storageFilePath.length )
-  storageFilePath = path.s.join( path.common( path.s.fromGlob( self.basePath ) ), self.storageFileName );
+  storageFilePath = path.s.join( path.s.fromGlob( self.basePath ), self.storageFileName );
 
   _.sure
   (
-    _.all( storageFilePath, ( storageFilePath ) => _.fileProvider.isDir( _.fileProvider.path.dir( storageFilePath ) ) ),
+    _.all( storageFilePath, ( storageFilePath ) => fileProvider.isDir( path.dir( storageFilePath ) ) ),
     () => 'Directory for storage file does not exist ' + _.strQuote( storageFilePath )
   );
 
