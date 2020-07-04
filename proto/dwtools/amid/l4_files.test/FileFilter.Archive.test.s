@@ -24,7 +24,7 @@ var Parent = wTester;
 function onSuiteBegin()
 {
   if( Config.interpreter === 'njs' )
-  this.testRootDirectory = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'Archive' );
+  this.testRootDirectory = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Archive' );
   else
   this.testRootDirectory = _.path.current();
 
