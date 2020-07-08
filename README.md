@@ -1,4 +1,4 @@
-# module::FilesArchive [![Status](https://github.com/Wandalen/wFilesArchive/workflows/Test/badge.svg)](https://github.com/Wandalen/wFilesArchive}/actions?query=workflow%3ATest)
+# module::FilesArchive [![Status](https://github.com/Wandalen/wFilesArchive/workflows/Test/badge.svg)](https://github.com/Wandalen/wFilesArchive/actions?query=workflow%3ATest) [![experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
 
 Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.
 
