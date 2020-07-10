@@ -1183,9 +1183,9 @@ function storageOperations( test )
 
   //simulate file change before filesUpdate
   let time = new Date( 98, 1 );
-  provider.fileTimeSet( _.path.join( dir, 'dir1/a' ), time,time );
-  provider.fileTimeSet( _.path.join( dir, 'dir2/a' ), time,time );
-  provider.fileTimeSet( _.path.join( dir, 'dir3/x' ), time,time );
+  provider.timeWrite( _.path.join( dir, 'dir1/a' ), time,time );
+  provider.timeWrite( _.path.join( dir, 'dir2/a' ), time,time );
+  provider.timeWrite( _.path.join( dir, 'dir3/x' ), time,time );
 
   provider.archive.filesUpdate();
 
