@@ -5,7 +5,7 @@ Experimental. Several classes to reflect changes of files on dependent files and
 ### Try out
 ```
 npm install
-node sample/Sample.js
+node sample/Sample.s
 ```
 
 
