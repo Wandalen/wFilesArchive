@@ -175,7 +175,7 @@ let Forbids =
 // declare
 // --
 
-let Extend =
+let Extension =
 {
 
   finit,
@@ -203,7 +203,7 @@ _.classDeclare
 ({
   cls : Self,
   parent : Parent,
-  extend : Extend,
+  extend : Extension,
 });
 
 _.Copyable.mixin( Self );
