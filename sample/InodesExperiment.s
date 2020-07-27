@@ -12,12 +12,14 @@ let dirname = _.path.join( __dirname, 'tmp.tmp' );
 let inodes = {};
 let pathsSameIno;
 
-for( let i = 0; i < 1000; i++ )
+for( let i = 0; i < 5; i++ )
 {
   let path = _.path.join( dirname, '' + i );
   _.fileProvider.fileWrite( path, path );
   let stat = _.fileProvider.statRead( path );
   let index = '' + parseInt( stat.ino );
+  console.log( inodes )
+  console.log( stat )
   if( inodes[ index ] )
   {
     pathsSameIno = inodes[ index ] = [ inodes[ index ], path ];
@@ -38,11 +40,11 @@ provider.archive.comparingRelyOnHardLinks = 1;
 
 provider.archive.restoreLinksBegin();
 
-// logger.log( 'Comparing hash2 of', _.toStr( pathsSameIno, { levels : 2 } ) );
-// let hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hash2;
-// let hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash2;
-// logger.log( hash1, hash2 );
-// logger.log( 'Same:', hash1 === hash2 );
+logger.log( 'Comparing hash2 of', _.toStr( pathsSameIno, { levels : 2 } ) );
+let hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hash2;
+let hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash2;
+logger.log( hash1, hash2 );
+logger.log( 'Same:', hash1 === hash2 );
 
 logger.log( 'Linking two files with same inode.' )
 provider.linkHard( { dstPath : pathsSameIno } );
