@@ -12,7 +12,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
   _.include( 'wFilesArchive' );
 
-  let waitSync = require( 'wait-sync' );
+  var waitSync = require( 'wait-sync' );
 }
 
 //
