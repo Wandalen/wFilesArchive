@@ -3,6 +3,7 @@
 
 'use strict';
 
+let waitSync
 if( typeof module !== 'undefined' )
 {
 
@@ -12,7 +13,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
   _.include( 'wFilesArchive' );
 
-  var waitSync = require( 'wait-sync' );
+  waitSync = require( 'wait-sync' );
 }
 
 //
