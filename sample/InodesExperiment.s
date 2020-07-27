@@ -12,7 +12,7 @@ let dirname = _.path.join( __dirname, 'tmp.tmp' );
 let inodes = {};
 let pathsSameIno;
 
-for( let i = 0; i < 5; i++ )
+for( let i = 0; i < 1000; i++ )
 {
   let path = _.path.join( dirname, '' + i );
   _.fileProvider.fileWrite( path, path );
