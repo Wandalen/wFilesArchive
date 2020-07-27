@@ -17,15 +17,15 @@ for( let i = 0; i < 1000; i++ )
   let path = _.path.join( dirname, '' + i );
   _.fileProvider.fileWrite( path, path );
   let stat = _.fileProvider.statRead( path );
-  if( inodes[ stat.ino ] )
+  let index = '' + parseInt( stat.ino );
+  if( inodes[ index ] )
   {
-    pathsSameIno = inodes[ stat.ino ] = [ inodes[ stat.ino ], path ];
+    pathsSameIno = inodes[ index ] = [ inodes[ index ], path ];
     logger.log( 'Inode duplication!' );
     logger.log( _.toStr( pathsSameIno ) );
     break;
   }
-
-  inodes[ stat.ino ] = path;
+  inodes[ index ] = path;
 }
 
 /**/
@@ -38,11 +38,11 @@ provider.archive.comparingRelyOnHardLinks = 1;
 
 provider.archive.restoreLinksBegin();
 
-logger.log( 'Comparing hash2 of', _.toStr( pathsSameIno, { levels : 2 } ) );
-let hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hash2;
-let hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash2;
-logger.log( hash1, hash2 );
-logger.log( 'Same:', hash1 === hash2 );
+// logger.log( 'Comparing hash2 of', _.toStr( pathsSameIno, { levels : 2 } ) );
+// let hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hash2;
+// let hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash2;
+// logger.log( hash1, hash2 );
+// logger.log( 'Same:', hash1 === hash2 );
 
 logger.log( 'Linking two files with same inode.' )
 provider.linkHard( { dstPath : pathsSameIno } );
