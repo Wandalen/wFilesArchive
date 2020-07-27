@@ -216,7 +216,6 @@ _[ Self.shortName ] = Self;
 // --
 
 
-
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
