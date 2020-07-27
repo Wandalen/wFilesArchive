@@ -18,8 +18,6 @@ for( let i = 0; i < 1000; i++ )
   _.fileProvider.fileWrite( path, path );
   let stat = _.fileProvider.statRead( path );
   let index = '' + parseInt( stat.ino );
-  console.log( inodes )
-  console.log( stat )
   if( inodes[ index ] )
   {
     pathsSameIno = inodes[ index ] = [ inodes[ index ], path ];
