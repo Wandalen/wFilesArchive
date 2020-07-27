@@ -14,7 +14,7 @@ let pathsSameIno;
 
 for( let i = 0; i < 10; i++ )
 {
-  let path = _.path.join( dirname, '' + i );
+  let path = _.path.join( dirname, '' + i + '.txt' );
   _.fileProvider.fileWrite( path, path );
   let stat = _.fileProvider.statRead( path );
   let index = '' + parseInt( stat.ino );
@@ -33,8 +33,6 @@ for( let i = 0; i < 10; i++ )
 /**/
 
 var provider = _.FileFilter.Archive();
-debugger;
-// console.log( provider )
 provider.archive.basePath = dirname;
 provider.archive.verbosity = 0;
 provider.archive.fileMapAutosaving = 0;
