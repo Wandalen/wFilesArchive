@@ -311,9 +311,9 @@ let timelapseCallFileCopyAct = timelapseLinkingHook_functor( function fileCopyAc
   identical = false;
 
   if( identical )
-  if( !_.statsAreHardLinked( srcStat, dstStat ) )
+  if( !_.files.stat.areHardLinked( srcStat, dstStat ) )
   {
-    if( _.statsHaveDifferentContent( srcStat, dstStat ) )
+    if( _.files.stat.different( srcStat, dstStat ) )
     identical = false;
     if( identical )
     {
@@ -377,7 +377,7 @@ let timelapseCallHardLinkAct = timelapseLinkingHook_functor( function hardLinkAc
   }
 
   debugger;
-  if( op.originalFileProvider.filesAreHardLinked( o2.srcPath, o2.dstPath ) )
+  if( op.originalFileProvider.areHardLinked( o2.srcPath, o2.dstPath ) )
   {
     dstRecord.finit();
   }
@@ -579,9 +579,6 @@ _[ Self.shortName ] = Self;
 // export
 // --
 
-// if( typeof module !== 'undefined' )
-// if( _global_.WTOOLS_PRIVATE )
-// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;

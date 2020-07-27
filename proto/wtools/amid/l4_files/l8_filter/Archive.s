@@ -38,7 +38,7 @@ function init( o )
   let proxy = _.proxyMap( self, self.original );
 
   if( !proxy.archive )
-  proxy.archive = new wFilesArchive({ fileProvider : proxy });
+  proxy.archive = new _.FilesArchive({ fileProvider : proxy });
 
   return proxy;
 }
@@ -69,7 +69,7 @@ let Restricts =
 // declare
 // --
 
-let Extend =
+let Extension =
 {
 
   init,
@@ -91,7 +91,7 @@ _.classDeclare
 ({
   cls : Self,
   parent : Parent,
-  extend : Extend,
+  extend : Extension,
 });
 
 _.Copyable.mixin( Self );

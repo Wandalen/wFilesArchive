@@ -3,14 +3,14 @@ root:
   - wFilesArchive.out
 consistency:
   wFilesArchive.out.will.yml: &ref_0
-    hash: ec6b85a8e186874e61c76904489fdd7b
-    size: 43202
+    hash: 16a5919a280139288de97efd3d4eae1c
+    size: 43319
   ../.ex.will.yml: &ref_1
     hash: f2ac3748061252f529bf868451995fb1
     size: 2096
   ../.im.will.yml: &ref_2
-    hash: 34e63254c3186df6ccc561ae96b8b232
-    size: 5276
+    hash: a3315667298526fffbbd6761b1a1377a
+    size: 5273
 module:
   wFilesArchive.out:
     about:
@@ -124,7 +124,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/amid/l4_files/entry/Archive.s
+        path: ../proto/wtools/amid/l4_files/entry/Archive.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -134,13 +134,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/l4_files/entry/Archive.s'
+        path: '{path::out.*=1}/source/wtools/amid/l4_files/entry/Archive.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/l4_files/entry/Archive.s'
+        path: '{path::out.*=1}/source/wtools/amid/l4_files/entry/Archive.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -166,82 +166,83 @@ module:
           export: 1
         path:
           - ../proto
-          - ../proto/dwtools
-          - ../proto/dwtools/Tools.s
-          - ../proto/dwtools/abase
-          - ../proto/dwtools/amid
-          - ../proto/dwtools/amid/-files
-          - ../proto/dwtools/amid/-files/IncludeArchive.s
-          - ../proto/dwtools/amid/-files/l2
-          - ../proto/dwtools/amid/-files/l2/ArchiveRecord.s
-          - ../proto/dwtools/amid/-files/l2/ArchiveRecordFactory.s
-          - ../proto/dwtools/amid/-files/l8_filter
-          - ../proto/dwtools/amid/-files/l8_filter/Archive.s
-          - ../proto/dwtools/amid/-files/l9
-          - ../proto/dwtools/amid/-files/l9/Archive.s
-          - ../proto/dwtools/amid/-files/l9/GraphArchive.s
-          - ../proto/dwtools/amid/-files/l9/GraphOld.s
-          - ../proto/dwtools/amid/-files.test
-          - ../proto/dwtools/amid/-files.test/FileFilter.Archive.test.s
-          - ../proto/dwtools/amid/-files.test/FilesGraph.test.s
-          - ../proto/dwtools/amid/l4_files
-          - ../proto/dwtools/amid/l4_files/entry
-          - ../proto/dwtools/amid/l4_files/entry/Archive.s
-          - ../proto/dwtools/amid/l4_files/include
-          - ../proto/dwtools/amid/l4_files/include/Archive.s
-          - ../proto/dwtools/amid/l4_files/l4
-          - ../proto/dwtools/amid/l4_files/l4/ArchiveRecord.s
-          - ../proto/dwtools/amid/l4_files/l4/ArchiveRecordFactory.s
-          - ../proto/dwtools/amid/l4_files/l8_filter
-          - ../proto/dwtools/amid/l4_files/l8_filter/Archive.s
-          - ../proto/dwtools/amid/l4_files/l9
-          - ../proto/dwtools/amid/l4_files/l9/-GraphOld.s
-          - ../proto/dwtools/amid/l4_files/l9/Archive.s
-          - ../proto/dwtools/amid/l4_files/l9/GraphArchive.s
-          - ../proto/dwtools/amid/l4_files.test
-          - ../proto/dwtools/amid/l4_files.test/FileFilter.Archive.test.s
-          - ../proto/dwtools/amid/l4_files.test/FilesGraph.test.s
-          - ../proto/dwtools/atop
-          - ../proto/dwtools/tmp.tmp
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1/a
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1/b
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1/c
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1/d
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir2
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir2/a
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir2/x
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir3
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir3/x
-          - ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations
+          - ../proto/Integration.test.ss
+          - ../proto/wtools
+          - ../proto/wtools/Tools.s
+          - ../proto/wtools/abase
+          - ../proto/wtools/amid
+          - ../proto/wtools/amid/-files
+          - ../proto/wtools/amid/-files/IncludeArchive.s
+          - ../proto/wtools/amid/-files/l2
+          - ../proto/wtools/amid/-files/l2/ArchiveRecord.s
+          - ../proto/wtools/amid/-files/l2/ArchiveRecordFactory.s
+          - ../proto/wtools/amid/-files/l8_filter
+          - ../proto/wtools/amid/-files/l8_filter/Archive.s
+          - ../proto/wtools/amid/-files/l9
+          - ../proto/wtools/amid/-files/l9/Archive.s
+          - ../proto/wtools/amid/-files/l9/GraphArchive.s
+          - ../proto/wtools/amid/-files/l9/GraphOld.s
+          - ../proto/wtools/amid/-files.test
+          - ../proto/wtools/amid/-files.test/FileFilter.Archive.test.s
+          - ../proto/wtools/amid/-files.test/FilesGraph.test.s
+          - ../proto/wtools/amid/l4_files
+          - ../proto/wtools/amid/l4_files/entry
+          - ../proto/wtools/amid/l4_files/entry/Archive.s
+          - ../proto/wtools/amid/l4_files/include
+          - ../proto/wtools/amid/l4_files/include/Archive.s
+          - ../proto/wtools/amid/l4_files/l4
+          - ../proto/wtools/amid/l4_files/l4/ArchiveRecord.s
+          - ../proto/wtools/amid/l4_files/l4/ArchiveRecordFactory.s
+          - ../proto/wtools/amid/l4_files/l8_filter
+          - ../proto/wtools/amid/l4_files/l8_filter/Archive.s
+          - ../proto/wtools/amid/l4_files/l9
+          - ../proto/wtools/amid/l4_files/l9/-GraphOld.s
+          - ../proto/wtools/amid/l4_files/l9/Archive.s
+          - ../proto/wtools/amid/l4_files/l9/GraphArchive.s
+          - ../proto/wtools/amid/l4_files.test
+          - ../proto/wtools/amid/l4_files.test/FileFilter.Archive.test.s
+          - ../proto/wtools/amid/l4_files.test/FilesGraph.test.s
+          - ../proto/wtools/atop
+          - ../proto/wtools/tmp.tmp
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1/a
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1/b
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1/c
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir1/d
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir2
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir2/a
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir2/x
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir3
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/severalPaths/dir3/x
+          - ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/.warchive
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/.warchive
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/a
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/a
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/b
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/b
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/c
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/c
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/d
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir1/d
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir2
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir2
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir2/.warchive
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir2/.warchive
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir2/a
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir2/a
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir2/x
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir2/x
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir3
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir3
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir3/.warchive
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir3/.warchive
           - >-
-            ../proto/dwtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir3/x
+            ../proto/wtools/tmp.tmp/Archive-213212-911-7d28/storageOperations/dir3/x
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -690,7 +691,7 @@ module:
           debug: release
       reflect.proto.debug.raw:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.raw'
         criterion:
           tests: no.tests
           debug: debug
@@ -700,7 +701,7 @@ module:
           - files.reflect
       reflect.proto.release.raw:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.raw'
         criterion:
           tests: no.tests
           debug: release
@@ -710,7 +711,7 @@ module:
           - files.reflect
       reflect.proto.debug.compiled:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.compiled'
         criterion:
           tests: no.tests
           debug: debug
@@ -720,7 +721,7 @@ module:
           - files.reflect
       reflect.proto.release.compiled:
         opts:
-          filePath: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.compiled'
         criterion:
           tests: no.tests
           debug: release
@@ -731,7 +732,7 @@ module:
       transpile.proto.raw:
         opts:
           entry: 'path::entry.proto.no.tests'
-          filePath: 'reflector::transpile.proto.raw*'
+          filePath: 'reflector::transpile.proto.raw'
         criterion:
           raw: raw
           debug: release
@@ -741,7 +742,7 @@ module:
       transpile.proto.no.tests.compiled.debug:
         opts:
           entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.debug'
         criterion:
           tests: no.tests
           raw: compiled
@@ -752,7 +753,7 @@ module:
       transpile.proto.no.tests.compiled.release:
         opts:
           entry: 'path::entry.proto.*=1'
-          filePath: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.release'
         criterion:
           tests: no.tests
           raw: compiled
@@ -764,7 +765,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.debug'
         criterion:
           tests: only.tests
           raw: compiled
@@ -776,7 +777,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          filePath: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.release'
         criterion:
           tests: only.tests
           raw: compiled
@@ -1005,7 +1006,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/amid/l4_files/entry/Archive.s
+        path: proto/wtools/amid/l4_files/entry/Archive.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -1015,13 +1016,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/l4_files/entry/Archive.s'
+        path: '{path::out.*=1}/source/wtools/amid/l4_files/entry/Archive.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/l4_files/entry/Archive.s'
+        path: '{path::out.*=1}/source/wtools/amid/l4_files/entry/Archive.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -1604,8 +1605,6 @@ module:
         hash: f2ac3748061252f529bf868451995fb1
         size: 2096
       ../.im.will.yml:
-        hash: 34e63254c3186df6ccc561ae96b8b232
-        size: 5276
-      wFilesArchive.out.will.yml:
-        hash: ec6b85a8e186874e61c76904489fdd7b
-        size: 43202
+        hash: a3315667298526fffbbd6761b1a1377a
+        size: 5273
+      wFilesArchive.out.will.yml: *ref_0

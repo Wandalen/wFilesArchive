@@ -131,7 +131,7 @@ let Forbids =
 // declare
 // --
 
-let Extend =
+let Extension =
 {
 
   finit,
@@ -160,7 +160,7 @@ _.classDeclare
 ({
   cls : Self,
   parent : Parent,
-  extend : Extend,
+  extend : Extension,
 });
 
 _.Copyable.mixin( Self );
@@ -170,9 +170,7 @@ _[ Self.shortName ] = Self;
 // export
 // --
 
-// if( typeof module !== 'undefined' )
-// if( _global_.WTOOLS_PRIVATE )
-// { /* delete require.cache[ module.id ]; */ }
+
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;

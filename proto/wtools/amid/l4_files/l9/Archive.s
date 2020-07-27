@@ -34,8 +34,9 @@ function init( o )
     archive.copy( o );
   }
 
-  if( archive.fileProvider && archive.fileProvider.safe >= 2 )
-  archive.fileProvider.safe = 1;
+  // yyy
+  // if( archive.fileProvider && archive.fileProvider.safe >= 2 )
+  // archive.fileProvider.safe = 1;
 
 }
 
@@ -45,6 +46,7 @@ function filesUpdate()
 {
   let archive = this;
   let fileProvider = archive.fileProvider;
+  let path = fileProvider.path;
   let time = _.time.now();
 
   let fileMapOld = archive.fileMap;
@@ -54,8 +56,27 @@ function filesUpdate()
   archive.hashReadMap = null;
 
   _.assert( _.strDefined( archive.basePath ) || _.strsDefined( archive.basePath ) );
+  _.assert( archive.basePath.length >= 1 );
+  _.assert
+  (
+    _.all( fileProvider.statsResolvedRead( path.s.fromGlob( archive.basePath ) ) )
+    , () => 'Some base paths do not exist:\n'
+    + '  ' + path.s.fromGlob( _.arrayAs( archive.basePath ) )
+    .filter( ( basePath ) => fileProvider.statResolvedRead( basePath ) )
+    .join( '\n  ' )
+  );
 
-  let filePath = _.strJoin([ archive.basePath, '/**' ]);
+  let filePath;
+  let basePath = _.arrayAs( archive.basePath );
+
+  filePath = basePath.map( ( basePath ) =>
+  {
+    if( path.isGlob( basePath ) )
+    return basePath;
+    else
+    return _.strJoin([ basePath, '/**' ]);
+  });
+
   if( archive.verbosity >= 3 )
   logger.log( ' : filesUpdate', filePath );
 
@@ -67,6 +88,19 @@ function filesUpdate()
 
   archive.mask = _.RegexpObject( archive.mask );
 
+  if( archive.includingPath || archive.excludingPath )
+  {
+    let includingPath = archive.includingPath ? _.arrayAs( archive.includingPath ) : [];
+    let excludingPath = archive.excludingPath ? _.arrayAs( archive.excludingPath ) : [];
+    _.assert( _.strsDefined( includingPath ) );
+    _.assert( _.strsDefined( excludingPath ) );
+    filePath = _.path.mapExtend( null, filePath );
+    includingPath = includingPath.length ? path.s.joinCross( basePath, includingPath ) : includingPath; /* xxx : simplify after fix of joinCross */
+    excludingPath = excludingPath.length ? path.s.joinCross( basePath, excludingPath ) : excludingPath; /* xxx : simplify after fix of joinCross */
+    includingPath.forEach( ( p ) => filePath[ p ] = true );
+    excludingPath.forEach( ( p ) => filePath[ p ] = false );
+  }
+
   let files = [];
   let found = fileProvider.filesFind
   ({
@@ -75,8 +109,9 @@ function filesUpdate()
     {
       maskAll : archive.mask,
       maskTransientAll : archive.mask,
-      recursive : 2,
+      // recursive : 2,
     },
+    mode : 'distinct',
     onUp : onFile,
     withTerminals : 1,
     withDirs : 1,
@@ -90,7 +125,7 @@ function filesUpdate()
   archive.fileRemovedMap = fileMapOld;
   archive.fileMap = fileMapNew;
 
-  if( archive.fileMapAutosaving ) /* xxx */
+  if( archive.fileMapAutosaving )
   archive.storageSave();
 
   if( archive.verbosity >= 8 )
@@ -182,7 +217,7 @@ function filesUpdate()
       d.size = fileRecord.stat.size;
       if( archive.maxSize === null || fileRecord.stat.size <= archive.maxSize )
       d.hash = fileProvider.hashRead({ filePath : fileRecord.absolute, throwing : 0, sync : 1 });
-      d.hash2 = _.statHash2Get( fileRecord.stat );
+      d.hashOfStat = _.files.stat.hashStatFrom( fileRecord.stat );
       d.nlink = fileRecord.stat.nlink;
     }
 
@@ -218,11 +253,13 @@ function filesHashMapForm()
 
 //
 
-function filesLinkSame( o )
+function filesLinkSame( o ) /* qqq : cover returned value */
 {
   let archive = this;
   let provider = archive.fileProvider;
   let hashReadMap = archive.filesHashMapForm();
+  let counter = 0;
+
   o = _.routineOptions( filesLinkSame, arguments );
 
   for( let f in hashReadMap )
@@ -243,25 +280,30 @@ function filesLinkSame( o )
         byName[ name ].push( path );
         else
         byName[ name ] = [ path ];
-      } );
+      });
+      let linked = 0;
       for( let name in byName )
       {
         files = filterFiles( byName[ name ] );
         if( files.length < 2 )
         continue;
-        provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
+        let done = provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
+        if( done )
+        linked += files.length; /* xxx : use linked instead of files.length after fix of hardLink */
       }
+      counter += linked;
     }
     else
     {
       files = filterFiles( files );
       if( files.length < 2 )
       continue;
-      provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
+      let linked = provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
+      counter += linked ? files.length : 0; /* xxx : use linked instead of files.length after fix of hardLink */
     }
   }
 
-  return archive;
+  return counter;
 
   /*  */
 
@@ -327,7 +369,7 @@ function restoreLinksEnd()
     if( linkedMap[ f ] )
     continue;
 
-    if( !hashReadMap[ modified.hash ] ) /* yyy qqq : cover please */
+    if( !hashReadMap[ modified.hash ] ) /* xxx qqq : cover please */
     {
       debugger;
       continue;
@@ -383,10 +425,10 @@ function restoreLinksEnd()
       continue;
       let dstFile = filesWithHash[ last ];
       /* if this files where linked before changes, relink them */
-      _.assert( !!srcFile.hash2 );
+      _.assert( !!srcFile.hashOfStat );
       _.assert( !!srcFile.size >= 0 );
       _.assert( !!dstFile.size >= 0 );
-      if( srcFile.hash2 && srcFile.hash2 === dstFile.hash2 && srcFile.size > 0 )
+      if( srcFile.hashOfStat && srcFile.hashOfStat === dstFile.hashOfStat && srcFile.size > 0 )
       {
         _.assert( dstFile.size === srcFile.size );
         restored += 1;
@@ -420,18 +462,22 @@ function storageFilePathToSaveGet( storageDirPath )
 {
   let self = this;
   let fileProvider = self.fileProvider;
+  let path = fileProvider.path;
   let storageFilePath = null;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   storageFilePath = _.select( self.storagesLoaded, '*/filePath' );
 
+  // if( !storageFilePath.length )
+  // storageFilePath = path.s.join( path.common( path.s.fromGlob( self.basePath ) ), self.storageFileName );
+
   if( !storageFilePath.length )
-  storageFilePath = fileProvider.path.s.join( self.basePath, self.storageFileName );
+  storageFilePath = path.s.join( path.s.fromGlob( self.basePath ), self.storageFileName );
 
   _.sure
   (
-    _.all( storageFilePath, ( storageFilePath ) => _.fileProvider.isDir( _.fileProvider.path.dir( storageFilePath ) ) ),
+    _.all( storageFilePath, ( storageFilePath ) => fileProvider.isDir( path.dir( storageFilePath ) ) ),
     () => 'Directory for storage file does not exist ' + _.strQuote( storageFilePath )
   );
 
@@ -508,7 +554,6 @@ let mask =
     /\.DS_Store$/,
     /\.tmp($|\/|\.)/,
     /\.big($|\/|\.)/,
-    // /(^|\/)\.(?!$|\/)/,
     /(^|\/)\-(?!$|\/)/,
   ],
 };
@@ -519,9 +564,12 @@ let mask =
 
 let Composes =
 {
+
   verbosity : 0,
 
-  basePath : null,
+  basePath : null, /* qqq : cover. try array, glob, array of mix of glob/not glob */
+  includingPath : null, /* qqq : cover */
+  excludingPath : null, /* qqq : cover */
 
   comparingRelyOnHardLinks : 0,
   replacingByNewest : 1,
@@ -538,7 +586,7 @@ let Composes =
   fileMapAutosaving : 0,
   fileMapAutoLoading : 1,
 
-  mask : _.define.own( mask ), /* !!! not shallow clone required */
+  mask : _.define.own( mask ), /* zzz : not shallow clone required */
 
   storageFileName : '.warchive',
   storageSaveAsJs : true
@@ -623,7 +671,8 @@ _.classDeclare
 _.Copyable.mixin( Self );
 _.StateStorage.mixin( Self );
 _.Verbal.mixin( Self );
-_global_[ Self.name ] = _[ Self.shortName ] = Self;
+_[ Self.shortName ] = Self;
+// _global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 // --
 // export

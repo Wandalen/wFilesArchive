@@ -189,14 +189,13 @@ rules :
   no-mixed-requires : error
   no-multi-assign : off
   no-multi-spaces :
-    - error
+    - warn
     -
       ignoreEOLComments : true
       exceptions :
         Property : true
         VariableDeclarator : true
         ImportDeclaration : true
-
   no-multi-str : error
   no-multiple-empty-lines : error
   no-native-reassign : error

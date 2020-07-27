@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../dwtools/Tools.s' );
+  let _ = require( '../../../wtools/Tools.s' );
 
   _.include( 'wFiles' );
   _.include( 'wTesting' );
@@ -17,15 +17,15 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _ = _global_.wTools;
-var Parent = wTester;
+let _ = _global_.wTools;
+let Parent = wTester;
 
 //
 
 function onSuiteBegin()
 {
   if( Config.interpreter === 'njs' )
-  this.testRootDirectory = _.path.pathDirTempOpen( _.path.join( __dirname, '../..' ), 'Archive' );
+  this.testRootDirectory = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'Archive' );
   else
   this.testRootDirectory = _.path.current();
 
@@ -49,6 +49,9 @@ function onSuiteEnd()
 
 function flatMapFromTree( tree, currentPath, paths )
 {
+
+  currentPath = _.scalarFrom( currentPath );
+
   if( paths === undefined )
   {
     paths = Object.create( null );
@@ -103,12 +106,6 @@ function archive( test )
   }
 
   _.fileProvider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
-  // _.FileProvider.Extract.readToProvider
-  // ({
-  //   filesTree,
-  //   dstPath : testRoutineDir,
-  //   dstProvider : _.fileProvider,
-  // });
 
   _.FileProvider.Extract
   ({
@@ -152,7 +149,6 @@ function archive( test )
   logger.log( _.entityDiff( archive, provider.archive.fileMap ) )
   test.identical( archive, provider.archive.fileMap );
 
-
   _.fileProvider.fieldPop( 'safe', 0 );
 }
 
@@ -175,7 +171,7 @@ function restoreLinks( test )
   if( !provider.original.UsingBigIntForStat )
   hardLinked = _.maybe;
 
-  //
+  /* */
 
   test.case = 'three files linked, first link will be broken';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -186,20 +182,20 @@ function restoreLinks( test )
     provider.fileWrite( paths[ i ], 'abc' );
   } );
   provider.hardLink({ dstPath : paths });
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
   waitSync( test.context.delay );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 0 ] ), false );
-  test.identical( provider.filesAreHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 0 ] ), false );
+  test.identical( provider.areHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 0 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
-  test.identical( provider.fileRead( paths[ 0 ] ), 'abc' );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 0 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+  test.identical( provider.fileRead( paths[0] ), 'abc' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 0 link will be broken, content 0 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -210,16 +206,16 @@ function restoreLinks( test )
     provider.fileWrite( paths[ i ], 'abc' );
   } );
   provider.hardLink({ dstPath : paths });
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
   provider.archive.restoreLinksBegin();
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.fileRead( paths[ 0 ] ), 'abc' );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 0 ],paths[ 1 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
+  test.identical( provider.fileRead( paths[0] ), 'abc' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 1 link will be broken, content 1 changed';
   provider.filesDelete( testRoutineDir );
@@ -230,21 +226,21 @@ function restoreLinks( test )
     provider.fileWrite( paths[ i ], 'abc' );
   } );
   provider.hardLink({ dstPath : paths });
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
   waitSync( test.context.delay );
   provider.fileWrite( paths[ 1 ], 'bcd' );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 0 ] ), false );
-  test.identical( provider.filesAreHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 0 ] ), false );
+  test.identical( provider.areHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 0 ],paths[ 1 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[ 0 ] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 0 link will be broken, content 2 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -255,21 +251,21 @@ function restoreLinks( test )
     provider.fileWrite( paths[ i ], 'abc' );
   } );
   provider.hardLink({ dstPath : paths });
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
   waitSync( test.context.delay );
   provider.fileWrite( paths[ 2 ], 'bcd' );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 0 ] ), false );
-  test.identical( provider.filesAreHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 0 ] ), false );
+  test.identical( provider.areHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.fileRead( paths[ 0 ] ), 'bcd' );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 0 ],paths[ 1 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
+  test.identical( provider.fileRead( paths[0] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 2 link will be broken, content 0 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -280,21 +276,21 @@ function restoreLinks( test )
     provider.fileWrite( paths[ i ], 'abc' );
   } );
   provider.hardLink({ dstPath : paths });
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
   waitSync( test.context.delay );
   provider.fileWrite( paths[ 0 ], 'bcd' );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), false );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 0 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 0 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.fileRead( paths[ 0 ] ), 'bcd' );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 0 ],paths[ 1 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
+  test.identical( provider.fileRead( paths[0] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 2 link will be broken, content 1 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -305,21 +301,21 @@ function restoreLinks( test )
     provider.fileWrite( paths[ i ], 'abc' );
   } );
   provider.hardLink({ dstPath : paths });
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
   waitSync( test.context.delay );
   provider.fileWrite( paths[ 1 ], 'bcd' );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), false );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 0 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 0 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.fileRead( paths[ 0 ] ), 'bcd' );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 0 ],paths[ 1 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
+  test.identical( provider.fileRead( paths[0] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, 2 link will be broken, content 2 changed';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
@@ -330,21 +326,21 @@ function restoreLinks( test )
     provider.fileWrite( paths[ i ], 'abc' );
   } );
   provider.hardLink({ dstPath : paths });
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
   provider.archive.restoreLinksBegin();
   provider.fileTouch({ filePath : paths[ 2 ], purging : 1 });
   waitSync( test.context.delay );
   provider.fileWrite( paths[ 2 ], 'bcd' );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), false );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 0 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 0 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.fileRead( paths[ 0 ] ), 'bcd' );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 0 ],paths[ 1 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
+  test.identical( provider.fileRead( paths[0] ), 'bcd' );
 
-  //
+  /* */
 
   test.case = 'three files linked, all links will be broken';
   provider.filesDelete( testRoutineDir );
@@ -365,16 +361,16 @@ function restoreLinks( test )
   test.identical( provider.fileRead( paths[ 0 ] ), '0' );
   test.identical( provider.fileRead( paths[ 1 ] ), '1' );
   test.identical( provider.fileRead( paths[ 2 ] ), '2' );
-  test.identical( provider.filesAreHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 0 ],paths[ 1 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[ 0 ] ), '2' );
   test.identical( provider.fileRead( paths[ 1 ] ), '2' );
   test.identical( provider.fileRead( paths[ 2 ] ), '2' );
 
-  //
+  /* */
 
   test.case = 'three files linked, size of first is changed after breaking the link, write 1 last'
   var paths = [ 'a', 'b', 'c' ];
@@ -391,15 +387,15 @@ function restoreLinks( test )
   provider.fileWrite( paths[ 0 ], 'abcd0' );
   waitSync( test.context.delay );
   provider.fileWrite( paths[ 1 ], 'abcd1' );
-  test.identical( provider.filesAreHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 0 ],paths[ 1 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[ 0 ] ), 'abcd1' );
   test.identical( provider.fileRead( paths[ 1 ] ), 'abcd1' );
   test.identical( provider.fileRead( paths[ 2 ] ), 'abcd1' );
 
-  //
+  /* */
 
   test.case = 'three files linked, size of first is changed after breaking the link, write 0 last'
   var paths = [ 'a', 'b', 'c' ];
@@ -416,15 +412,15 @@ function restoreLinks( test )
   provider.fileWrite( paths[ 1 ], 'abcd1' );
   waitSync( test.context.delay );
   provider.fileWrite( paths[ 0 ], 'abcd0' );
-  test.identical( provider.filesAreHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths ), false );
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 0 ],paths[ 1 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ],paths[ 2 ] ), hardLinked );
   test.identical( provider.fileRead( paths[ 0 ] ), 'abcd0' );
   test.identical( provider.fileRead( paths[ 1 ] ), 'abcd0' );
   test.identical( provider.fileRead( paths[ 2 ] ), 'abcd0' );
 
-  //
+  /* */
 
   test.case = 'three files linked, fourth is linked with the third file';
   provider.filesDelete( testRoutineDir );
@@ -449,17 +445,17 @@ function restoreLinks( test )
 
   /*  checking if linkage is broken  */
 
-  test.identical( provider.filesAreHardLinked( paths ), false );
-  test.identical( provider.filesAreHardLinked( paths[ 0 ], paths[ 1 ] ), false );
-  test.identical( provider.filesAreHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
-  test.identical( provider.filesAreHardLinked( paths[ 2 ], paths[ 3 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), false );
+  test.identical( provider.areHardLinked( paths[ 0 ], paths[ 1 ] ), false );
+  test.identical( provider.areHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 2 ], paths[ 3 ] ), hardLinked );
   test.is( provider.fileRead( paths[ 0 ] ) !== provider.fileRead( paths[ 3 ] ) );
   test.identical( provider.fileRead( paths[ 2 ] ), provider.fileRead( paths[ 3 ] ) );
 
   /*  restoring linkage  */
 
   provider.archive.restoreLinksEnd();
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = testRoutineDir;
@@ -484,9 +480,9 @@ function restoreLinks( test )
   provider.fileWrite( paths[ 0 ], 'abcd' );
   provider.archive.restoreLinksEnd();
   /* checking if link was recovered by comparing content of a files */
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
 
-  //
+  /* */
 
   test.case = 'three files linked, changing content of a file, but saving size';
   var paths = [ 'a', 'b', 'c' ];
@@ -504,7 +500,7 @@ function restoreLinks( test )
   provider.fileWrite( paths[ 0 ], 'cad' );
   provider.archive.restoreLinksEnd();
   /* checking if link was recovered by comparing content of a files */
-  test.identical( provider.filesAreHardLinked( paths ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
 
   _.fileProvider.fieldPop( 'safe', 0 );
 
@@ -537,7 +533,7 @@ function restoreLinksComplex( test )
 
   run();
 
-  //
+  /* */
 
   function begin()
   {
@@ -565,7 +561,7 @@ function restoreLinksComplex( test )
     return files;
   }
 
-  //
+  /* */
 
   function run()
   {
@@ -582,10 +578,10 @@ function restoreLinksComplex( test )
 
     provider.hardLink({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
     provider.hardLink({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
 
 
     provider.archive.restoreLinksBegin();
@@ -598,8 +594,8 @@ function restoreLinksComplex( test )
     provider.fileWrite({ filePath : _.mapKeys( files )[ 3 ], purging : 1, data : 'b' });
     waitSync( test.context.delay )
     provider.fileWrite({ filePath : _.mapKeys( files )[ 6 ], purging : 0, data : 'd' });
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), false );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 8 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 8 ) ), false );
     test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), '3' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), '3' );
@@ -643,10 +639,10 @@ function restoreLinksComplex( test )
     //   test.identical( _.mapKeys( provider.archive.fileModifiedMap ).length, 4 );
     // }
 
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
     test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), 'a' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), 'a' );
@@ -665,10 +661,10 @@ function restoreLinksComplex( test )
 
     provider.hardLink({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
     provider.hardLink({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
 
     provider.archive.restoreLinksBegin();
 
@@ -678,8 +674,8 @@ function restoreLinksComplex( test )
     provider.fileWrite({ filePath : _.mapKeys( files )[ 0 ], purging : 1, data : 'a1' });
     waitSync( test.context.delay )
     provider.fileWrite({ filePath : _.mapKeys( files )[ 1 ], purging : 1, data : 'a2' });
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), false );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 8 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 8 ) ), false );
     test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a1' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), 'a2' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), '3' );
@@ -721,10 +717,10 @@ function restoreLinksComplex( test )
       test.identical( _.mapKeys( provider.archive.fileModifiedMap ).length, 3 );
     } */
 
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
     test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a2' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), 'a2' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), 'a2' );
@@ -743,10 +739,10 @@ function restoreLinksComplex( test )
 
     provider.hardLink({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
     provider.hardLink({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
 
     provider.archive.restoreLinksBegin();
 
@@ -760,8 +756,8 @@ function restoreLinksComplex( test )
     waitSync( test.context.delay );
     provider.fileWrite({ filePath : _.mapKeys( files )[ 6 ], purging : 0, data : 'd' });
 
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), false );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 8 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 8 ) ), false );
     test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), '3' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), '3' );
@@ -799,10 +795,10 @@ function restoreLinksComplex( test )
       test.identical( _.mapKeys( provider.archive.fileModifiedMap ).length, 6 );
     } */
 
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.filesAreHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
     test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), 'a' );
     test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), 'a' );
@@ -889,11 +885,11 @@ function filesLinkSame( test )
   test.is( !!provider.statResolvedRead( _.path.join( dir, 'a' ) ) );
   test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir/a' ) ) );
 
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'b' ) ]), false );
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'dir/x' ) ]), false );
+  test.identical( provider.areHardLinked([ _.path.join( dir,'a' ),_.path.join( dir,'b' ) ]), false );
+  test.identical( provider.areHardLinked([ _.path.join( dir,'a' ),_.path.join( dir,'dir/x' ) ]), false );
 
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'c' ), _.path.join( dir, 'dir/a' ) ]), hardLinked );
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'b' ), _.path.join( dir, 'dir/x' ) ]), hardLinked );
+  test.identical( provider.areHardLinked([ _.path.join( dir,'a' ),_.path.join( dir,'c' ),_.path.join( dir,'dir/a' ) ]), hardLinked );
+  test.identical( provider.areHardLinked([ _.path.join( dir,'b' ),_.path.join( dir,'dir/x' ) ]), hardLinked );
 
   provider.finit();
   provider.archive.finit();
@@ -908,12 +904,12 @@ function filesLinkSame( test )
   test.is( !!provider.statResolvedRead( _.path.join( dir, 'a' ) ) );
   test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir/a' ) ) );
 
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'b' ) ]), false );
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'dir/x' ) ]), false );
+  test.identical( provider.areHardLinked([ _.path.join( dir,'a' ),_.path.join( dir,'b' ) ]), false );
+  test.identical( provider.areHardLinked([ _.path.join( dir,'a' ),_.path.join( dir,'dir/x' ) ]), false );
 
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'dir/a' ) ]), hardLinked );
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'c' ) ]), false );
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'b' ), _.path.join( dir, 'dir/x' ) ]), false );
+  test.identical( provider.areHardLinked([ _.path.join( dir,'a' ),_.path.join( dir,'dir/a' ) ]), hardLinked );
+  test.identical( provider.areHardLinked([ _.path.join( dir,'a' ),_.path.join( dir,'c' ) ]), false );
+  test.identical( provider.areHardLinked([ _.path.join( dir,'b' ),_.path.join( dir,'dir/x' ) ]), false );
 
   provider.finit();
   provider.archive.finit();
@@ -979,13 +975,13 @@ function filesLinkSameEmptyFiles( test )
   test.is( provider.fileExists( _.path.join( dir, 'f' ) ) );
   test.is( provider.fileExists( _.path.join( dir, 'dir/f' ) ) );
 
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'a', 'b' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'a', 'c' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'a', 'd' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'a', 'e' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'c', 'd' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'e', 'f' ] ) ), true );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'e', 'f', 'dir/f' ] ) ), true );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'b' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'c' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'd' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'e' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'c', 'd' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'e', 'f' ] ) ), true );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'e', 'f', 'dir/f' ] ) ), true );
 
   provider.finit();
   provider.archive.finit();
@@ -997,22 +993,22 @@ function filesLinkSameEmptyFiles( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
 
-  test.is( provider.fileExists( _.path.join( dir, 'a' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'b' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'c' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'd' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'e' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'f' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'dir/f' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'a' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'b' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'c' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'d' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'e' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'f' ) ) );
+  test.is( provider.fileExists( _.path.join( dir,'dir/f' ) ) );
 
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'a', 'b' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'a', 'c' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'a', 'd' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'a', 'e' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'c', 'd' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'e', 'f' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'e', 'dir/f' ] ) ), false );
-  test.identical( provider.filesAreHardLinked( _.path.s.join( dir, [ 'f', 'dir/f' ] ) ), true );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'b' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'c' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'd' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'e' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'c', 'd' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'e', 'f' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'e', 'dir/f' ] ) ), false );
+  test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'f', 'dir/f' ] ) ), true );
 
   provider.finit();
   provider.archive.finit();
@@ -1103,12 +1099,12 @@ function severalPaths( test )
   test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir3/x' ) ) );
 
   debugger;
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'dir1/a' ), _.path.join( dir, 'dir2/a' ) ]), hardLinked );
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'dir2/x' ), _.path.join( dir, 'dir3/x' ) ]), hardLinked );
+  test.identical( provider.areHardLinked( [ _.path.join( dir,'dir1/a' ),_.path.join( dir,'dir2/a' ) ]), hardLinked );
+  test.identical( provider.areHardLinked( [ _.path.join( dir,'dir2/x' ),_.path.join( dir,'dir3/x' ) ]), hardLinked );
   debugger;
 
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'dir1/a' ), _.path.join( dir, 'dir1/b' ) ]), false );
-  test.identical( provider.filesAreHardLinked([ _.path.join( dir, 'dir1/b' ), _.path.join( dir, 'dir2/x' ) ]), false );
+  test.identical( provider.areHardLinked( [ _.path.join( dir,'dir1/a' ),_.path.join( dir,'dir1/b' ) ]), false );
+  test.identical( provider.areHardLinked( [ _.path.join( dir,'dir1/b' ),_.path.join( dir,'dir2/x' ) ]), false );
 
   provider.finit();
   provider.archive.finit();
@@ -1152,13 +1148,6 @@ function storageOperations( test )
   provider.archive.fileMapAutosaving = 1;
   provider.archive.fileMapAutoLoading = 0;
 
-  // _.FileProvider.Extract.readToProvider
-  // ({
-  //   filesTree,
-  //   dstProvider : provider,
-  //   dstPath : dir,
-  // });
-
   _.FileProvider.Extract
   ({
     filesTree,
@@ -1171,15 +1160,14 @@ function storageOperations( test )
 
   provider.archive.filesUpdate();
 
-
-  test.identical( provider.archive.storagesLoaded, [] );
+  test.identical( provider.archive.storagesLoaded, [] ); debugger;
 
   var archivePaths = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ], provider.archive.storageFileName );
   var records = provider.recordFactory().records( archivePaths );
   records.forEach( ( r ) =>
   {
     let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
-    test.case = 'archive saved on disk and fileMap are same';
+    test.description = 'archive saved on disk and fileMap are same';
     test.contains( provider.archive.fileMap, filesMap );
   });
 
@@ -1196,9 +1184,9 @@ function storageOperations( test )
 
   //simulate file change before filesUpdate
   let time = new Date( 98, 1 );
-  provider.fileTimeSet( _.path.join( dir, 'dir1/a' ), time, time );
-  provider.fileTimeSet( _.path.join( dir, 'dir2/a' ), time, time );
-  provider.fileTimeSet( _.path.join( dir, 'dir3/x' ), time, time );
+  provider.timeWrite( _.path.join( dir, 'dir1/a' ), time,time );
+  provider.timeWrite( _.path.join( dir, 'dir2/a' ), time,time );
+  provider.timeWrite( _.path.join( dir, 'dir3/x' ), time,time );
 
   provider.archive.filesUpdate();
 
@@ -1314,17 +1302,17 @@ function inodeExperiment( test )
   test.notIdentical( hash1, hash2 );
 
   test.case = 'files with same ino should not have same hash2'
-  hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hash2;
-  hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash2;
+  hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hashOfStat;
+  hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hashOfStat;
   test.notIdentical( hash1, hash2 )
 
   provider.hardLink({ dstPath : pathsSameIno });
-  test.identical( provider.filesAreHardLinked.apply( provider, pathsSameIno ), hardLinked )
+  test.identical( provider.areHardLinked.apply( provider, pathsSameIno ), hardLinked )
 
   provider.archive.restoreLinksEnd();
 
   test.case = 'restored files should not be linked';
-  test.identical( provider.filesAreHardLinked.apply( provider, pathsSameIno ), false )
+  test.identical( provider.areHardLinked.apply( provider, pathsSameIno ), false )
 
   test.case = 'restored files should not have same hash';
   hash1 = provider.hashRead( pathsSameIno[ 0 ] );
@@ -1406,7 +1394,7 @@ function tester( test )
 // declare
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Tools.mid.files.src.Archive',

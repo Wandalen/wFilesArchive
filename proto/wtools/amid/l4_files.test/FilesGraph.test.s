@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../dwtools/Tools.s' );
+  let _ = require( '../../../wtools/Tools.s' );
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
@@ -19,7 +19,7 @@ if( typeof module !== 'undefined' )
 //
 
 let _ = _global_.wTools;
-var Parent = wTester;
+let Parent = wTester;
 
 // --
 //
@@ -208,7 +208,8 @@ function trivial( test )
   test.identical( gotActions, expActions );
   test.identical( gotPreserve, expPreserve );
 
-  debugger; return; xxx
+  // debugger; return; xxx
+  debugger;
 
   /* - */
 
@@ -304,7 +305,7 @@ function trivial( test )
 // declare
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Tools.mid.files.Graph',
