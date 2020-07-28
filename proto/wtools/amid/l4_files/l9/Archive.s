@@ -1,4 +1,5 @@
-( function _FilesArchive_s_() {
+( function _FilesArchive_s_()
+{
 
 'use strict';
 
@@ -58,10 +59,11 @@ function filesUpdate()
   _.assert( archive.basePath.length >= 1 );
   _.assert
   (
-      _.all( fileProvider.statsResolvedRead( path.s.fromGlob( archive.basePath ) ) )
+    _.all( fileProvider.statsResolvedRead( path.s.fromGlob( archive.basePath ) ) )
     , () => 'Some base paths do not exist:\n'
     + '  ' + path.s.fromGlob( _.arrayAs( archive.basePath ) )
-    .filter( ( basePath ) => fileProvider.statResolvedRead( basePath ) ).join( '\n  ' )
+    .filter( ( basePath ) => fileProvider.statResolvedRead( basePath ) )
+    .join( '\n  ' )
   );
 
   let filePath;
@@ -316,7 +318,7 @@ function filesLinkSame( o ) /* qqq : cover returned value */
       if( fileA === undefined )
       fileA = provider.fileRead({ filePath : files[ 0 ], encoding : 'original.type' });
       return _.entityIdentical( fileA, fileB );
-    })
+    } )
 
     return result;
   }
@@ -679,4 +681,4 @@ _[ Self.shortName ] = Self;
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
-})();
+} )();

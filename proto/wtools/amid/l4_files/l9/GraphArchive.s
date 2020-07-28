@@ -1,4 +1,5 @@
-( function _GraphArchive_s_() {
+( function _GraphArchive_s_()
+{
 
 'use strict';
 
@@ -233,7 +234,7 @@ let timelapseCallStatReadAct = timelapseSingleHook_functor( function( op )
   throw _.err( 'File', o2.filePath, 'was deleted' );
   op.result = null;
 
-});
+} );
 
 //
 
@@ -243,7 +244,7 @@ let timelapseCallFileExistsAct = timelapseSingleHook_functor( function( op )
   let o2 = op.args[ 0 ];
 
   op.result = false;
-});
+} );
 
 //
 
@@ -271,7 +272,7 @@ let timelapseCallDirMakeAct = timelapseSingleHook_functor( function( op, arecord
   // delete self.records.filePath[ arecord.absolute ];
 
   return true;
-});
+} );
 
 //
 
@@ -347,7 +348,7 @@ let timelapseCallFileCopyAct = timelapseLinkingHook_functor( function fileCopyAc
     return self.originalCall( op );
   }
 
-});
+} );
 
 //
 
@@ -398,7 +399,7 @@ let timelapseCallHardLinkAct = timelapseLinkingHook_functor( function hardLinkAc
     return self.originalCall( op );
   }
 
-});
+} );
 
 //
 
@@ -579,8 +580,7 @@ _[ Self.shortName ] = Self;
 // --
 
 
-
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
-})();
+} )();

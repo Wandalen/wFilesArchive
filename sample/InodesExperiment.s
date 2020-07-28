@@ -12,20 +12,22 @@ let dirname = _.path.join( __dirname, 'tmp.tmp' );
 let inodes = {};
 let pathsSameIno;
 
-for( let i = 0; i < 1000; i++ )
+for( let i = 0; i < 10; i++ )
 {
-  let path = _.path.join( dirname, '' + i );
-  _.fileProvider.fileWrite( path,path );
-  let stat = _.fileProvider.fileStat( path );
-  if( inodes[ stat.ino ] )
+  let path = _.path.join( dirname, '' + i + '.txt' );
+  _.fileProvider.fileWrite( path, path );
+  let stat = _.fileProvider.statRead( path );
+  let index = '' + parseInt( stat.ino );
+  if( i === 9 )
+  i--;
+  if( inodes[ index ] )
   {
-    pathsSameIno = inodes[ stat.ino ] = [ inodes[ stat.ino ], path ];
+    pathsSameIno = inodes[ index ] = [ inodes[ index ], path ];
     logger.log( 'Inode duplication!' );
     logger.log( _.toStr( pathsSameIno ) );
     break;
   }
-
-  inodes[ stat.ino ] = path;
+  inodes[ index ] = path;
 }
 
 /**/
@@ -45,15 +47,15 @@ logger.log( hash1, hash2 );
 logger.log( 'Same:', hash1 === hash2 );
 
 logger.log( 'Linking two files with same inode.' )
-provider.linkHard({ dstPath : pathsSameIno });
-logger.log( 'Linked: ', provider.filesAreHardLinked.apply( provider, pathsSameIno ) );
+provider.hardLink( { dstPath : pathsSameIno } );
+logger.log( 'Linked: ', provider.areHardLinked.apply( provider, pathsSameIno ) );
 
 provider.archive.restoreLinksEnd();
 
 logger.log( 'Restoring, files should be restored' )
-logger.log( 'Linked: ', provider.filesAreHardLinked.apply( provider, pathsSameIno ) );
-hash1 = provider.fileHash( pathsSameIno[ 0 ] );
-hash2 = provider.fileHash( pathsSameIno[ 1 ] );
+logger.log( 'Linked: ', provider.areHardLinked.apply( provider, pathsSameIno ) );
+hash1 = provider.hashRead( pathsSameIno[ 0 ] );
+hash2 = provider.hashRead( pathsSameIno[ 1 ] );
 logger.log( 'Comparing hash of files, should be not same' );
 logger.log( hash1, hash2 );
 logger.log( 'Same:', hash1 === hash2 );

@@ -1,4 +1,5 @@
-( function _AtchiveRecord_s_() {
+( function _AtchiveRecord_s_()
+{
 
 'use strict';
 
@@ -215,8 +216,7 @@ _[ Self.shortName ] = Self;
 // --
 
 
-
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
-})();
+} )();
