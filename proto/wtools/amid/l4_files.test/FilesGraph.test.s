@@ -208,9 +208,6 @@ function trivial( test )
   test.identical( gotActions, expActions );
   test.identical( gotPreserve, expPreserve );
 
-  // debugger; return; xxx
-  debugger;
-
   /* - */
 
   test.case = 'universal, linking : hardLink, dstRewriting : 1';
@@ -311,6 +308,7 @@ let Self =
   name : 'Tools.mid.files.Graph',
   silencing : 1,
   enabled : 1,
+  routineTimeOut : 15000,
 
   context :
   {
