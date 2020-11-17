@@ -517,13 +517,11 @@ function restoreLinksOnDifferentDirLevels( test )
   _.fileProvider.fieldPush( 'safe', 0 );
 
   var provider = _.FileFilter.Archive();
-  provider.archive.basePath = testRoutineDir;
-  provider.archive.verbosity = 0;
-  provider.archive.fileMapAutosaving = 0;
-  provider.archive.comparingRelyOnHardLinks = 1;
+  provider.archive.fileMapAutosaving = 1;
+  provider.archive.allowingMissed = 1;
+  provider.archive.allowingCycled = 1;
 
   let hardLinked = true;
-
   if( provider.original instanceof _.FileProvider.HardDrive )
   if( !provider.original.UsingBigIntForStat )
   hardLinked = _.maybe;
@@ -532,16 +530,21 @@ function restoreLinksOnDifferentDirLevels( test )
 
   test.case = 'three files linked, first link will be broken';
   provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
+  var paths1 = [ '..', '.', 'c' ];
+  paths1.forEach( ( p, i ) =>
+  {
+    paths1[ i ] = _.path.join( testRoutineDir, p );
+  });
   var paths = [ '../a', 'b', 'c/a' ];
   paths.forEach( ( p, i ) =>
   {
     paths[ i ] = _.path.join( testRoutineDir, p );
     provider.fileWrite( paths[ i ], 'abc' );
-  } );
+  });
   provider.hardLink({ dstPath : paths });
   test.identical( provider.areHardLinked( paths ), hardLinked );
 
-  provider.archive.basePath = paths;
+  provider.archive.basePath = paths1;
   provider.archive.restoreLinksBegin();
 
   provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
