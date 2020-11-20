@@ -129,7 +129,7 @@ function archive( test )
   var flatMap = flatMapFromTree( filesTree, provider.archive.basePath );
   var got = _.mapOwnKeys( provider.archive.fileMap );
   var expected = _.mapOwnKeys( flatMap );
-  test.is( _.arraySetIdentical( got, expected ) );
+  test.true( _.arraySetIdentical( got, expected ) );
 
   /* check if each file from map has some info inside */
 
@@ -139,13 +139,13 @@ function archive( test )
     var info = provider.archive.fileMap[ path ];
     allFilesHaveInfo &= _.mapOwnKeys( info ).length > 0;
   } );
-  test.is( allFilesHaveInfo );
+  test.true( allFilesHaveInfo );
 
   /* check how archive saves fileMap of disk */
 
   var archivePath = _.path.join( provider.archive.basePath, provider.archive.storageFileName );
   var savedOnDisk = !!provider.statResolvedRead( archivePath );
-  test.is( savedOnDisk );
+  test.true( savedOnDisk );
   var archive = provider.fileReadJs( archivePath );
   logger.log( _.entityDiff( archive, provider.archive.fileMap ) )
   test.identical( archive, provider.archive.fileMap );
@@ -450,7 +450,7 @@ function restoreLinks( test )
   test.identical( provider.areHardLinked( paths[ 0 ], paths[ 1 ] ), false );
   test.identical( provider.areHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
   test.identical( provider.areHardLinked( paths[ 2 ], paths[ 3 ] ), hardLinked );
-  test.is( provider.fileRead( paths[ 0 ] ) !== provider.fileRead( paths[ 3 ] ) );
+  test.true( provider.fileRead( paths[ 0 ] ) !== provider.fileRead( paths[ 3 ] ) );
   test.identical( provider.fileRead( paths[ 2 ] ), provider.fileRead( paths[ 3 ] ) );
 
   /*  restoring linkage  */
@@ -865,8 +865,8 @@ function filesLinkSame( test )
       dstProvider : provider,
     });
 
-    test.is( !!provider.statResolvedRead( _.path.join( dir, 'a' ) ) );
-    test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir/a' ) ) );
+    test.true( !!provider.statResolvedRead( _.path.join( dir, 'a' ) ) );
+    test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir/a' ) ) );
 
     hardLinked = true;
 
@@ -883,8 +883,8 @@ function filesLinkSame( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 0 });
 
-  test.is( !!provider.statResolvedRead( _.path.join( dir, 'a' ) ) );
-  test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir/a' ) ) );
+  test.true( !!provider.statResolvedRead( _.path.join( dir, 'a' ) ) );
+  test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir/a' ) ) );
 
   test.identical( provider.areHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'b' ) ]), false );
   test.identical( provider.areHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'dir/x' ) ]), false );
@@ -902,8 +902,8 @@ function filesLinkSame( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
 
-  test.is( !!provider.statResolvedRead( _.path.join( dir, 'a' ) ) );
-  test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir/a' ) ) );
+  test.true( !!provider.statResolvedRead( _.path.join( dir, 'a' ) ) );
+  test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir/a' ) ) );
 
   test.identical( provider.areHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'b' ) ]), false );
   test.identical( provider.areHardLinked([ _.path.join( dir, 'a' ), _.path.join( dir, 'dir/x' ) ]), false );
@@ -968,13 +968,13 @@ function filesLinkSameEmptyFiles( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 0 });
 
-  test.is( provider.fileExists( _.path.join( dir, 'a' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'b' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'c' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'd' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'e' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'f' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'dir/f' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'a' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'b' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'c' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'd' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'e' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'f' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'dir/f' ) ) );
 
   test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'b' ] ) ), false );
   test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'c' ] ) ), false );
@@ -994,13 +994,13 @@ function filesLinkSameEmptyFiles( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
 
-  test.is( provider.fileExists( _.path.join( dir, 'a' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'b' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'c' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'd' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'e' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'f' ) ) );
-  test.is( provider.fileExists( _.path.join( dir, 'dir/f' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'a' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'b' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'c' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'd' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'e' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'f' ) ) );
+  test.true( provider.fileExists( _.path.join( dir, 'dir/f' ) ) );
 
   test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'b' ] ) ), false );
   test.identical( provider.areHardLinked( _.path.s.join( dir, [ 'a', 'c' ] ) ), false );
@@ -1076,9 +1076,9 @@ function severalPaths( test )
       dstProvider : provider,
     });
 
-    test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir1/a' ) ) );
-    test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir2/a' ) ) );
-    test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir3/x' ) ) );
+    test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir1/a' ) ) );
+    test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir2/a' ) ) );
+    test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir3/x' ) ) );
 
     hardLinked = true;
 
@@ -1095,9 +1095,9 @@ function severalPaths( test )
   provider.archive.filesUpdate();
   provider.archive.filesLinkSame({ consideringFileName : 1 });
 
-  test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir1/a' ) ) );
-  test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir2/a' ) ) );
-  test.is( !!provider.statResolvedRead( _.path.join( dir, 'dir3/x' ) ) );
+  test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir1/a' ) ) );
+  test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir2/a' ) ) );
+  test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir3/x' ) ) );
 
   debugger;
   test.identical( provider.areHardLinked( [ _.path.join( dir, 'dir1/a' ), _.path.join( dir, 'dir2/a' ) ]), hardLinked );
@@ -1203,7 +1203,7 @@ function storageOperations( test )
     let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
 
     test.case = 'archive on disk and fileMap have same files';
-    test.is( _.arraySetContainAll( filePaths, _.mapOwnKeys( filesMap ) ) );
+    test.true( _.arraySetContainAll( filePaths, _.mapOwnKeys( filesMap ) ) );
 
     // filesMap is not upToDate if at least one file from map was changed
     test.case = 'archive on disk is not updated';
@@ -1214,7 +1214,7 @@ function storageOperations( test )
       upToDate = false;
       break;
     }
-    test.is( !upToDate );
+    test.true( !upToDate );
   });
 
   provider.finit();
@@ -1320,7 +1320,7 @@ function inodeExperiment( test )
   hash2 = provider.hashRead( pathsSameIno[ 1 ] );
   test.notIdentical( hash1, hash2 );
   test.case = 'restored files should not be same';
-  test.is( !provider.filesCanBeSame.apply( provider, pathsSameIno ) );
+  test.true( !provider.filesCanBeSame.apply( provider, pathsSameIno ) );
 
   provider.finit();
   provider.archive.finit();
