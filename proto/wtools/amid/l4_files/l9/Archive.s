@@ -273,7 +273,7 @@ function filesLinkSame( o ) /* qqq : cover returned value */
     {
       let byName = {};
       debugger;
-      _.entityFilter( files, function( path )
+      _.filter_( null, files, function( path )
       {
         let name = _.path.fullName( path );
         if( byName[ name ] )
@@ -383,7 +383,7 @@ function restoreLinksEnd()
 
     /* remove removed files and use old file descriptors */
 
-    filesWithHash = _.entityFilter( filesWithHash, ( e ) => fileMap2[ e ] ? fileMap2[ e ] : undefined );
+    filesWithHash = _.filter_( null, filesWithHash, ( e ) => fileMap2[ e ] ? fileMap2[ e ] : undefined );
 
     /* find newest file */
 
@@ -403,7 +403,7 @@ function restoreLinksEnd()
 
     /* use old file descriptors */
 
-    filesWithHash = _.entityFilter( filesWithHash, ( e ) => fileMap1[ e.absolutePath ] );
+    filesWithHash = _.filter_( null, filesWithHash, ( e ) => fileMap1[ e.absolutePath ] );
     mostLinked = fileMap1[ mostLinked.absolutePath ];
 
     /* verbosity */
