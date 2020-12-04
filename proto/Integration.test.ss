@@ -120,10 +120,10 @@ function eslint( test )
   let ready = new _.Consequence().take( null );
 
   // if( _.process.insideTestContainer() && process.platform !== 'linux' )
-  // return test.is( true );
+  // return test.true( true );
 
   if( process.platform !== 'linux' )
-  return test.is( true );
+  return test.true( true );
 
   let start = _.process.starter
   ({
@@ -143,6 +143,8 @@ function eslint( test )
       '--ignore-pattern', '*.md',
       '--ignore-pattern', '*.xml',
       '--ignore-pattern', '*.css',
+      '--ignore-pattern', '_asset',
+      '--ignore-pattern', 'out',
       '--quiet'
     ],
     throwingExitCode : 0,
