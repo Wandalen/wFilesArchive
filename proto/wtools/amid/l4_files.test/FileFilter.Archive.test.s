@@ -1254,7 +1254,7 @@ function storageOperations( test )
     let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
 
     test.case = 'archive on disk and fileMap have same files';
-    test.true( _.arraySetContainAll_( null, filePaths, _.mapOwnKeys( filesMap ) ) );
+    test.true( _.arraySetContainAll_( filePaths, _.mapOwnKeys( filesMap ) ) );
 
     // filesMap is not upToDate if at least one file from map was changed
     test.case = 'archive on disk is not updated';
