@@ -511,6 +511,57 @@ restoreLinks.timeOut = 30000;
 
 //
 
+function restoreLinksOnDifferentDirLevels( test )
+{
+  var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
+  _.fileProvider.fieldPush( 'safe', 0 );
+
+  var provider = _.FileFilter.Archive();
+  provider.archive.fileMapAutosaving = 1;
+  provider.archive.allowingMissed = 1;
+  provider.archive.allowingCycled = 1;
+
+  let hardLinked = true;
+  if( provider.original instanceof _.FileProvider.HardDrive )
+  if( !provider.original.UsingBigIntForStat )
+  hardLinked = _.maybe;
+
+  /* */
+
+  test.case = 'three files linked, first link will be broken';
+  provider.filesDelete({ filePath : testRoutineDir, throwing : 0 });
+  var paths1 = [ '..', '.', 'c' ];
+  paths1.forEach( ( p, i ) =>
+  {
+    paths1[ i ] = _.path.join( testRoutineDir, p );
+  });
+  var paths = [ '../a', 'b', 'c/a' ];
+  paths.forEach( ( p, i ) =>
+  {
+    paths[ i ] = _.path.join( testRoutineDir, p );
+    provider.fileWrite( paths[ i ], 'abc' );
+  });
+  provider.hardLink({ dstPath : paths });
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+
+  provider.archive.basePath = paths1;
+  provider.archive.restoreLinksBegin();
+
+  provider.fileTouch({ filePath : paths[ 0 ], purging : 1 });
+  waitSync( test.context.delay );
+  test.identical( provider.areHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ], paths[ 0 ] ), false );
+  test.identical( provider.areHardLinked( paths ), false );
+
+  provider.archive.restoreLinksEnd();
+  test.identical( provider.areHardLinked( paths[ 1 ], paths[ 2 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths[ 1 ], paths[ 0 ] ), hardLinked );
+  test.identical( provider.areHardLinked( paths ), hardLinked );
+  test.identical( provider.fileRead( paths[ 0 ] ), 'abc' );
+}
+
+//
+
 function restoreLinksComplex( test )
 {
 
@@ -1203,7 +1254,7 @@ function storageOperations( test )
     let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
 
     test.case = 'archive on disk and fileMap have same files';
-    test.true( _.arraySetContainAll_( null, filePaths, _.mapOwnKeys( filesMap ) ) );
+    test.true( _.arraySetContainAll_( filePaths, _.mapOwnKeys( filesMap ) ) );
 
     // filesMap is not upToDate if at least one file from map was changed
     test.case = 'archive on disk is not updated';
@@ -1418,6 +1469,7 @@ let Self =
 
     archive,
     restoreLinks,
+    restoreLinksOnDifferentDirLevels,
     restoreLinksComplex,
     filesLinkSame,
     filesLinkSameEmptyFiles,
