@@ -618,7 +618,7 @@ let Forbids =
 
 let Accessors =
 {
-  logger : { readOnly : 1 },
+  logger : { writable : 0 },
 }
 
 // --
