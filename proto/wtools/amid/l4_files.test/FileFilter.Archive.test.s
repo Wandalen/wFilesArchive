@@ -127,8 +127,8 @@ function archive( test )
   /* check if map contains expected files */
 
   var flatMap = flatMapFromTree( filesTree, provider.archive.basePath );
-  var got = _.mapOwnKeys( provider.archive.fileMap );
-  var expected = _.mapOwnKeys( flatMap );
+  var got = _.mapOnlyOwnKeys( provider.archive.fileMap );
+  var expected = _.mapOnlyOwnKeys( flatMap );
   test.true( _.arraySetIdentical( got, expected ) );
 
   /* check if each file from map has some info inside */
@@ -137,7 +137,7 @@ function archive( test )
   got.forEach( ( path ) =>
   {
     var info = provider.archive.fileMap[ path ];
-    allFilesHaveInfo &= _.mapOwnKeys( info ).length > 0;
+    allFilesHaveInfo &= _.mapOnlyOwnKeys( info ).length > 0;
   } );
   test.true( allFilesHaveInfo );
 
@@ -1248,13 +1248,13 @@ function storageOperations( test )
   var loadedStorages = _.select( provider.archive.storagesLoaded, '*/filePath' );
   test.identical( loadedStorages, archivePaths );
 
-  var filePaths = _.mapOwnKeys( provider.archive.fileMap );
+  var filePaths = _.mapOnlyOwnKeys( provider.archive.fileMap );
   records.forEach( ( r ) =>
   {
     let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
 
     test.case = 'archive on disk and fileMap have same files';
-    test.true( _.arraySetContainAll_( filePaths, _.mapOwnKeys( filesMap ) ) );
+    test.true( _.arraySetContainAll_( filePaths, _.mapOnlyOwnKeys( filesMap ) ) );
 
     // filesMap is not upToDate if at least one file from map was changed
     test.case = 'archive on disk is not updated';
