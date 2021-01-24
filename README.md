@@ -7,7 +7,7 @@ Experimental. Several classes to reflect changes of files on dependent files and
 git clone https://github.com/Wandalen/wFilesArchive
 cd wFilesArchive
 npm install
-node sample/Sample.s
+node sample/trivial/Sample.s
 ```
 
 ## To add to your project
