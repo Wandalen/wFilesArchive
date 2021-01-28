@@ -136,14 +136,14 @@ function filesUpdate()
   }
   else if( archive.verbosity >= 6 )
   {
-    logger.log( 'fileAddedMap', _.entityLength( archive.fileAddedMap ) );
-    logger.log( 'fileRemovedMap', _.entityLength( archive.fileRemovedMap ) );
-    logger.log( 'fileModifiedMap', _.entityLength( archive.fileModifiedMap ) );
+    logger.log( 'fileAddedMap', _.entityLengthOf( archive.fileAddedMap ) );
+    logger.log( 'fileRemovedMap', _.entityLengthOf( archive.fileRemovedMap ) );
+    logger.log( 'fileModifiedMap', _.entityLengthOf( archive.fileModifiedMap ) );
   }
 
   if( archive.verbosity >= 4 )
   {
-    logger.log( ' . filesUpdate', filePath, 'found', _.entityLength( fileMapNew ), 'file(s)', _.time.spent( 'in ', time ) );
+    logger.log( ' . filesUpdate', filePath, 'found', _.entityLengthOf( fileMapNew ), 'file(s)', _.time.spent( 'in ', time ) );
   }
 
   return archive;
