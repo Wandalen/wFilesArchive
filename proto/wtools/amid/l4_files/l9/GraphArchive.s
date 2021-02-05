@@ -253,7 +253,11 @@ let timelapseCallDirMakeAct = timelapseSingleHook_functor( function( op, arecord
   let self = this;
   let o2 = op.args[ 0 ];
 
-  if( !arecord.stat.isDir() )
+  if( arecord.stat.isDir() )
+  {
+    arecord.finit();
+  }
+  else
   {
     arecord.timelapsedSubFilesDelete();
     arecord.timelapsedDelete();
@@ -263,10 +267,21 @@ let timelapseCallDirMakeAct = timelapseSingleHook_functor( function( op, arecord
     arecord.finit();
     return r;
   }
-  else
-  {
-    arecord.finit();
-  }
+
+  // if( !arecord.stat.isDir() )
+  // {
+  //   arecord.timelapsedSubFilesDelete();
+  //   arecord.timelapsedDelete();
+  //   // arecord.deletingOptions.sync = 1;
+  //   // op.originalFileProvider.fileDeleteAct( arecord.deletingOptions );
+  //   let r = self.originalCall( op );
+  //   arecord.finit();
+  //   return r;
+  // }
+  // else
+  // {
+  //   arecord.finit();
+  // }
 
   // _.assert( self.records.filePath[ arecord.absolute ] === arecord );
   // delete self.records.filePath[ arecord.absolute ];
@@ -324,14 +339,19 @@ let timelapseCallFileCopyAct = timelapseLinkingHook_functor( function fileCopyAc
     }
   }
 
-  if( !identical )
-  {
-    return end();
-  }
+  if( identical )
+  dstRecord.finit();
   else
-  {
-    dstRecord.finit();
-  }
+  return end();
+
+  // if( !identical )
+  // {
+  //   return end();
+  // }
+  // else
+  // {
+  //   dstRecord.finit();
+  // }
 
   op.result = true;
 
