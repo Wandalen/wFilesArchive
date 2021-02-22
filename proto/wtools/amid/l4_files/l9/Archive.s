@@ -409,7 +409,7 @@ function restoreLinksEnd()
     /* verbosity */
 
     if( archive.verbosity >= 4 )
-    logger.log( 'modified', _.toStr( _.select( filesWithHash, '*/absolutePath' ), { levels : 2 } ) );
+    logger.log( 'modified', _.entity.exportString( _.select( filesWithHash, '*/absolutePath' ), { levels : 2 } ) );
 
     /*  */
 
@@ -522,13 +522,13 @@ function storageLoaded( o )
   let self = this;
   let fileProvider = self.fileProvider;
 
-  _.sure( self.storageIs( o.storage ), () => 'Strange storage : ' + _.toStrShort( o.storage ) );
+  _.sure( self.storageIs( o.storage ), () => 'Strange storage : ' + _.entity.exportStringShort( o.storage ) );
   _.assert( arguments.length === 1, 'Expects exactly two arguments' );
   _.assert( _.strIs( o.storageFilePath ) );
 
   if( self.storagesLoaded !== undefined )
   {
-    _.assert( _.arrayIs( self.storagesLoaded ), () => 'Expects {-self.storagesLoaded-}, but got ' + _.strType( self.storagesLoaded ) );
+    _.assert( _.arrayIs( self.storagesLoaded ), () => 'Expects {-self.storagesLoaded-}, but got ' + _.entity.strType( self.storagesLoaded ) );
     self.storagesLoaded.push({ filePath : o.storageFilePath });
   }
 

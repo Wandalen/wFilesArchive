@@ -1396,7 +1396,7 @@ function inodeExperiment( test )
       {
         pathsSameIno = [ inodes[ stat.ino ], path ];
         logger.log( 'Inode duplication!' );
-        logger.log( _.toStr( pathsSameIno ) );
+        logger.log( _.entity.exportString( pathsSameIno ) );
         break;
       }
 
