@@ -24,7 +24,7 @@ for( let i = 0; i < 10; i++ )
   {
     pathsSameIno = inodes[ index ] = [ inodes[ index ], path ];
     logger.log( 'Inode duplication!' );
-    logger.log( _.toStr( pathsSameIno ) );
+    logger.log( _.entity.exportString( pathsSameIno ) );
     break;
   }
   inodes[ index ] = path;
@@ -40,7 +40,7 @@ provider.archive.comparingRelyOnHardLinks = 1;
 
 provider.archive.restoreLinksBegin();
 
-logger.log( 'Comparing hash2 of', _.toStr( pathsSameIno, { levels : 2 } ) );
+logger.log( 'Comparing hash2 of', _.entity.exportString( pathsSameIno, { levels : 2 } ) );
 let hash1 = provider.archive.fileMap[ pathsSameIno[ 0 ] ].hash2;
 let hash2 = provider.archive.fileMap[ pathsSameIno[ 1 ] ].hash2;
 logger.log( hash1, hash2 );
