@@ -317,8 +317,10 @@ function filesLinkSame( o ) /* qqq : cover returned value */
       fileB = provider.fileRead({ filePath : fileB, encoding : 'original.type' });
       if( fileA === undefined )
       fileA = provider.fileRead({ filePath : files[ 0 ], encoding : 'original.type' });
-      return _.entityIdentical( fileA, fileB );
-    } )
+      debugger; /* xxx */
+      return _.entity.identicalShallow( fileA, fileB );
+      // return _.entityIdentical( fileA, fileB );
+    });
 
     return result;
   }
