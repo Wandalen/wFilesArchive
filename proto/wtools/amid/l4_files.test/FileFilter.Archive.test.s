@@ -1150,10 +1150,8 @@ function severalPaths( test )
   test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir2/a' ) ) );
   test.true( !!provider.statResolvedRead( _.path.join( dir, 'dir3/x' ) ) );
 
-  debugger;
   test.identical( provider.areHardLinked( [ _.path.join( dir, 'dir1/a' ), _.path.join( dir, 'dir2/a' ) ]), hardLinked );
   test.identical( provider.areHardLinked( [ _.path.join( dir, 'dir2/x' ), _.path.join( dir, 'dir3/x' ) ]), hardLinked );
-  debugger;
 
   test.identical( provider.areHardLinked( [ _.path.join( dir, 'dir1/a' ), _.path.join( dir, 'dir1/b' ) ]), false );
   test.identical( provider.areHardLinked( [ _.path.join( dir, 'dir1/b' ), _.path.join( dir, 'dir2/x' ) ]), false );
@@ -1212,7 +1210,7 @@ function storageOperations( test )
 
   provider.archive.filesUpdate();
 
-  test.identical( provider.archive.storagesLoaded, [] ); debugger;
+  test.identical( provider.archive.storagesLoaded, [] );
 
   var archivePaths = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ], provider.archive.storageFileName );
   var records = provider.recordFactory().records( archivePaths );

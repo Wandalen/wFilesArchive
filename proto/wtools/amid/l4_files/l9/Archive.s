@@ -183,8 +183,8 @@ function filesUpdate()
       same = same && ( isDir || d.size === fileRecord.stat.size );
       if( same && archive.comparingRelyOnHardLinks && !isDir )
       {
-        if( d.nlink === 1 )
-        debugger;
+        // if( d.nlink === 1 )
+        // debugger;
         same = d.nlink === fileRecord.stat.nlink;
       }
 
@@ -272,7 +272,6 @@ function filesLinkSame( o ) /* qqq : cover returned value */
     if( o.consideringFileName )
     {
       let byName = {};
-      debugger;
       _.filter_( null, files, function( path )
       {
         let name = _.path.fullName( path );
@@ -317,7 +316,7 @@ function filesLinkSame( o ) /* qqq : cover returned value */
       fileB = provider.fileRead({ filePath : fileB, encoding : 'original.type' });
       if( fileA === undefined )
       fileA = provider.fileRead({ filePath : files[ 0 ], encoding : 'original.type' });
-      debugger; /* xxx */
+      // debugger; /* xxx */
       return _.entity.identicalShallow( fileA, fileB );
       // return _.entityIdentical( fileA, fileB );
     });
@@ -373,7 +372,6 @@ function restoreLinksEnd()
 
     if( !hashReadMap[ modified.hash ] ) /* xxx qqq : cover please */
     {
-      debugger;
       continue;
     }
 
