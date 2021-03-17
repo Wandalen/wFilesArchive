@@ -301,14 +301,12 @@ let timelapseCallFileCopyAct = timelapseLinkingHook_functor( function fileCopyAc
 
   if( !dstRecord )
   {
-    debugger;
     _.assert( 0, 'not tested' );
     return end();
   }
 
   if( o2.breakingDstHardLink )
   {
-    debugger;
     _.assert( 0, 'not tested' );
     return end();
   }
@@ -384,19 +382,16 @@ let timelapseCallHardLinkAct = timelapseLinkingHook_functor( function hardLinkAc
 
   if( !dstRecord )
   {
-    debugger;
     _.assert( 0, 'not tested' );
     return end();
   }
 
   if( o2.breakingSrcHardLink || !o2.breakingDstHardLink )
   {
-    debugger;
     _.assert( 0, 'not tested' );
     return end();
   }
 
-  debugger;
   if( op.originalFileProvider.areHardLinked( o2.srcPath, o2.dstPath ) )
   {
     dstRecord.finit();

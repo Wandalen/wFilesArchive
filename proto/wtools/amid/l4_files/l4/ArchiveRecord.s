@@ -28,8 +28,6 @@ function finit()
   _.assert( factory.records.filePath[ record.absolute ] === record );
   delete factory.records.filePath[ record.absolute ];
 
-  // debugger;
-
   record.deleting = 0;
   record.deletingOptions = null;
   record.stat = null;
