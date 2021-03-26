@@ -5,10 +5,10 @@
 
 //
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 let Parent = null;
-let Self = wArchiveRecordFactory;
+const Self = wArchiveRecordFactory;
 function wArchiveRecordFactory( o )
 {
   return _.workpiece.construct( Self, this, arguments );
@@ -69,7 +69,7 @@ function recordsSelect( filePath )
 {
   let self = this;
 
-  let result = _.mapVals( _.mapSelect( self.records.filePath, filePath ) ).filter( ( el ) => el !== undefined );
+  let result = _.mapVals( _.mapVaslWithKeys( self.records.filePath, filePath ) ).filter( ( el ) => el !== undefined );
 
   return result;
 }

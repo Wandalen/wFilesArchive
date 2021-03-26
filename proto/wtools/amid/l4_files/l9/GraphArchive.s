@@ -5,10 +5,10 @@
 
 //
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 let Parent = null;
-let Self = wFilesGraphArchive;
+const Self = wFilesGraphArchive;
 function wFilesGraphArchive( o )
 {
   _.assert( arguments.length === 0 || arguments.length === 1, 'Expects single argument' );
@@ -91,14 +91,14 @@ function timelapseCall( op )
   return self.originalCall( op );
 
   if( !op.writesPaths )
-  op.writesPaths = _.arrayFlatten( _.mapVals( _.mapSelect( o2, op.writes ) ) );
+  op.writesPaths = _.arrayFlatten( _.mapVals( _.mapVaslWithKeys( o2, op.writes ) ) );
   if( !op.readsPaths )
-  op.readsPaths = _.arrayFlatten( _.mapVals( _.mapSelect( o2, op.reads ) ) );
+  op.readsPaths = _.arrayFlatten( _.mapVals( _.mapVaslWithKeys( o2, op.reads ) ) );
 
   let writingRecords = self.factory.recordsSelect( op.writesPaths );
   // if( writingRecords.length )
   // debugger;
-  // let writingRecords = _.mapVals( _.mapSelect( self.records.filePath, op.writesPaths ) ).filter( ( el ) => el !== undefined );
+  // let writingRecords = _.mapVals( _.mapVaslWithKeys( self.records.filePath, op.writesPaths ) ).filter( ( el ) => el !== undefined );
   // if( _.entityLengthOf( writingRecords ) )
   // debugger;
   // if( op.routineName === 'fileCopyAct' )

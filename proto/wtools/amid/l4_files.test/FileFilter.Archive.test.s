@@ -18,7 +18,7 @@ if( typeof module !== 'undefined' )
 
 //
 
-let _ = _global_.wTools;
+const _ = _global_.wTools;
 let Parent = wTester;
 
 //
@@ -1444,7 +1444,7 @@ function tester( test )
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.mid.files.src.Archive',
@@ -1481,7 +1481,7 @@ let Self =
 
 };
 
-Self = wTestSuite( Self )
+const Self = wTestSuite( Proto )
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

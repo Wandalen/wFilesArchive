@@ -5,10 +5,10 @@
 
 //
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 let Parent = null;
-let Self = wArchiveRecord;
+const Self = wArchiveRecord;
 function wArchiveRecord( o )
 {
   return _.workpiece.construct( Self, this, arguments );

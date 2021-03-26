@@ -3,13 +3,13 @@
 
 'use strict';
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 let Abstract = _.FileProvider.Abstract;
 let Partial = _.FileProvider.Partial;
 let Default = _.FileProvider.Default;
 let Parent = Abstract;
-let Self = wFileFilterArchive;
+const Self = wFileFilterArchive;
 function wFileFilterArchive( o )
 {
   return _.workpiece.construct( Self, this, arguments );
