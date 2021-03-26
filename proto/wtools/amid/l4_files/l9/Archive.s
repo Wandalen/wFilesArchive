@@ -7,7 +7,7 @@
 
 const _global = _global_;
 const _ = _global_.wTools;
-let Parent = null;
+const Parent = null;
 const Self = wFilesArchive;
 function wFilesArchive( o )
 {
@@ -522,7 +522,7 @@ function storageLoaded( o )
   let self = this;
   let fileProvider = self.fileProvider;
 
-  _.sure( self.storageIs( o.storage ), () => 'Strange storage : ' + _.entity.exportStringShort( o.storage ) );
+  _.sure( self.storageIs( o.storage ), () => 'Strange storage : ' + _.entity.exportStringShallow( o.storage ) );
   _.assert( arguments.length === 1, 'Expects exactly two arguments' );
   _.assert( _.strIs( o.storageFilePath ) );
 

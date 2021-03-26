@@ -8,7 +8,7 @@ const _ = _global_.wTools;
 let Abstract = _.FileProvider.Abstract;
 let Partial = _.FileProvider.Partial;
 let Default = _.FileProvider.Default;
-let Parent = Abstract;
+const Parent = Abstract;
 const Self = wFileFilterArchive;
 function wFileFilterArchive( o )
 {
