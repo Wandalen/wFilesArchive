@@ -5,8 +5,8 @@
 
 const _global = _global_;
 const _ = _global_.wTools;
-let Abstract = _.FileProvider.Abstract;
-let Partial = _.FileProvider.Partial;
+const Abstract = _.FileProvider.Abstract;
+const Partial = _.FileProvider.Partial;
 let Default = _.FileProvider.Default;
 const Parent = Abstract;
 const Self = wFileFilterArchive;
