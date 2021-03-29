@@ -45,8 +45,8 @@ function init( o )
 function filesUpdate()
 {
   let archive = this;
-  let fileProvider = archive.fileProvider;
-  let path = fileProvider.path;
+  const fileProvider = archive.fileProvider;
+  const path = fileProvider.path;
   let time = _.time.now();
 
   let fileMapOld = archive.fileMap;
@@ -448,7 +448,7 @@ function restoreLinksEnd()
 function _loggerGet()
 {
   let self = this;
-  let fileProvider = self.fileProvider;
+  const fileProvider = self.fileProvider;
   if( fileProvider )
   return fileProvider.logger;
   return null;
@@ -461,8 +461,8 @@ function _loggerGet()
 function storageFilePathToSaveGet( storageDirPath )
 {
   let self = this;
-  let fileProvider = self.fileProvider;
-  let path = fileProvider.path;
+  const fileProvider = self.fileProvider;
+  const path = fileProvider.path;
   let storageFilePath = null;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
@@ -520,7 +520,7 @@ storageToSave.defaults =
 function storageLoaded( o )
 {
   let self = this;
-  let fileProvider = self.fileProvider;
+  const fileProvider = self.fileProvider;
 
   _.sure( self.storageIs( o.storage ), () => 'Strange storage : ' + _.entity.exportStringShallow( o.storage ) );
   _.assert( arguments.length === 1, 'Expects exactly two arguments' );
