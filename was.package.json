@@ -11,7 +11,7 @@
     { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
   ],
   "main" : "proto/wtools/amid/l4_files/entry/Archive.s",
-  "files" : [ "proto/wtools/amid/l4_files", "proto/wtools/Tools.s", "out" ],
+  "files" : [ "proto/wtools/amid/l4_files", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
   "repository" :
   {
@@ -29,12 +29,6 @@
     "wverbal" : "",
     "wstatestorage" : ""
   },
-  "devDependencies" :
-  {
-    "eslint" : "7.1.0",
-    "wait-sync" : "",
-    "wTesting" : "",
-    "wfilesarchive" : "file:."
-  },
+  "devDependencies" : { "eslint" : "7.1.0", "wait-sync" : "", "wTesting" : "" },
   "keywords" : [ "wTools", "wFiles", "wFilesArchive", "File Archive", "file", "read file", "write file" ]
 }
