@@ -10,7 +10,7 @@
     { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" },
     { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
   ],
-  "main" : "proto/wtools/amid/l4_files/entry/Archive.s",
+  "main" : "/pro/module/wFilesArchive/proto/node_modules/wfilesarchive",
   "files" : [ "proto/wtools/amid/l4_files", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
   "repository" :
