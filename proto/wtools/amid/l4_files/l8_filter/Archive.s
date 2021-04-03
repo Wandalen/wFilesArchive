@@ -33,7 +33,8 @@ function init( o )
   self.copy( o );
 
   if( !self.original )
-  self.original = _.fileProvider;
+  self.original = new _.FileProvider.Default();
+  // self.original = _.fileProvider;
 
   let proxy = _.proxyMap( self, self.original );
 

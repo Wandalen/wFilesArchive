@@ -895,9 +895,12 @@ function filesLinkSame( test )
       dir : { a : '1', x : '3' },
     }
 
+    debugger;
     provider = _.FileFilter.Archive();
     provider.archive.basePath = dir;
     provider.archive.fileMapAutosaving = 0;
+    test.true( provider.system === null );
+    debugger;
 
     // _.FileProvider.Extract.readToProvider
     // ({
