@@ -1,6 +1,6 @@
 {
   "name" : "wfilesarchive",
-  "version" : "0.3.362",
+  "version" : "0.3.363",
   "engine" : "node >= 10.0.0",
   "description" : "Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.",
   "license" : "MIT",
@@ -10,7 +10,7 @@
     { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" },
     { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
   ],
-  "main" : "/pro/module/wFilesArchive/proto/node_modules/wfilesarchive",
+  "main" : "proto/node_modules/wfilesarchive",
   "files" : [ "proto/wtools/amid/l4_files", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
   "repository" :
