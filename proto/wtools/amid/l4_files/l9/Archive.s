@@ -45,8 +45,8 @@ function init( o )
 function filesUpdate()
 {
   let archive = this;
-  const fileProvider = archive.fileProvider;
-  const path = fileProvider.path;
+  let fileProvider = archive.fileProvider;
+  let path = fileProvider.path;
   let time = _.time.now();
 
   let fileMapOld = archive.fileMap;
@@ -77,7 +77,7 @@ function filesUpdate()
     return _.strJoin([ basePath, '/**' ]);
   });
 
-  if( archive.verbosity >= 3 )
+  if( ( archive.logger ? archive.logger.verbosity : 0 ) >= 3 )
   logger.log( ' : filesUpdate', filePath );
 
   /* */
@@ -109,7 +109,6 @@ function filesUpdate()
     {
       maskAll : archive.mask,
       maskTransientAll : archive.mask,
-      // recursive : 2,
     },
     mode : 'distinct',
     onUp : onFile,
@@ -128,20 +127,20 @@ function filesUpdate()
   if( archive.fileMapAutosaving )
   archive.storageSave();
 
-  if( archive.verbosity >= 8 )
+  if( ( archive.logger ? archive.logger.verbosity : 0 ) >= 8 )
   {
     logger.log( 'fileAddedMap', archive.fileAddedMap );
     logger.log( 'fileRemovedMap', archive.fileRemovedMap );
     logger.log( 'fileModifiedMap', archive.fileModifiedMap );
   }
-  else if( archive.verbosity >= 6 )
+  else if( ( archive.logger ? archive.logger.verbosity : 0 ) >= 6 )
   {
     logger.log( 'fileAddedMap', _.entityLengthOf( archive.fileAddedMap ) );
     logger.log( 'fileRemovedMap', _.entityLengthOf( archive.fileRemovedMap ) );
     logger.log( 'fileModifiedMap', _.entityLengthOf( archive.fileModifiedMap ) );
   }
 
-  if( archive.verbosity >= 4 )
+  if( ( archive.logger ? archive.logger.verbosity : 0 ) >= 4 )
   {
     logger.log( ' . filesUpdate', filePath, 'found', _.entityLengthOf( fileMapNew ), 'file(s)', _.time.spent( 'in ', time ) );
   }
@@ -169,7 +168,7 @@ function filesUpdate()
       archive.storageLoaded({ storageFilePath : storagageFilePath, storage });
     }
 
-    if( archive.verbosity >= 7 )
+    if( ( archive.logger ? archive.logger.verbosity : 0 ) >= 7 )
     logger.log( ' . investigating ' + fileRecord.absolute );
 
     if( fileMapOld[ fileRecord.absolute ] )
@@ -183,8 +182,6 @@ function filesUpdate()
       same = same && ( isDir || d.size === fileRecord.stat.size );
       if( same && archive.comparingRelyOnHardLinks && !isDir )
       {
-        // if( d.nlink === 1 )
-        // debugger;
         same = d.nlink === fileRecord.stat.nlink;
       }
 
@@ -195,7 +192,7 @@ function filesUpdate()
       }
       else
       {
-        if( archive.verbosity >= 5 )
+        if( ( archive.logger ? archive.logger.verbosity : 0 ) >= 5 )
         logger.log( ' . change ' + fileRecord.absolute );
         archive.fileModifiedMap[ fileRecord.absolute ] = d;
         d = _.mapExtend( null, d );
@@ -286,9 +283,7 @@ function filesLinkSame( o ) /* qqq : cover returned value */
         files = filterFiles( byName[ name ] );
         if( files.length < 2 )
         continue;
-        let done = provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
-        if( done )
-        linked += files.length; /* xxx : use linked instead of files.length after fix of hardLink */
+        linked += hardLink( files );
       }
       counter += linked;
     }
@@ -297,14 +292,28 @@ function filesLinkSame( o ) /* qqq : cover returned value */
       files = filterFiles( files );
       if( files.length < 2 )
       continue;
-      let linked = provider.hardLink({ dstPath : files, verbosity : archive.verbosity });
-      counter += linked ? files.length : 0; /* xxx : use linked instead of files.length after fix of hardLink */
+      counter += hardLink( files );
     }
   }
 
   return counter;
 
-  /*  */
+  /* */
+
+  function hardLink( files )
+  {
+    let r = provider.hardLink
+    ({
+      dstPath : files,
+      verbosity : ( archive.logger ? archive.logger.verbosity : 0 ),
+      resolvingDstSoftLink : 1,
+      resolvingSrcSoftLink : 1,
+    })
+    return r ? files.length : 0;
+    /* xxx : use linked instead of files.length after fix of hardLink */
+  }
+
+  /* */
 
   function filterFiles( files )
   {
@@ -316,11 +325,8 @@ function filesLinkSame( o ) /* qqq : cover returned value */
       fileB = provider.fileRead({ filePath : fileB, encoding : 'original.type' });
       if( fileA === undefined )
       fileA = provider.fileRead({ filePath : files[ 0 ], encoding : 'original.type' });
-      // debugger; /* xxx */
       return _.entity.identicalShallow( fileA, fileB );
-      // return _.entityIdentical( fileA, fileB );
     });
-
     return result;
   }
 
@@ -408,7 +414,7 @@ function restoreLinksEnd()
 
     /* verbosity */
 
-    if( archive.verbosity >= 4 )
+    if( ( archive.logger ? archive.logger.verbosity : 0 ) >= 4 )
     logger.log( 'modified', _.entity.exportString( _.select( filesWithHash, '*/absolutePath' ), { levels : 2 } ) );
 
     /*  */
@@ -432,14 +438,14 @@ function restoreLinksEnd()
       {
         _.assert( dstFile.size === srcFile.size );
         restored += 1;
-        provider.hardLink({ dstPath, srcPath, verbosity : archive.verbosity });
+        provider.hardLink({ dstPath, srcPath, verbosity : ( archive.logger ? archive.logger.verbosity : 0 ) });
         linkedMap[ dstPath ] = filesWithHash[ last ];
       }
     }
 
   }
 
-  if( archive.verbosity >= 1 )
+  if( ( archive.logger ? archive.logger.verbosity : 0 ) >= 1 )
   logger.log( ' + Restored', restored, 'hardlinks' );
 }
 
@@ -452,6 +458,16 @@ function _loggerGet()
   if( fileProvider )
   return fileProvider.logger;
   return null;
+}
+
+//
+
+function _verbosityGet()
+{
+  let self = this;
+  if( !self.logger )
+  return 0;
+  return self.logger.verbosity;
 }
 
 // --
@@ -541,7 +557,7 @@ function storageLoaded( o )
 // vars
 // --
 
-let verbositySymbol = Symbol.for( 'verbosity' );
+// let verbositySymbol = Symbol.for( 'verbosity' );
 let mask =
 {
   excludeAny :
@@ -565,7 +581,7 @@ let mask =
 let Composes =
 {
 
-  verbosity : 0,
+  // verbosity : 0,
 
   basePath : null, /* qqq : cover. try array, glob, array of mix of glob/not glob */
   includingPath : null, /* qqq : cover */
@@ -589,7 +605,7 @@ let Composes =
   mask : _.define.own( mask ), /* zzz : not shallow clone required */
 
   storageFileName : '.warchive',
-  storageSaveAsJs : true
+  storageSaveAsJs : true,
 
 }
 
@@ -619,6 +635,7 @@ let Forbids =
 let Accessors =
 {
   logger : { writable : 0 },
+  verbosity : { writable : 0 },
 }
 
 // --
@@ -638,6 +655,7 @@ let Extension =
   restoreLinksEnd,
 
   _loggerGet,
+  _verbosityGet,
 
   // storage
 
@@ -670,7 +688,7 @@ _.classDeclare
 
 _.Copyable.mixin( Self );
 _.StateStorage.mixin( Self );
-_.Verbal.mixin( Self );
+// _.Verbal.mixin( Self );
 _[ Self.shortName ] = Self;
 // _global_[ Self.name ] = _[ Self.shortName ] = Self;
 

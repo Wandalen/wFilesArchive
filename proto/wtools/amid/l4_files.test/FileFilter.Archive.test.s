@@ -25,25 +25,36 @@ const Parent = wTester;
 
 function onSuiteBegin()
 {
-  if( Config.interpreter === 'njs' )
-  this.testRootDirectory = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'Archive' );
-  else
-  this.testRootDirectory = _.path.current();
+  let context = this;
 
-  this.delay = _.fileProvider.systemBitrateTimeGet() / 1000;
+  // if( Config.interpreter === 'njs' )
+  // context.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'archive' );
+  // else
+  // context.suiteTempPath = _.path.current();
+
+  context.delay = _.fileProvider.systemBitrateTimeGet() / 1000;
+
+  context.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'archive' );
+
 }
 
 //
 
 function onSuiteEnd()
 {
-  if( Config.interpreter === 'njs' )
+  let context = this;
+
+  // if( Config.interpreter === 'njs' )
   {
-    _.assert( _.strHas( this.testRootDirectory, 'Archive' ) )
+    // _.assert( _.strHas( context.suiteTempPath, 'archive' ) )
     _.fileProvider.fieldPush( 'safe', 0 );
-    _.fileProvider.filesDelete( this.testRootDirectory );
+    _.fileProvider.filesDelete( context.suiteTempPath );
     _.fileProvider.fieldPop( 'safe', 0 );
   }
+
+  _.assert( _.strHas( context.suiteTempPath, 'archive' ) );
+  _.path.tempClose( context.suiteTempPath );
+
 }
 
 //
@@ -80,7 +91,7 @@ function flatMapFromTree( tree, currentPath, paths )
 
 function archive( test )
 {
-  var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
+  var testRoutineDir = _.path.join( this.suiteTempPath, test.name );
   _.fileProvider.fieldPush( 'safe', 0 );
 
   test.case = 'multilevel files tree';
@@ -120,7 +131,8 @@ function archive( test )
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = testRoutineDir;
-  provider.archive.verbosity = 0;
+  // provider.archive.logger.verbosity = 0;
+  provider.archive.logger.verbosity = 0;
   provider.archive.fileMapAutosaving = 1;
   provider.archive.filesUpdate();
 
@@ -157,12 +169,12 @@ function archive( test )
 
 function restoreLinks( test )
 {
-  var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
+  var testRoutineDir = _.path.join( this.suiteTempPath, test.name );
   _.fileProvider.fieldPush( 'safe', 0 );
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = testRoutineDir;
-  provider.archive.verbosity = 0;
+  provider.archive.logger.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 1;
 
@@ -460,7 +472,7 @@ function restoreLinks( test )
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = testRoutineDir;
-  provider.archive.verbosity = 0;
+  provider.archive.logger.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 1;
   provider.resolvingSoftLink = 1;
@@ -513,7 +525,7 @@ restoreLinks.timeOut = 30000;
 
 function restoreLinksOnDifferentDirLevels( test )
 {
-  var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
+  var testRoutineDir = _.path.join( this.suiteTempPath, test.name );
   _.fileProvider.fieldPush( 'safe', 0 );
 
   var provider = _.FileFilter.Archive();
@@ -565,12 +577,12 @@ function restoreLinksOnDifferentDirLevels( test )
 function restoreLinksComplex( test )
 {
 
-  var testRoutineDir = _.path.join( this.testRootDirectory, test.name );
+  var testRoutineDir = _.path.join( this.suiteTempPath, test.name );
   _.fileProvider.fieldPush( 'safe', 0 );
 
   var provider = _.FileFilter.Archive({ original : new _.FileProvider.Default() });
   provider.verbosity = 0;
-  provider.archive.verbosity = 0;
+  provider.archive.logger.verbosity = 0;
   provider.archive.basePath = testRoutineDir;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 0;
@@ -579,7 +591,7 @@ function restoreLinksComplex( test )
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = testRoutineDir;
-  provider.archive.verbosity = 0;
+  provider.archive.logger.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 1;
 
@@ -740,10 +752,10 @@ function restoreLinksComplex( test )
     /* restore links and check if they works now */
 
     provider.verbosity = 2;
-    provider.archive.verbosity = 2;
+    provider.archive.logger.verbosity = 2;
     provider.archive.restoreLinksEnd();
     provider.verbosity = 0;
-    provider.archive.verbosity = 0;
+    provider.archive.logger.verbosity = 0;
 
     test.identical( provider.archive.verbosity, 0 );
     test.identical( provider.archive.replacingByNewest, 1 );
@@ -872,8 +884,8 @@ restoreLinksComplex.timeOut = 120000;
 
 function filesLinkSame( test )
 {
-  var context = this;
-  var dir = _.path.join( context.testRootDirectory, test.name );
+  let context = this;
+  var dir = _.path.join( context.suiteTempPath, test.name );
   _.fileProvider.fieldPush( 'safe', 0 );
   var provider;
 
@@ -884,7 +896,7 @@ function filesLinkSame( test )
 
     test.case = 'prepare';
 
-    _.fileProvider.filesDelete( context.testRootDirectory );
+    _.fileProvider.filesDelete( context.suiteTempPath );
 
     var filesTree =
     {
@@ -976,44 +988,10 @@ function filesLinkSame( test )
 
 function filesLinkSameEmptyFiles( test )
 {
-  var context = this;
-  var dir = _.path.join( context.testRootDirectory, test.name );
+  let context = this;
+  var dir = _.path.join( context.suiteTempPath, test.name );
   _.fileProvider.fieldPush( 'safe', 0 );
   var provider;
-
-  function begin()
-  {
-
-    test.case = 'prepare';
-
-    _.fileProvider.filesDelete( context.testRootDirectory );
-
-    var filesTree =
-    {
-      a : '',
-      b : '',
-      c : 'c',
-      d : 'd',
-      e : 'same',
-      f : 'same',
-      dir : { 'f' : 'same' }
-    }
-
-    provider = _.FileFilter.Archive();
-    provider.archive.basePath = dir;
-    provider.archive.fileMapAutosaving = 0;
-
-
-    _.FileProvider.Extract
-    ({
-      filesTree,
-    })
-    .filesReflectTo
-    ({
-      dst : dir,
-      dstProvider : provider,
-    });
-  }
 
   begin();
 
@@ -1069,14 +1047,100 @@ function filesLinkSameEmptyFiles( test )
   provider.archive.finit();
 
   _.fileProvider.fieldPop( 'safe', 0 );
+
+  function begin()
+  {
+
+    test.case = 'prepare';
+
+    _.fileProvider.filesDelete( context.suiteTempPath );
+
+    var filesTree =
+    {
+      a : '',
+      b : '',
+      c : 'c',
+      d : 'd',
+      e : 'same',
+      f : 'same',
+      dir : { 'f' : 'same' }
+    }
+
+    provider = _.FileFilter.Archive();
+    provider.archive.basePath = dir;
+    provider.archive.fileMapAutosaving = 0;
+
+    _.FileProvider.Extract
+    ({
+      filesTree,
+    })
+    .filesReflectTo
+    ({
+      dst : dir,
+      dstProvider : provider,
+    });
+  }
+
+}
+
+//
+
+function filesLinkSameSoftLinks( test )
+{
+  let context = this;
+  let a = test.assetFor( false );
+  // var dir = _.path.join( context.suiteTempPath, test.name );
+  // var provider = _.FileFilter.Archive();
+
+  let archive = new _.FilesArchive({ fileProvider : a.fileProvider })
+
+  test.case = 'basic';
+
+  a.fileProvider.fileWrite( a.abs( 'f1' ), 'txt' );
+  a.fileProvider.softLink( a.abs( 's1' ), a.abs( 'f1' ) );
+  a.fileProvider.fileWrite( a.abs( 'f2' ), 'txt' );
+  a.fileProvider.softLink( a.abs( 's2' ), a.abs( 'f2' ) );
+  a.fileProvider.fileWrite( a.abs( 'f3' ), 'txt2' );
+  a.fileProvider.softLink( a.abs( 's3' ), a.abs( 'f3' ) );
+
+  test.true( a.fileProvider.isSoftLink( a.abs( 's1' ) ) );
+  test.true( a.fileProvider.isSoftLink( a.abs( 's2' ) ) );
+  test.true( a.fileProvider.isSoftLink( a.abs( 's3' ) ) );
+
+  test.true( a.fileProvider.areSoftLinked( a.abs( 's1' ), a.abs( 'f1' ) ) );
+  test.true( a.fileProvider.areSoftLinked( a.abs( 's2' ), a.abs( 'f2' ) ) );
+  test.true( a.fileProvider.areSoftLinked( a.abs( 's3' ), a.abs( 'f3' ) ) );
+
+  test.true( !a.fileProvider.areHardLinked( a.abs( 'f1' ), a.abs( 'f2' ) ) );
+  test.true( !a.fileProvider.areHardLinked( a.abs( 'f1' ), a.abs( 'f3' ) ) );
+  test.true( !a.fileProvider.areHardLinked( a.abs( 'f2' ), a.abs( 'f3' ) ) );
+
+  archive.basePath = a.abs( '.' );
+  archive.fileMapAutosaving = 0;
+  archive.fileMapAutoLoading = 0;
+  archive.filesUpdate();
+  var count = archive.filesLinkSame();
+
+  test.true( a.fileProvider.isSoftLink( a.abs( 's1' ) ) );
+  test.true( a.fileProvider.isSoftLink( a.abs( 's2' ) ) );
+  test.true( a.fileProvider.isSoftLink( a.abs( 's3' ) ) );
+
+  test.true( a.fileProvider.areSoftLinked( a.abs( 's1' ), a.abs( 'f1' ) ) );
+  test.true( a.fileProvider.areSoftLinked( a.abs( 's2' ), a.abs( 'f2' ) ) );
+  test.true( a.fileProvider.areSoftLinked( a.abs( 's3' ), a.abs( 'f3' ) ) );
+
+  test.true( a.fileProvider.areHardLinked( a.abs( 'f1' ), a.abs( 'f2' ) ) );
+  test.true( !a.fileProvider.areHardLinked( a.abs( 'f1' ), a.abs( 'f3' ) ) );
+  test.true( !a.fileProvider.areHardLinked( a.abs( 'f2' ), a.abs( 'f3' ) ) );
+
 }
 
 //
 
 function severalPaths( test )
 {
-  var context = this;
-  var dir = _.path.join( context.testRootDirectory, test.name );
+  let context = this;
+  var dir = _.path.join( context.suiteTempPath, test.name );
   _.fileProvider.fieldPush( 'safe', 0 );
   var provider;
 
@@ -1087,7 +1151,7 @@ function severalPaths( test )
 
     test.case = 'prepare';
 
-    _.fileProvider.filesDelete( context.testRootDirectory );
+    _.fileProvider.filesDelete( context.suiteTempPath );
 
     var filesTree =
     {
@@ -1171,7 +1235,7 @@ function storageOperations( test )
 {
   let context = this;
   _.fileProvider.fieldPush( 'safe', 0 );
-  let dir = _.path.join( context.testRootDirectory, test.name );
+  let dir = _.path.join( context.suiteTempPath, test.name );
 
   _.fileProvider.filesDelete( dir );
 
@@ -1197,7 +1261,7 @@ function storageOperations( test )
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ] );
-  provider.archive.verbosity = 0;
+  provider.archive.logger.verbosity = 0;
   provider.archive.fileMapAutosaving = 1;
   provider.archive.fileMapAutoLoading = 0;
 
@@ -1231,7 +1295,7 @@ function storageOperations( test )
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ] );
-  provider.archive.verbosity = 0;
+  provider.archive.logger.verbosity = 0;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.fileMapAutoLoading = 1;
 
@@ -1276,7 +1340,7 @@ function storageOperations( test )
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = _.path.s.join( dir, [ 'dir1', 'dir2', 'dir3' ] );
-  provider.archive.verbosity = 0;
+  provider.archive.logger.verbosity = 0;
   provider.archive.fileMapAutosaving = 1;
   provider.archive.fileMapAutoLoading = 1;
 
@@ -1314,7 +1378,7 @@ function inodeExperiment( test )
     return;
   }
 
-  let dirname = _.path.join( context.testRootDirectory, test.name );
+  let dirname = _.path.join( context.suiteTempPath, test.name );
   let pathsSameIno;
 
   for( var i = 0; i < 10; i++ )
@@ -1343,7 +1407,7 @@ function inodeExperiment( test )
 
   var provider = _.FileFilter.Archive();
   provider.archive.basePath = dirname;
-  provider.archive.verbosity = 10;
+  provider.archive.logger.verbosity = 10;
   provider.archive.fileMapAutosaving = 0;
   provider.archive.comparingRelyOnHardLinks = 0;
 
@@ -1461,7 +1525,7 @@ const Proto =
 
   context :
   {
-    testRootDirectory : null,
+    suiteTempPath : null, /* xxx : qqq : remove */
     delay : null
   },
 
@@ -1474,6 +1538,7 @@ const Proto =
     restoreLinksComplex,
     filesLinkSame,
     filesLinkSameEmptyFiles,
+    filesLinkSameSoftLinks,
     severalPaths,
     storageOperations,
     inodeExperiment,
@@ -1481,6 +1546,8 @@ const Proto =
     // tester,
 
   },
+
+  /* qqq : rewrite tests using test.assetFor */
 
 };
 

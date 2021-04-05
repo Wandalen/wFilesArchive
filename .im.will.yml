@@ -86,8 +86,8 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - /pro/module/wFilesArchive/proto/wtools/amid/l4_files/entry/Archive.s
-    - /pro/module/wFilesArchive/proto/node_modules/wfilesarchive
+    - proto/wtools/amid/l4_files/entry/Archive.s
+    - proto/node_modules/wfilesarchive
 reflector:
   reflect.proto:
     inherit: predefined.*
