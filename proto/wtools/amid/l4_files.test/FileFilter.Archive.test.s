@@ -7,7 +7,7 @@ let waitSync;
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../wtools/Tools.s' );
+  let _ = require( '../../../node_modules/Tools' );
 
   _.include( 'wFiles' );
   _.include( 'wTesting' );
@@ -33,7 +33,6 @@ function onSuiteBegin()
   // context.suiteTempPath = _.path.current();
 
   context.delay = _.fileProvider.systemBitrateTimeGet() / 1000;
-
   context.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'archive' );
 
 }
