@@ -7,7 +7,7 @@ let waitSync;
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../node_modules/Tools' );
+  const _ = require( '../../../node_modules/Tools' );
 
   _.include( 'wFiles' );
   _.include( 'wTesting' );
