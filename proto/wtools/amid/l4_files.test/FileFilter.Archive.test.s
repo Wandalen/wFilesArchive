@@ -3,10 +3,9 @@
 
 'use strict';
 
-let waitSync;
+let waitSync; /* xxx : qqq : use sleep instead of waitSync. remove waitSync */
 if( typeof module !== 'undefined' )
 {
-
   const _ = require( '../../../node_modules/Tools' );
 
   _.include( 'wFiles' );
@@ -1513,7 +1512,7 @@ function tester( test )
 const Proto =
 {
 
-  name : 'Tools.mid.files.src.Archive',
+  name : 'Tools.files.src.Archive',
   silencing : 1,
   // verbosity : 4,
   // negativity : 5,
