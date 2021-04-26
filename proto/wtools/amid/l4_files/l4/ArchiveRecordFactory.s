@@ -69,7 +69,7 @@ function recordsSelect( filePath )
 {
   let self = this;
 
-  let result = _.mapVals( _.mapVaslWithKeys( self.records.filePath, filePath ) ).filter( ( el ) => el !== undefined );
+  let result = _.props.vals( _.mapValsWithKeys( self.records.filePath, filePath ) ).filter( ( el ) => el !== undefined );
 
   return result;
 }
@@ -79,7 +79,7 @@ function recordsSelect( filePath )
 function recordsTimelapsedDelete()
 {
   let self = this;
-  let filePath = _.mapKeys( self.records.filePath )
+  let filePath = _.props.keys( self.records.filePath )
 
   for( let f = filePath.length-1 ; f >= 0 ; f-- )
   {

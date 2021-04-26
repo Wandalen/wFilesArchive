@@ -173,7 +173,7 @@ function filesUpdate()
 
     if( fileMapOld[ fileRecord.absolute ] )
     {
-      d = _.mapExtend( null, fileMapOld[ fileRecord.absolute ] );
+      d = _.props.extend( null, fileMapOld[ fileRecord.absolute ] );
       files.push( d );
       delete fileMapOld[ fileRecord.absolute ];
       let same = true;
@@ -195,7 +195,7 @@ function filesUpdate()
         if( ( archive.logger ? archive.logger.verbosity : 0 ) >= 5 )
         logger.log( ' . change ' + fileRecord.absolute );
         archive.fileModifiedMap[ fileRecord.absolute ] = d;
-        d = _.mapExtend( null, d );
+        d = _.props.extend( null, d );
       }
     }
     else
@@ -257,7 +257,7 @@ function filesLinkSame( o ) /* qqq : cover returned value */
   let hashReadMap = archive.filesHashMapForm();
   let counter = 0;
 
-  o = _.routineOptions( filesLinkSame, arguments );
+  o = _.routine.options_( filesLinkSame, arguments );
 
   for( let f in hashReadMap )
   {
@@ -354,7 +354,7 @@ function restoreLinksEnd()
 {
   let archive = this;
   let provider = archive.fileProvider;
-  let fileMap1 = _.mapExtend( null, archive.fileMap );
+  let fileMap1 = _.props.extend( null, archive.fileMap );
   let hashReadMap = archive.filesHashMapForm();
   let restored = 0;
 
@@ -362,7 +362,7 @@ function restoreLinksEnd()
 
   _.assert( !!archive.fileMap, 'restoreLinksBegin should be called before calling restoreLinksEnd' );
 
-  let fileMap2 = _.mapExtend( null, archive.fileMap );
+  let fileMap2 = _.props.extend( null, archive.fileMap );
   let fileModifiedMap = archive.fileModifiedMap;
   let linkedMap = Object.create( null );
 
@@ -506,7 +506,7 @@ function storageToSave( o )
 {
   let self = this;
 
-  o = _.routineOptions( storageToSave, arguments );
+  o = _.routine.options_( storageToSave, arguments );
 
   let storage = self.fileMap;
 
@@ -548,7 +548,7 @@ function storageLoaded( o )
     self.storagesLoaded.push({ filePath : o.storageFilePath });
   }
 
-  _.mapExtend( self.fileMap, o.storage );
+  _.props.extend( self.fileMap, o.storage );
 
   return true;
 }

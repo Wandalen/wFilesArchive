@@ -91,14 +91,14 @@ function timelapseCall( op )
   return self.originalCall( op );
 
   if( !op.writesPaths )
-  op.writesPaths = _.arrayFlatten( _.mapVals( _.mapVaslWithKeys( o2, op.writes ) ) );
+  op.writesPaths = _.arrayFlatten( _.props.vals( _.mapValsWithKeys( o2, op.writes ) ) );
   if( !op.readsPaths )
-  op.readsPaths = _.arrayFlatten( _.mapVals( _.mapVaslWithKeys( o2, op.reads ) ) );
+  op.readsPaths = _.arrayFlatten( _.props.vals( _.mapValsWithKeys( o2, op.reads ) ) );
 
   let writingRecords = self.factory.recordsSelect( op.writesPaths );
   // if( writingRecords.length )
   // debugger;
-  // let writingRecords = _.mapVals( _.mapVaslWithKeys( self.records.filePath, op.writesPaths ) ).filter( ( el ) => el !== undefined );
+  // let writingRecords = _.props.vals( _.mapValsWithKeys( self.records.filePath, op.writesPaths ) ).filter( ( el ) => el !== undefined );
   // if( _.entityLengthOf( writingRecords ) )
   // debugger;
   // if( op.routineName === 'fileCopyAct' )
@@ -446,10 +446,10 @@ function timelapseBegin( o )
   let self = this;
   let logger = self.logger;
 
-  o = _.routineOptions( timelapseBegin, arguments );
+  o = _.routine.options_( timelapseBegin, arguments );
 
   _.assert( self.timelapseMode === 0 || self.timelapseMode === 1 );
-  _.assert( self.timelapseMode === 1 || _.mapKeys( self.factory.records.filePath ).length === 0 );
+  _.assert( self.timelapseMode === 1 || _.props.keys( self.factory.records.filePath ).length === 0 );
 
   self.timelapseMode = 1;
 
@@ -467,7 +467,7 @@ function timelapseEnd( o )
   let self = this;
   let logger = self.logger;
 
-  o = _.routineOptions( timelapseEnd, arguments );
+  o = _.routine.options_( timelapseEnd, arguments );
 
   self.timelapseMode = 0;
 
@@ -484,7 +484,7 @@ timelapseEnd.defaults =
 
 function del( o )
 {
-  o = _.routineOptions( del, arguments );
+  o = _.routine.options_( del, arguments );
 
   logger.log( 'del' );
 

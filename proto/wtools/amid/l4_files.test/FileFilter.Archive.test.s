@@ -137,8 +137,8 @@ function archive( test )
   /* check if map contains expected files */
 
   var flatMap = flatMapFromTree( filesTree, provider.archive.basePath );
-  var got = _.mapOnlyOwnKeys( provider.archive.fileMap );
-  var expected = _.mapOnlyOwnKeys( flatMap );
+  var got = _.props.onlyOwnKeys( provider.archive.fileMap );
+  var expected = _.props.onlyOwnKeys( flatMap );
   test.true( _.arraySetIdentical( got, expected ) );
 
   /* check if each file from map has some info inside */
@@ -147,7 +147,7 @@ function archive( test )
   got.forEach( ( path ) =>
   {
     var info = provider.archive.fileMap[ path ];
-    allFilesHaveInfo &= _.mapOnlyOwnKeys( info ).length > 0;
+    allFilesHaveInfo &= _.props.onlyOwnKeys( info ).length > 0;
   } );
   test.true( allFilesHaveInfo );
 
@@ -638,12 +638,12 @@ function restoreLinksComplex( test )
 
     /* make links and save info in archive */
 
-    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
-    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
+    provider.hardLink({ dstPath : _.props.keys( files ).slice( 0, 3 ), verbosity : 3 });
+    provider.hardLink({ dstPath : _.props.keys( files ).slice( 3, 6 ), verbosity : 3 });
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 6, 8 ) ), false );
 
 
     provider.archive.restoreLinksBegin();
@@ -651,26 +651,26 @@ function restoreLinksComplex( test )
     /* remove some links and check if they are broken */
 
     waitSync( test.context.delay )
-    provider.fileWrite({ filePath : _.mapKeys( files )[ 0 ], purging : 1, data : 'a' });
+    provider.fileWrite({ filePath : _.props.keys( files )[ 0 ], purging : 1, data : 'a' });
     waitSync( test.context.delay )
-    provider.fileWrite({ filePath : _.mapKeys( files )[ 3 ], purging : 1, data : 'b' });
+    provider.fileWrite({ filePath : _.props.keys( files )[ 3 ], purging : 1, data : 'b' });
     waitSync( test.context.delay )
-    provider.fileWrite({ filePath : _.mapKeys( files )[ 6 ], purging : 0, data : 'd' });
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), false );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 8 ) ), false );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), '3' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), '3' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 3 ] ), 'b' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 4 ] ), '5' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 5 ] ), '5' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 6 ] ), 'd' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 7 ] ), '8' );
+    provider.fileWrite({ filePath : _.props.keys( files )[ 6 ], purging : 0, data : 'd' });
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 3 ) ), false );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 3, 8 ) ), false );
+    test.identical( provider.fileRead( _.props.keys( files )[ 0 ] ), 'a' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 1 ] ), '3' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 2 ] ), '3' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 3 ] ), 'b' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 4 ] ), '5' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 5 ] ), '5' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 6 ] ), 'd' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 7 ] ), '8' );
 
     /* restore links and check if they works now */
 
-    var records1 = provider.recordFactory().records( _.mapKeys( files ).slice( 0, 3 ) );
-    var records2 = provider.recordFactory().records( _.mapKeys( files ).slice( 3, 6 ) );
+    var records1 = provider.recordFactory().records( _.props.keys( files ).slice( 0, 3 ) );
+    var records2 = provider.recordFactory().records( _.props.keys( files ).slice( 3, 6 ) );
 
     logger.log( _.select( records1, '*/stat/mtime' ).map( ( t ) => t.getTime() ) )
     logger.log( _.select( records2, '*/stat/mtime' ).map( ( t ) => t.getTime() ) )
@@ -686,33 +686,33 @@ function restoreLinksComplex( test )
     test.identical( provider.archive.fileAddedMap, {} );
     test.identical( provider.archive.fileRemovedMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
-    test.identical( _.mapKeys( provider.archive.fileMap ).length, 9 );
+    test.identical( _.props.keys( provider.archive.fileMap ).length, 9 );
 
     //!!!wrong results on linux
 
     // if( provider.archive.comparingRelyOnHardLinks )
     // {
     //   test.identical( provider.archive.comparingRelyOnHardLinks, 1 );
-    //   test.identical( _.mapKeys( provider.archive.fileModifiedMap ).length, 8 );
+    //   test.identical( _.props.keys( provider.archive.fileModifiedMap ).length, 8 );
     // }
     // else
     // {
     //   test.identical( provider.archive.comparingRelyOnHardLinks, 0 );
-    //   test.identical( _.mapKeys( provider.archive.fileModifiedMap ).length, 4 );
+    //   test.identical( _.props.keys( provider.archive.fileModifiedMap ).length, 4 );
     // }
 
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), 'a' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), 'a' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 3 ] ), 'b' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 4 ] ), 'b' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 5 ] ), 'b' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 6 ] ), 'd' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 7 ] ), '8' );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 6, 8 ) ), false );
+    test.identical( provider.fileRead( _.props.keys( files )[ 0 ] ), 'a' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 1 ] ), 'a' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 2 ] ), 'a' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 3 ] ), 'b' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 4 ] ), 'b' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 5 ] ), 'b' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 6 ] ), 'd' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 7 ] ), '8' );
 
     //
 
@@ -721,31 +721,31 @@ function restoreLinksComplex( test )
 
     /* make links and save info in archive */
 
-    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
-    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
+    provider.hardLink({ dstPath : _.props.keys( files ).slice( 0, 3 ), verbosity : 3 });
+    provider.hardLink({ dstPath : _.props.keys( files ).slice( 3, 6 ), verbosity : 3 });
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 6, 8 ) ), false );
 
     provider.archive.restoreLinksBegin();
 
     /* remove some links and check if they are broken */
 
     waitSync( test.context.delay )
-    provider.fileWrite({ filePath : _.mapKeys( files )[ 0 ], purging : 1, data : 'a1' });
+    provider.fileWrite({ filePath : _.props.keys( files )[ 0 ], purging : 1, data : 'a1' });
     waitSync( test.context.delay )
-    provider.fileWrite({ filePath : _.mapKeys( files )[ 1 ], purging : 1, data : 'a2' });
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), false );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 8 ) ), false );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a1' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), 'a2' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), '3' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 3 ] ), '5' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 4 ] ), '5' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 5 ] ), '5' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 6 ] ), '8' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 7 ] ), '8' );
+    provider.fileWrite({ filePath : _.props.keys( files )[ 1 ], purging : 1, data : 'a2' });
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 3 ) ), false );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 3, 8 ) ), false );
+    test.identical( provider.fileRead( _.props.keys( files )[ 0 ] ), 'a1' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 1 ] ), 'a2' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 2 ] ), '3' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 3 ] ), '5' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 4 ] ), '5' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 5 ] ), '5' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 6 ] ), '8' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 7 ] ), '8' );
 
     /* restore links and check if they works now */
 
@@ -764,33 +764,33 @@ function restoreLinksComplex( test )
     test.identical( provider.archive.fileAddedMap, {} );
     test.identical( provider.archive.fileRemovedMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
-    test.identical( _.mapKeys( provider.archive.fileMap ).length, 9 );
+    test.identical( _.props.keys( provider.archive.fileMap ).length, 9 );
 
     //!!!wrong results on linux
 
     /* if( provider.archive.comparingRelyOnHardLinks )
     {
       test.identical( provider.archive.comparingRelyOnHardLinks, 1 );
-      test.identical( _.mapKeys( provider.archive.fileModifiedMap ).length, 4 );
+      test.identical( _.props.keys( provider.archive.fileModifiedMap ).length, 4 );
     }
     else
     {
       test.identical( provider.archive.comparingRelyOnHardLinks, 0 );
-      test.identical( _.mapKeys( provider.archive.fileModifiedMap ).length, 3 );
+      test.identical( _.props.keys( provider.archive.fileModifiedMap ).length, 3 );
     } */
 
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a2' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), 'a2' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), 'a2' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 3 ] ), '5' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 4 ] ), '5' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 5 ] ), '5' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 6 ] ), '8' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 7 ] ), '8' );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 6, 8 ) ), false );
+    test.identical( provider.fileRead( _.props.keys( files )[ 0 ] ), 'a2' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 1 ] ), 'a2' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 2 ] ), 'a2' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 3 ] ), '5' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 4 ] ), '5' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 5 ] ), '5' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 6 ] ), '8' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 7 ] ), '8' );
 
     //
 
@@ -799,35 +799,35 @@ function restoreLinksComplex( test )
 
     /* make links and save info in archive */
 
-    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 0, 3 ), verbosity : 3 });
-    provider.hardLink({ dstPath : _.mapKeys( files ).slice( 3, 6 ), verbosity : 3 });
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
+    provider.hardLink({ dstPath : _.props.keys( files ).slice( 0, 3 ), verbosity : 3 });
+    provider.hardLink({ dstPath : _.props.keys( files ).slice( 3, 6 ), verbosity : 3 });
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 6, 8 ) ), false );
 
     provider.archive.restoreLinksBegin();
 
     /* remove some links and check if they are broken */
 
-    provider.fileWrite({ filePath : _.mapKeys( files )[ 0 ], purging : 1, data : 'a' });
+    provider.fileWrite({ filePath : _.props.keys( files )[ 0 ], purging : 1, data : 'a' });
     waitSync( test.context.delay );
-    provider.fileWrite({ filePath : _.mapKeys( files )[ 3 ], purging : 1, data : 'b' });
+    provider.fileWrite({ filePath : _.props.keys( files )[ 3 ], purging : 1, data : 'b' });
     waitSync( test.context.delay );
-    provider.fileWrite({ filePath : _.mapKeys( files )[ 4 ], purging : 0, data : 'c' });
+    provider.fileWrite({ filePath : _.props.keys( files )[ 4 ], purging : 0, data : 'c' });
     waitSync( test.context.delay );
-    provider.fileWrite({ filePath : _.mapKeys( files )[ 6 ], purging : 0, data : 'd' });
+    provider.fileWrite({ filePath : _.props.keys( files )[ 6 ], purging : 0, data : 'd' });
 
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), false );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 8 ) ), false );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), '3' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), '3' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 3 ] ), 'b' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 4 ] ), 'c' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 5 ] ), 'c' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 6 ] ), 'd' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 7 ] ), '8' );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 3 ) ), false );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 3, 8 ) ), false );
+    test.identical( provider.fileRead( _.props.keys( files )[ 0 ] ), 'a' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 1 ] ), '3' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 2 ] ), '3' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 3 ] ), 'b' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 4 ] ), 'c' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 5 ] ), 'c' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 6 ] ), 'd' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 7 ] ), '8' );
 
     /* restore links and check if they works now */
 
@@ -842,33 +842,33 @@ function restoreLinksComplex( test )
     test.identical( provider.archive.fileAddedMap, {} );
     test.identical( provider.archive.fileRemovedMap, {} );
     test.identical( provider.archive.fileAddedMap, {} );
-    test.identical( _.mapKeys( provider.archive.fileMap ).length, 9 );
+    test.identical( _.props.keys( provider.archive.fileMap ).length, 9 );
 
     //!!!wrong results on linux
 
     /* if( provider.archive.comparingRelyOnHardLinks )
     {
       test.identical( provider.archive.comparingRelyOnHardLinks, 1 );
-      test.identical( _.mapKeys( provider.archive.fileModifiedMap ).length, 8 );
+      test.identical( _.props.keys( provider.archive.fileModifiedMap ).length, 8 );
     }
     else
     {
       test.identical( provider.archive.comparingRelyOnHardLinks, 0 );
-      test.identical( _.mapKeys( provider.archive.fileModifiedMap ).length, 6 );
+      test.identical( _.props.keys( provider.archive.fileModifiedMap ).length, 6 );
     } */
 
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 3 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 3, 6 ) ), hardLinked );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 0, 6 ) ), false );
-    test.identical( provider.areHardLinked( _.mapKeys( files ).slice( 6, 8 ) ), false );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 0 ] ), 'a' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 1 ] ), 'a' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 2 ] ), 'a' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 3 ] ), 'c' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 4 ] ), 'c' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 5 ] ), 'c' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 6 ] ), 'd' );
-    test.identical( provider.fileRead( _.mapKeys( files )[ 7 ] ), '8' );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 3 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 3, 6 ) ), hardLinked );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 0, 6 ) ), false );
+    test.identical( provider.areHardLinked( _.props.keys( files ).slice( 6, 8 ) ), false );
+    test.identical( provider.fileRead( _.props.keys( files )[ 0 ] ), 'a' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 1 ] ), 'a' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 2 ] ), 'a' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 3 ] ), 'c' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 4 ] ), 'c' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 5 ] ), 'c' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 6 ] ), 'd' );
+    test.identical( provider.fileRead( _.props.keys( files )[ 7 ] ), '8' );
 
   }
 
@@ -1311,13 +1311,13 @@ function storageOperations( test )
   var loadedStorages = _.select( provider.archive.storagesLoaded, '*/filePath' );
   test.identical( loadedStorages, archivePaths );
 
-  var filePaths = _.mapOnlyOwnKeys( provider.archive.fileMap );
+  var filePaths = _.props.onlyOwnKeys( provider.archive.fileMap );
   records.forEach( ( r ) =>
   {
     let filesMap = provider.fileRead({ filePath : r.absolute, encoding : 'js.structure' });
 
     test.case = 'archive on disk and fileMap have same files';
-    test.true( _.arraySetContainAll_( filePaths, _.mapOnlyOwnKeys( filesMap ) ) );
+    test.true( _.arraySetContainAll_( filePaths, _.props.onlyOwnKeys( filesMap ) ) );
 
     // filesMap is not upToDate if at least one file from map was changed
     test.case = 'archive on disk is not updated';
