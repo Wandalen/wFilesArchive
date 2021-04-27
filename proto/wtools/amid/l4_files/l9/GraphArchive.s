@@ -99,7 +99,7 @@ function timelapseCall( op )
   // if( writingRecords.length )
   // debugger;
   // let writingRecords = _.props.vals( _.mapValsWithKeys( self.records.filePath, op.writesPaths ) ).filter( ( el ) => el !== undefined );
-  // if( _.entityLengthOf( writingRecords ) )
+  // if( _.entity.lengthOf( writingRecords ) )
   // debugger;
   // if( op.routineName === 'fileCopyAct' )
   // debugger;
