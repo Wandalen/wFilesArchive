@@ -72,7 +72,7 @@ function flatMapFromTree( tree, currentPath, paths )
 
   for( var k in tree )
   {
-    if( _.objectIs( tree[ k ] ) )
+    if( _.object.isBasic( tree[ k ] ) )
     {
       paths[ _.path.resolve( currentPath, k ) ] = Object.create( null );
 
