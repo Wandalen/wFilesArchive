@@ -1,4 +1,4 @@
-# module::FilesArchive [![status](https://github.com/Wandalen/wFilesArchive/workflows/publish/badge.svg)](https://github.com/Wandalen/wFilesArchive/actions?query=workflow%3Apublish) [![experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
+# module::FilesArchive [![status](https://github.com/Wandalen/wFilesArchive/actions/workflows/StandardPublish.yml/badge.svg)](https://github.com/Wandalen/wFilesArchive/actions/workflows/StandardPublish.yml) [![experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
 
 Experimental. Several classes to reflect changes of files on dependent files and keep links of hard linked files. FilesArchive provides means to define interdependence between files and to forward changes from dependencies to dependents. Use FilesArchive to avoid unnecessary CPU workload.
 
@@ -10,7 +10,7 @@ npm install
 node sample/trivial/Sample.s
 ```
 
-## To add to your project
+### To add to your project
 ```
 npm add 'wfilesarchive@alpha'
 ```
