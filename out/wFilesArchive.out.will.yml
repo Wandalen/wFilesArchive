@@ -2,12 +2,9 @@ format: outwillfile-2.0
 root:
   - wFilesArchive.out
 consistency:
-  ../.ex.will.yml: &ref_0
-    hash: f2ac3748061252f529bf868451995fb1
-    size: 2096
-  ../.im.will.yml: &ref_1
-    hash: cbd499975480bb5e7aac13765430c827
-    size: 5177
+  ../will.yml: &ref_0
+    hash: e7226e40ee9707bd2a816bda28d3f816
+    size: 7057
 module:
   wFilesArchive.out:
     about:
@@ -21,11 +18,10 @@ module:
         workload.
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords: &ref_3
+      license: MIT
+      npm.name: wfilesarchive
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: &ref_1
         - wTools
         - wFiles
         - wFilesArchive
@@ -33,13 +29,14 @@ module:
         - file
         - read file
         - write file
-      license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors: &ref_2
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
-      npm.name: wfilesarchive
-      npm.scripts: &ref_5
+      interpreters: &ref_3
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      npm.scripts: &ref_4
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -54,15 +51,11 @@ module:
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.in:
         criterion:
           predefined: 1
@@ -242,11 +235,11 @@ module:
         path: 'npm:///wFiles'
         autoExporting: 0
         enabled: 0
-      wStateStorage:
+      wstatestorage:
         path: 'npm:///wstatestorage'
         autoExporting: 0
         enabled: 0
-      wVerbal:
+      wverbal:
         path: 'npm:///wverbal'
         autoExporting: 0
         enabled: 0
@@ -863,8 +856,7 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      ../will.yml: *ref_0
   ../:
     about:
       name: wFilesArchive
@@ -877,26 +869,22 @@ module:
         workload.
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
       npm.name: wfilesarchive
-      npm.scripts: *ref_5
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: *ref_1
+      contributors: *ref_2
+      interpreters: *ref_3
+      npm.scripts: *ref_4
     path:
       module.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
@@ -1006,11 +994,11 @@ module:
         path: 'npm:///wFiles'
         autoExporting: 0
         enabled: 0
-      wStateStorage:
+      wstatestorage:
         path: 'npm:///wstatestorage'
         autoExporting: 0
         enabled: 0
-      wVerbal:
+      wverbal:
         path: 'npm:///wverbal'
         autoExporting: 0
         enabled: 0
@@ -1563,9 +1551,6 @@ module:
           - 'build::release'
           - 'build::npm'
     consistency:
-      ../.ex.will.yml:
-        hash: f2ac3748061252f529bf868451995fb1
-        size: 2096
-      ../.im.will.yml:
-        hash: cbd499975480bb5e7aac13765430c827
-        size: 5177
+      ../will.yml:
+        hash: e7226e40ee9707bd2a816bda28d3f816
+        size: 7057
