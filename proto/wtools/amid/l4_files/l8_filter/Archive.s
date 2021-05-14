@@ -45,7 +45,7 @@ function init( o )
 }
 
 // --
-// relationship
+// relations
 // --
 
 let Composes =
@@ -101,12 +101,5 @@ _.Copyable.mixin( Self );
 
 _.FileFilter = _.FileFilter || Object.create( null );
 _.FileFilter[ Self.shortName ] = Self;
-
-// --
-// export
-// --
-
-if( typeof module !== 'undefined' )
-module[ 'exports' ] = Self;
 
 } )();
