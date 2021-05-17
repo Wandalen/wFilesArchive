@@ -322,9 +322,9 @@ function filesLinkSame( o ) /* qqq : cover returned value */
     {
       if( !archive.fileMap[ fileB ].size )
       return false;
-      fileB = provider.fileRead({ filePath : fileB, encoding : 'original.type' });
+      fileB = provider.fileRead({ filePath : fileB, encoding : 'meta.original' });
       if( fileA === undefined )
-      fileA = provider.fileRead({ filePath : files[ 0 ], encoding : 'original.type' });
+      fileA = provider.fileRead({ filePath : files[ 0 ], encoding : 'meta.original' });
       return _.entity.identicalShallow( fileA, fileB );
     });
     return result;
@@ -403,7 +403,7 @@ function restoreLinksEnd()
 
     if( mostLinked.absolutePath !== newest.absolutePath )
     {
-      let read = provider.fileRead({ filePath : newest.absolutePath, encoding : 'original.type' });
+      let read = provider.fileRead({ filePath : newest.absolutePath, encoding : 'meta.original' });
       provider.fileWrite( mostLinked.absolutePath, read );
     }
 
