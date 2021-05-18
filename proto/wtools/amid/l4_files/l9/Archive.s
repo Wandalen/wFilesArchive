@@ -61,13 +61,13 @@ function filesUpdate()
   (
     _.all( fileProvider.statsResolvedRead( path.s.fromGlob( archive.basePath ) ) )
     , () => 'Some base paths do not exist:\n'
-    + '  ' + path.s.fromGlob( _.arrayAs( archive.basePath ) )
+    + '  ' + path.s.fromGlob( _.array.as( archive.basePath ) )
     .filter( ( basePath ) => fileProvider.statResolvedRead( basePath ) )
     .join( '\n  ' )
   );
 
   let filePath;
-  let basePath = _.arrayAs( archive.basePath );
+  let basePath = _.array.as( archive.basePath );
 
   filePath = basePath.map( ( basePath ) =>
   {
@@ -90,8 +90,8 @@ function filesUpdate()
 
   if( archive.includingPath || archive.excludingPath )
   {
-    let includingPath = archive.includingPath ? _.arrayAs( archive.includingPath ) : [];
-    let excludingPath = archive.excludingPath ? _.arrayAs( archive.excludingPath ) : [];
+    let includingPath = archive.includingPath ? _.array.as( archive.includingPath ) : [];
+    let excludingPath = archive.excludingPath ? _.array.as( archive.excludingPath ) : [];
     _.assert( _.strsDefined( includingPath ) );
     _.assert( _.strsDefined( excludingPath ) );
     filePath = _.path.mapExtend( null, filePath );

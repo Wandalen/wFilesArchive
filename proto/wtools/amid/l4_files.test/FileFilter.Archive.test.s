@@ -443,7 +443,7 @@ function restoreLinks( test )
   } );
   provider.hardLink({ dstPath : paths });
 
-  /* linking fourth with second and saving info */
+  /* linkingAction fourth with second and saving info */
 
   paths[ 3 ] = _.path.join( testRoutineDir, 'e' );
   provider.hardLink( paths[ 3 ], paths[ 2 ] );
