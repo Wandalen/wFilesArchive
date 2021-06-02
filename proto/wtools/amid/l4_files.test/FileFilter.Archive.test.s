@@ -32,7 +32,7 @@ function onSuiteBegin()
   // context.suiteTempPath = _.path.current();
 
   context.delay = _.fileProvider.systemBitrateTimeGet() / 1000;
-  context.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'archive' );
+  context.suiteTempPath = _.path.tempOpen( _.path.join( __dirname, '../..' ), 'archive' );
 
 }
 
@@ -43,12 +43,12 @@ function onSuiteEnd()
   let context = this;
 
   // if( Config.interpreter === 'njs' )
-  {
+  // {
     // _.assert( _.strHas( context.suiteTempPath, 'archive' ) )
-    _.fileProvider.fieldPush( 'safe', 0 );
-    _.fileProvider.filesDelete( context.suiteTempPath );
-    _.fileProvider.fieldPop( 'safe', 0 );
-  }
+  _.fileProvider.fieldPush( 'safe', 0 );
+  _.fileProvider.filesDelete( context.suiteTempPath );
+  _.fileProvider.fieldPop( 'safe', 0 );
+  // }
 
   _.assert( _.strHas( context.suiteTempPath, 'archive' ) );
   _.path.tempClose( context.suiteTempPath );
@@ -905,12 +905,10 @@ function filesLinkSame( test )
       dir : { a : '1', x : '3' },
     }
 
-    debugger;
     provider = _.FileFilter.Archive();
     provider.archive.basePath = dir;
     provider.archive.fileMapAutosaving = 0;
     test.true( provider.system === null );
-    debugger;
 
     // _.FileProvider.Extract.readToProvider
     // ({
