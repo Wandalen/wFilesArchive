@@ -3,8 +3,8 @@ root:
   - wFilesArchive.out
 consistency:
   ../will.yml: &ref_0
-    hash: e7226e40ee9707bd2a816bda28d3f816
-    size: 7057
+    hash: 92b8ea3c908b914e3ac5e026ff5ccddb
+    size: 6916
 module:
   wFilesArchive.out:
     about:
@@ -442,9 +442,6 @@ module:
           content: npm
         inherit:
           - module.export
-      npm.publish:
-        opts:
-          shell: npm publish
       npm.generate.debug.raw:
         opts:
           entryPath: 'path::entry.out.*=1'
@@ -780,12 +777,6 @@ module:
           - 'step::doc.export'
         criterion:
           content: doc
-          export: 1
-      npm.export:
-        steps:
-          - 'step::npm.publish'
-        criterion:
-          content: npm
           export: 1
       export:
         steps:
@@ -1150,9 +1141,6 @@ module:
           content: npm
         inherit:
           - module.export
-      npm.publish:
-        opts:
-          shell: npm publish
       npm.generate.debug.raw:
         opts:
           entryPath: 'path::entry.out.*=1'
@@ -1489,12 +1477,6 @@ module:
         criterion:
           content: doc
           export: 1
-      npm.export:
-        steps:
-          - 'step::npm.publish'
-        criterion:
-          content: npm
-          export: 1
       export:
         steps:
           - 'build::proto.export'
@@ -1552,5 +1534,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: e7226e40ee9707bd2a816bda28d3f816
-        size: 7057
+        hash: 92b8ea3c908b914e3ac5e026ff5ccddb
+        size: 6916
